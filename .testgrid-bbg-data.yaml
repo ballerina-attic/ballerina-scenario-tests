@@ -1,3 +1,19 @@
+# Copyright (c) 2019, WSO2 Inc. (http://wso2.org) All Rights Reserved.
+#
+# WSO2 Inc. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
 # TestGrid Test Configuration Parameters
 version: '0.9'
 emailToList: "manurip@wso2.com,vijithae@wso2.com"
@@ -27,23 +43,23 @@ deploymentConfig:
   deploymentPatterns:
     - name: 'data-backed-service'
       description: 'data-backed-service BBG tests'
-      remoteRepository: "https://github.com/ballerina-platform/ballerina-lang.git"
-      remoteBranch: "ballerina-scenarios-cleaned"
+      remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
+      remoteBranch: "scenario-tests"
       dir: .
       scripts:
         - name: 'default'
           type: SHELL
-          file: product-scenarios/test-grid-scripts/bbg/data/deployment-data-backed-service.sh
+          file: test-grid-scripts/bbg/data/deployment-data-backed-service.sh
           inputParameters:
             BallerinaVersion: "0.990.3"
             isDebugEnabled: "false"
 scenarioConfigs:
 - testType: TESTNG
-  remoteRepository: "https://github.com/ballerina-platform/ballerina-lang.git"
-  remoteBranch: "ballerina-scenarios-cleaned"
+  remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
+  remoteBranch: "scenario-tests"
   name: "ballerinaScenarios"
   description: "ballerina-scenarios"
-  file: product-scenarios/test-grid-scripts/bbg/data/test-data-backed-service.sh
+  file: test-grid-scripts/bbg/data/test-data-backed-service.sh
   inputParameters:
     BallerinaVersion: "0.990.3"
     isDebugEnabled: "false"
