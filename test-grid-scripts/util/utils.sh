@@ -120,11 +120,12 @@ run_bbg_section_tests() {
     local -n properties_array=$3
     local __input_dir=$4
     local __output_dir=$5
+    local test_group=$6
     local sys_prop_str=""
     bash --version
     for x in "${!properties_array[@]}"; do sys_prop_str+="-D$x=${properties_array[$x]} " ; done
 
-    mvn clean install -f ${utils_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -P ${maven_profile}
+    mvn clean install -f ${utils_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
 
     mkdir -p ${__output_dir}/scenarios
 

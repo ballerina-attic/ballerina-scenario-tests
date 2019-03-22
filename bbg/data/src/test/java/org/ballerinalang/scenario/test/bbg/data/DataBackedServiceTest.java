@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * Tests data-backed-service BBG.
  */
+@Test(groups = "DataBackedService")
 public class DataBackedServiceTest extends ScenarioTestBase {
     private static String host = System.getProperty("data.backed.service.host");
     private static String port = System.getProperty("data.backed.service.port");
