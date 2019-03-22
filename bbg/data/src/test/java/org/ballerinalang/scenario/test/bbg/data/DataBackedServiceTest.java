@@ -28,14 +28,21 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Tests data-backed-service BBG.
  */
 @Test(groups = "DataBackedService")
 public class DataBackedServiceTest extends ScenarioTestBase {
-    private static String host = System.getProperty("data.backed.service.host");
-    private static String port = System.getProperty("data.backed.service.port");
+    private static final String host;
+    private static final String port;
+
+    static {
+        Properties deploymentProperties = getDeploymentProperties();
+        host = deploymentProperties.getProperty("ExternalIP");
+        port = deploymentProperties.getProperty("NodePort");
+    }
 
     @Test(description = "Test employee creation")
     public void testCreateEmployee() throws Exception {
