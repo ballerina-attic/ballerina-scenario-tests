@@ -28,9 +28,8 @@ run_tests() {
         print_debug_info
     fi
 
+    # Creating an empty array. If there are system properties to be passed, need to add them as key values pairs
     declare -A sys_prop_array
-    sys_prop_array["data.backed.service.host"]=${external_ip}
-    sys_prop_array["data.backed.service.port"]=${node_port}
 
     # Builds and run tests of the given BBG section and copies resulting surefire reports to output directory
     run_bbg_section_tests bbg-data data sys_prop_array ${input_dir} ${output_dir} "DataBackedService"
