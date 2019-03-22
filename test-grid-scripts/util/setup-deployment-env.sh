@@ -19,6 +19,8 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
+trap propagate_cleanup_properties EXIT
+
 setup_deployment_env() {
     local parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
     . ${parent_path}/utils.sh
@@ -42,9 +44,16 @@ setup_deployment_env() {
     # Install ballerina
     install_ballerina ${ballerina_version}
 
-    # Store namespace to be cleaned up at the end
-    echo "NamespacesToCleanup=${custom_namespace}" >> ${output_dir}/infrastructure-cleanup.properties
     echo "TestGroup=${infra_config["TestGroup"]}" >> ${output_dir}/deployment.properties
 }
 
-setup_deployment_env
+propagate_cleanup_properties() {
+    # Store namespace to be cleaned up at the end
+    echo "NamespacesToCleanup=${custom_namespace}" >> ${output_dir}/infrastructure-cleanup.properties
+}
+
+if setup_deployment_env; then
+    echo "Deployment set up successful"
+else
+    exit 1
+fi
