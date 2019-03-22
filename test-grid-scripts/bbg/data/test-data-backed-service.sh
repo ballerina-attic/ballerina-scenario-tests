@@ -15,14 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 
-readonly test_data_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly test_data_grand_parent_path=$(dirname ${test_data_parent_path})
-readonly test_data_great_grand_parent_path=$(dirname ${test_data_grand_parent_path})
-readonly test_data_great_great_grant_parent_path=$(dirname ${test_data_great_grand_parent_path})
-
-. ${test_data_great_grand_parent_path}/util/usage.sh
-. ${test_data_great_grand_parent_path}/util/setup-test-env.sh
-
 print_debug_info() {
     echo "Host And Port: ${external_ip}:${node_port}"
 }
@@ -41,7 +33,7 @@ run_tests() {
     sys_prop_array["data.backed.service.port"]=${node_port}
 
     # Builds and run tests of the given BBG section and copies resulting surefire reports to output directory
-    run_bbg_section_tests bbg-data data sys_prop_array ${input_dir} ${output_dir}
+    run_bbg_section_tests bbg-data data sys_prop_array ${input_dir} ${output_dir} "DataBackedService"
 }
 
 run_tests

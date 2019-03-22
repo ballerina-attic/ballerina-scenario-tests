@@ -52,13 +52,13 @@ deploymentConfig:
           inputParameters:
             BallerinaVersion: "0.990.3"
             isDebugEnabled: "false"
+            TestGroup: "DataBackedService"
 scenarioConfigs:
 - testType: TESTNG
   remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
   remoteBranch: "scenario-tests"
   name: "ballerinaScenarios"
   description: "ballerina-scenarios"
-  file: test-grid-scripts/bbg/data/test-data-backed-service.sh
+  file: test-grid-scripts/bbg/data/test-runner.sh
   inputParameters:
-    BallerinaVersion: "0.990.3"
     isDebugEnabled: "false"

@@ -44,6 +44,7 @@ setup_deployment_env() {
 
     # Store namespace to be cleaned up at the end
     echo "NamespacesToCleanup=${custom_namespace}" >> ${output_dir}/infrastructure-cleanup.properties
+    echo "TestGroup=${infra_config["TestGroup"]}" >> ${output_dir}/deployment.properties
 }
 
 setup_deployment_env
