@@ -23,8 +23,9 @@ trap propagate_cleanup_properties EXIT
 
 setup_deployment_env() {
     local parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-    . ${parent_path}/common_utils.sh
-    . ${parent_path}/deployment_utils.sh
+    local grand_parent_path=$(dirname ${parent_path})
+    . ${grand_parent_path}/util/common_utils.sh
+    . ${grand_parent_path}/util/deployment_utils.sh
 
     work_dir=$(pwd)
     declare -g -A infra_config
