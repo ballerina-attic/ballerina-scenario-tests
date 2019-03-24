@@ -16,8 +16,9 @@
 # under the License.
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+grand_parent_path=$(dirname ${parent_path})
 
-. ${parent_path}/infra_utils.sh
+. ${grand_parent_path}/util/infra_utils.sh
 
 echo "Resource deletion script is being executed !"
 input_dir=${2}
