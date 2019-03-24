@@ -20,8 +20,8 @@ readonly test_data_grand_parent_path=$(dirname ${test_data_parent_path})
 readonly test_data_great_grand_parent_path=$(dirname ${test_data_grand_parent_path})
 readonly test_data_great_great_grant_parent_path=$(dirname ${test_data_great_grand_parent_path})
 
-. ${test_data_great_grand_parent_path}/util/usage.sh
-. ${test_data_great_grand_parent_path}/util/setup-test-env.sh
+. ${test_data_great_grand_parent_path}/common/usage.sh
+. ${test_data_great_grand_parent_path}/setup/setup_test_env.sh
 
 run_provided_test() {
     local test_group_to_run=${deployment_config["TestGroup"]}

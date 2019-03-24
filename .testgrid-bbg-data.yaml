@@ -33,9 +33,9 @@ infrastructureConfig:
         description: Creates Kubernetes infrastructure for a database and ballerina installed instance.
         type: SHELL
         phase: CREATE
-        file: test-grid-scripts/util/common_infra.sh
+        file: test-grid-scripts/common/common_infra.sh
       - name: destroy
-        file: test-grid-scripts/util/common-cleanup.sh
+        file: test-grid-scripts/common/common_cleanup.sh
         type: SHELL
         phase: DESTROY
 deploymentConfig:
