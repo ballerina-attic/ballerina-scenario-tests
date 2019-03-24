@@ -16,8 +16,6 @@
 # under the License.
 
 readonly utils_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly utils_grand_parent_path=$(dirname ${utils_parent_path})
-readonly utils_great_grand_parent_path=$(dirname ${utils_grand_parent_path})
 
 readonly cluster_name="ballerina-testgrid-cluster-v2"
 
@@ -70,31 +68,6 @@ wait_for_pod_readiness() {
     # the pod is ready to accept requests (app is ready) so the above
     # readiness script would suffice
     sleep 120s
-}
-
-# Builds run tests of the provided BBG section profile and copies the surefire reports to teh output directory
-#
-# $1 - Maven profile to be run
-# $2 - Associative array of system property-value pairs
-# $3 - System properties associative array
-# $4 - Input directory
-# $5 - Output directory
-run_bbg_section_tests() {
-    local maven_profile=$1
-    local bbg_section=$2
-    local -n properties_array=$3
-    local __input_dir=$4
-    local __output_dir=$5
-    local test_group=$6
-    local sys_prop_str=""
-    bash --version
-    for x in "${!properties_array[@]}"; do sys_prop_str+="-D$x=${properties_array[$x]} " ; done
-
-    mvn clean install -f ${utils_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
-
-    mkdir -p ${__output_dir}/scenarios
-
-    cp -r ${utils_great_grand_parent_path}/bbg/${bbg_section}/target ${__output_dir}/scenarios/${bbg_section}/
 }
 
 # Clones the given BBG.

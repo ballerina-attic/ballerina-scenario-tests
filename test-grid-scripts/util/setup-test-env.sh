@@ -22,6 +22,7 @@ set -o nounset
 setup_test_env() {
     local parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
     . ${parent_path}/common_utils.sh
+    . ${parent_path}/test_utils.sh
 
     # Read deployment.properties content into an associative array
     declare -g -A deployment_config
