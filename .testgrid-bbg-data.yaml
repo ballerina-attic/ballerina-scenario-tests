@@ -51,7 +51,7 @@ deploymentConfig:
           file: test-grid-scripts/bbg/data/deployment-data-backed-service.sh
           inputParameters:
             BallerinaVersion: "0.990.3"
-            isDebugEnabled: "false"
+            isDebugEnabled: "true"
             TestGroup: "DataBackedService"
 scenarioConfigs:
 - testType: TESTNG
@@ -61,4 +61,4 @@ scenarioConfigs:
   description: "ballerina-scenarios"
   file: test-grid-scripts/bbg/data/test-runner.sh
   inputParameters:
-    isDebugEnabled: "false"
+    isDebugEnabled: "true"
