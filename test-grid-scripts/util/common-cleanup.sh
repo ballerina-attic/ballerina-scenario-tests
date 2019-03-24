@@ -1,4 +1,4 @@
-#!/bin/bash
+#!bin/bash
 # Copyright (c) 2019, WSO2 Inc. (http://wso2.org) All Rights Reserved.
 #
 # WSO2 Inc. licenses this file to you under the Apache License,
@@ -15,17 +15,16 @@
 # specific language governing permissions and limitations
 # under the License.
 
-set -o errexit
-set -o pipefail
-set -o nounset
+parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
-setup_test_env() {
-    local parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-    . ${parent_path}/common_utils.sh
+. ${parent_path}/infra_utils.sh
 
-    # Read deployment.properties content into an associative array
-    declare -g -A deployment_config
-    read_property_file "${input_dir}/deployment.properties" deployment_config
-}
+echo "Resource deletion script is being executed !"
+input_dir=${2}
 
-setup_test_env
+# Read infrastucture cleanup properties to a associative array
+declare -A infra_cleanup_config
+read_infra_cleanup_props ${input_dir} infra_cleanup_config
+
+# Cleanup k8s resources
+cleanup_k8s_resources infra_cleanup_config

@@ -21,41 +21,6 @@ readonly utils_great_grand_parent_path=$(dirname ${utils_grand_parent_path})
 
 readonly cluster_name="ballerina-testgrid-cluster-v2"
 
-# Read a property file to a given associative array
-#
-# $1 - Property file
-# $2 - associative array
-# How to call
-# declare -A somearray
-# read_property_file testplan-props.properties somearray
-read_property_file() {
-    local testplan_properties=$1
-    # Read configuration into an associative array
-    # IFS is the 'internal field separator'. In this case, your file uses '='
-    local -n configArray=$2
-    IFS="="
-    while read -r key value
-    do
-         configArray[$key]=$value
-    done < ${testplan_properties}
-    unset IFS
-}
-
-# Write key value pairs in a given associative array to a given property file
-#
-# $1 - file path
-# $2 - associative array of key value pairs
-write_to_properties_file() {
-    local properties_file_path=$1
-    local -n properties_array=$2
-
-    # Keys are accessed through exclamation point
-    for i in ${!properties_array[@]}
-    do
-      echo ${i}=${properties_array[$i]} >> ${properties_file_path}
-    done
-}
-
 # Install the provided Ballerina version
 #
 # $1 - Ballerina version

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!bin/bash
 # Copyright (c) 2019, WSO2 Inc. (http://wso2.org) All Rights Reserved.
 #
 # WSO2 Inc. licenses this file to you under the Apache License,
@@ -15,17 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-set -o errexit
-set -o pipefail
-set -o nounset
-
-setup_test_env() {
-    local parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-    . ${parent_path}/common_utils.sh
-
-    # Read deployment.properties content into an associative array
-    declare -g -A deployment_config
-    read_property_file "${input_dir}/deployment.properties" deployment_config
-}
-
-setup_test_env
+## Properties with following keys will be copied to infrastructure.properties file
+database_host_key="DatabaseHost"
+database_port_key="DatabasePort"
+database_username_key="DBUsername"
+database_password_key="DBPassword"
+database_name_key="DatabaseName"

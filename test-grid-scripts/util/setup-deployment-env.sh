@@ -23,7 +23,8 @@ trap propagate_cleanup_properties EXIT
 
 setup_deployment_env() {
     local parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-    . ${parent_path}/utils.sh
+    . ${parent_path}/common_utils.sh
+    . ${parent_path}/deployment_utils.sh
 
     work_dir=$(pwd)
     declare -g -A infra_config
@@ -32,8 +33,6 @@ setup_deployment_env() {
     readonly docker_user=${infra_config["dockerhub_ballerina_scenarios_username"]}
     readonly docker_password=${infra_config["dockerhub_ballerina_scenarios_password"]}
 
-    # Update kube config to point to the existing cluster
-    aws eks update-kubeconfig --name ${cluster_name}
     # Create a custom random namespace
     custom_namespace=$(generate_random_namespace)
     kubectl create namespace ${custom_namespace}

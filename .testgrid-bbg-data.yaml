@@ -25,17 +25,17 @@ infrastructureConfig:
     - OracleJDK-8
   provisioners:
   - name: ballerina-deployment
-    remoteRepository: "git@github.com:ballerina-platform/aws-ballerina.git"
-    remoteBranch: "use-existing-cluster"
+    remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
+    remoteBranch: "scenario-tests"
     description: creates infrastructure for ballerina scenario tests
     scripts:
       - name: ballerina-deployment
         description: Creates Kubernetes infrastructure for a database and ballerina installed instance.
         type: SHELL
         phase: CREATE
-        file: bbg/common_infra.sh
+        file: test-grid-scripts/util/common_infra.sh
       - name: destroy
-        file: bbg/common-cleanup.sh
+        file: test-grid-scripts/util/common-cleanup.sh
         type: SHELL
         phase: DESTROY
 deploymentConfig:
