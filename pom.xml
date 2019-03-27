@@ -98,6 +98,16 @@
                 <module>bbg/data</module>
             </modules>
         </profile>
+        <profile>
+            <id>bbg-integration-patterns</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>bbg/bbg-integration-patterns</module>
+            </modules>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
     </profiles>
 
     <properties>

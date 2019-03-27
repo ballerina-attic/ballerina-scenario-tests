@@ -1,0 +1,49 @@
+# TestGrid Test Configuration Parameters
+version: '0.9'
+emailToList: "manurip@wso2.com,vijithae@wso2.com"
+infrastructureConfig:
+  infrastructureProvider: SHELL
+  containerOrchestrationEngine: K8S
+  includes:
+    - Ubuntu-18.04
+    - OracleJDK-8
+  provisioners:
+  - name: ballerina-deployment
+    remoteRepository: "https://github.com/VijithaEkanayake/ballerina-scenario-tests.git"
+    remoteBranch: "http-scenarios"
+    description: creates infrastructure for ballerina scenario tests
+    scripts:
+      - name: ballerina-deployment
+        description: Creates Kubernetes infrastructure for a ballerina installed instance.
+        type: SHELL
+        phase: CREATE
+        file: test-grid-scripts/common/common_infra.sh
+      - name: destroy
+        file: test-grid-scripts/common/common_cleanup.sh
+        type: SHELL
+        phase: DESTROY
+deploymentConfig:
+  deploymentPatterns:
+    - name: 'ballerinaScenarios'
+      description: 'ballerina-integration-patterns'
+      remoteRepository: "https://github.com/VijithaEkanayake/ballerina-scenario-tests.git"
+      remoteBranch: "http-scenarios"
+      dir: .
+      scripts:
+        - name: 'default'
+          type: SHELL
+          file: test-grid-scripts/bbg/integration-patterns/deployment-integration-patterns.sh
+          inputParameters:
+            BallerinaVersion: "0.990.3"
+            isDebugEnabled: "true"
+            TestGroup: "IntegrationPatterns"
+scenarioConfigs:
+- testType: TESTNG
+  remoteRepository: "https://github.com/VijithaEkanayake/ballerina-scenario-tests.git"
+  remoteBranch: "http-scenarios"
+  name: "ballerinaScenarios"
+  description: "integration-patterns-scenario-tests"
+  file: test-grid-scripts/bbg/integration-patterns/integration-patterns-test-runner.sh
+  inputParameters:
+    BallerinaVersion: "0.990.3"
+    isDebugEnabled: "true"
