@@ -25,7 +25,7 @@ readonly deployment_kafka_great_grand_parent_path=$(dirname ${deployment_kafka_g
 
 function clone_bbg_and_set_bal_path() {
     local bbg_repo_name="messaging-with-kafka"
-    git clone https://github.com/ThisaruGuruge/messaging-with-kafka.git --branch kafka-testgrid
+    git clone https://github.com/ballerina-guides/messaging-with-kafka.git --branch kafka-testgrid
     bal_path_admin=${bbg_repo_name}/guide/product_admin_portal/product_admin_portal.bal
 }
 
