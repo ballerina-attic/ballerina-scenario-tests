@@ -46,7 +46,7 @@ function setup_deployment() {
 
 ## Functions
 function download_and_install_kafka_connector() {
-    KAFKA_CONNECTOR_VERSION=0.980.2
+    local KAFKA_CONNECTOR_VERSION=${infra_config["KafkaConnectorVersion"]}
     KAFKA_CONNECTOR_DISTRIBUTION=wso2-kafka-${KAFKA_CONNECTOR_VERSION}
     wget https://github.com/wso2-ballerina/module-kafka/releases/download/v${KAFKA_CONNECTOR_VERSION}/${KAFKA_CONNECTOR_DISTRIBUTION}.zip --quiet
     unzip ${KAFKA_CONNECTOR_DISTRIBUTION}.zip -d ${KAFKA_CONNECTOR_DISTRIBUTION}
@@ -76,9 +76,6 @@ function replace_variables_in_bal_file() {
 
     local broker_host=$(kubectl get svc kafka-service -o=jsonpath='{.spec.clusterIP}')
     local broker_port=9092
-
-    #echo ${broker_host}
-    #echo ${broker_port}
 
     sed -i "s:<path_to_kafka_connector_jars>:\"${work_dir}/${KAFKA_CONNECTOR_DISTRIBUTION}/dependencies/\":g" ${bal_path}
     sed -i "s:<USERNAME>:${docker_user}:g" ${bal_path}

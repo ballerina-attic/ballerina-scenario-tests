@@ -51,7 +51,8 @@ deploymentConfig:
           file: test-grid-scripts/bbg/kafka/deployment-kafka-service.sh
           inputParameters:
             BallerinaVersion: "0.990.3"
-            isDebugEnabled: "true"
+            KafkaConnectorVersion: "0.980.2"
+            isDebugEnabled: "false"
             TestGroup: "KafkaService"
 scenarioConfigs:
   - testType: TESTNG
@@ -61,4 +62,4 @@ scenarioConfigs:
     description: "ballerina-scenarios"
     file: test-grid-scripts/bbg/kafka/test-runner.sh
     inputParameters:
-      isDebugEnabled: "true"
+      isDebugEnabled: "false"
