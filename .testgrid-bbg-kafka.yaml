@@ -16,7 +16,7 @@
 
 # TestGrid Test Configuration Parameters
 version: '0.9'
-emailToList: "thisaru@wso2.com"
+emailToList: "thisaru@wso2.com,builder@wso2.org"
 infrastructureConfig:
   infrastructureProvider: SHELL
   containerOrchestrationEngine: K8S
