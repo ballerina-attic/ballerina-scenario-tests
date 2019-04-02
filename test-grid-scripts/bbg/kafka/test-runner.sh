@@ -15,19 +15,19 @@
 # specific language governing permissions and limitations
 # under the License.
 
-readonly test_http_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly test_http_grand_parent_path=$(dirname ${test_http_parent_path})
-readonly test_http_great_grand_parent_path=$(dirname ${test_http_grand_parent_path})
-readonly test_http_great_great_grand_parent_path=$(dirname ${test_http_great_grand_parent_path})
+readonly test_data_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+readonly test_data_grand_parent_path=$(dirname ${test_data_parent_path})
+readonly test_data_great_grand_parent_path=$(dirname ${test_data_grand_parent_path})
+readonly test_data_great_great_grant_parent_path=$(dirname ${test_data_great_grand_parent_path})
 
-. ${test_http_great_grand_parent_path}/common/usage.sh
-. ${test_http_great_grand_parent_path}/setup/setup_test_env.sh
+. ${test_data_great_grand_parent_path}/common/usage.sh
+. ${test_data_great_grand_parent_path}/setup/setup_test_env.sh
 
 run_provided_test() {
     local test_group_to_run=${deployment_config["TestGroup"]}
 
-    if [ "${test_group_to_run}" = "IntegrationPatterns" ]; then
-        . ${test_http_parent_path}/test-integration-patterns.sh
+    if [ "${test_group_to_run}" = "KafkaService" ]; then
+        . ${test_data_parent_path}/test-kafka-service.sh
     fi
 }
 
