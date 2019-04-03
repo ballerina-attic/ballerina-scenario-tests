@@ -24,6 +24,13 @@ import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BValue;
 import org.testng.Assert;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Provides utility methods used for test assertion.
  */
@@ -39,6 +46,61 @@ public class AssertionUtil {
 
     public static String getIncorrectColumnValueMessage(String column) {
         return column + " column value isn't correct";
+    }
+
+    public static void assertNullValues(BMap record, int fieldCount, String... fieldsToSkip) {
+        Set<String> fieldsToSkipSet = new HashSet<>(Arrays.asList(fieldsToSkip));
+        Assert.assertEquals(record.keys().length, fieldCount, "Field count is different");
+        for (Object key : record.keys()) {
+            if (fieldsToSkipSet.contains(key)) {
+                continue;
+            }
+            Assert.assertNull(record.get(key), AssertionUtil.getIncorrectColumnValueMessage((String) key));
+        }
+    }
+
+    public static void assertNonNullStringValues(BMap record, int fieldCount, String[] fieldValues, String... fieldsToSkip) {
+        Set<String> fieldsToSkipSet = new HashSet<>(Arrays.asList(fieldsToSkip));
+        Assert.assertEquals(record.keys().length, fieldCount, "Field count is different");
+        int i = 0;
+        for (Object key : record.keys()) {
+            if (fieldsToSkipSet.contains(key)) {
+                continue;
+            }
+            Assert.assertEquals(getStringValFromBMap(record, (String) key), fieldValues[i],
+                    AssertionUtil.getIncorrectColumnValueMessage((String) key));
+            i++;
+        }
+    }
+
+    public static void assertDateStringValues(BMap datetimeRecord, long dateInserted, long timeInserted,
+            long datetimeInserted, long timestampInserted) {
+        try {
+            DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+            String dateReturned = datetimeRecord.get("dateStr").stringValue();
+            long dateReturnedEpoch = dfDate.parse(dateReturned).getTime();
+            Assert.assertEquals(dateReturnedEpoch, dateInserted);
+
+            DateFormat dfTime = new SimpleDateFormat("HH:mm:ss.SSS");
+            String timeReturned = datetimeRecord.get("timeStr").stringValue();
+            long timeReturnedEpoch = dfTime.parse(timeReturned).getTime();
+            Assert.assertEquals(timeReturnedEpoch, timeInserted);
+
+            DateFormat dfDatetime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            String datetimeReturned = datetimeRecord.get("dateTimeStr").stringValue();
+            long datetimeReturnedEpoch = dfDatetime.parse(datetimeReturned).getTime();
+            Assert.assertEquals(datetimeReturnedEpoch, datetimeInserted);
+
+            String timestampReturned = datetimeRecord.get("timestampStr").stringValue();
+            long timestampReturnedEpoch = dfDatetime.parse(timestampReturned).getTime();
+            Assert.assertEquals(timestampReturnedEpoch, timestampInserted);
+        } catch (ParseException e) {
+            Assert.fail("Parsing the returned date/time/timestamp value has failed", e);
+        }
+    }
+
+    private static String getStringValFromBMap(BMap bMap, String key) {
+        return bMap.get(key).stringValue();
     }
 
     private static String getErrorReturnedAssertionMessage(BError error) {
