@@ -52,3 +52,7 @@ function testCreateIndex() returns sql:UpdateResult | error {
 function testDropIndex() returns sql:UpdateResult | error {
     return testDB->update("DROP INDEX DDL_TEST_DROP_INDEX ON DDL_TEST_TABLE");
 }
+
+function stopDatabaseClient() {
+    checkpanic testDB.stop();
+}

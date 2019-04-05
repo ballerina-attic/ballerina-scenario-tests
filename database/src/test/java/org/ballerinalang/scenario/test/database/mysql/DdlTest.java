@@ -84,6 +84,7 @@ public class DdlTest extends ScenarioTestBase {
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
+        BRunUtil.invoke(ddlCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "mysql", "ddl-test-cleanup.sql"));
     }

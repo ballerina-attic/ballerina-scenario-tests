@@ -246,6 +246,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
+        BRunUtil.invoke(selectCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "mysql", "dml-select-test-cleanup.sql"));
     }

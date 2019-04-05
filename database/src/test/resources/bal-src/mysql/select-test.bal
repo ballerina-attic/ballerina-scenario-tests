@@ -226,3 +226,7 @@ function runSelectSetQuery(string tableName, string id, typedesc recordType, str
 function runSelectAllQuery(string tableName, string id, typedesc recordType) returns record{} | error {
     return runSelectSetQuery(tableName, id, recordType, "*");
 }
+
+function stopDatabaseClient() {
+    checkpanic testDB.stop();
+}
