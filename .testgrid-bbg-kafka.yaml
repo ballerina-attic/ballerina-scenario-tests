@@ -26,7 +26,7 @@ infrastructureConfig:
   provisioners:
     - name: ballerina-deployment
       remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
-      remoteBranch: "scenario-tests"
+      remoteBranch: "master"
       description: creates infrastructure for ballerina scenario tests
       scripts:
         - name: ballerina-deployment
@@ -43,7 +43,7 @@ deploymentConfig:
     - name: 'messaging-with-kafka'
       description: 'messaging-with-kafka BBG tests'
       remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
-      remoteBranch: "scenario-tests"
+      remoteBranch: "master"
       dir: .
       scripts:
         - name: 'default'
@@ -57,7 +57,7 @@ deploymentConfig:
 scenarioConfigs:
   - testType: TESTNG
     remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
-    remoteBranch: "scenario-tests"
+    remoteBranch: "master"
     name: "ballerinaScenarios"
     description: "ballerina-scenarios"
     file: test-grid-scripts/bbg/kafka/test-runner.sh
