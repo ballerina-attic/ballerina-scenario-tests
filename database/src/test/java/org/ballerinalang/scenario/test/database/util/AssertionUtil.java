@@ -22,6 +22,7 @@ import org.ballerinalang.model.values.BError;
 import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.model.values.BValueArray;
 import org.testng.Assert;
 
 import java.text.DateFormat;
@@ -42,6 +43,17 @@ public class AssertionUtil {
                 "Return type invalid");
         Assert.assertEquals(((BInteger) ((BMap) returnedVal).get("updatedRowCount")).intValue(),
                 expectedUpdatedRowCount);
+    }
+
+    public static void assertBatchUpdateQueryReturnValue(BValue returnedVal, int[] expectedArrayOfUpdatedRowCount) {
+        Assert.assertTrue(returnedVal instanceof BValueArray, returnedVal instanceof BError ?
+                getErrorReturnedAssertionMessage((BError) returnedVal) :
+                "Return type invalid");
+        BValueArray actualArrayOfUpdatedRowCount = (BValueArray) returnedVal;
+        Assert.assertEquals(actualArrayOfUpdatedRowCount.size(), expectedArrayOfUpdatedRowCount.length);
+        for(int i = 0; i < expectedArrayOfUpdatedRowCount.length; i++) {
+            Assert.assertEquals(actualArrayOfUpdatedRowCount.getInt(i), expectedArrayOfUpdatedRowCount[i], "Actual row count of param batch " + (i + 1) + " is incorrect" );
+        }
     }
 
     public static String getIncorrectColumnValueMessage(String column) {
