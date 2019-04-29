@@ -1,0 +1,49 @@
+# TestGrid Test Configuration Parameters
+version: '0.9'
+emailToList: "bhashinee@wso2.com"
+infrastructureConfig:
+  infrastructureProvider: SHELL
+  containerOrchestrationEngine: K8S
+  includes:
+    - Ubuntu-18.04
+    - OracleJDK-8
+  provisioners:
+  - name: ballerina-deployment
+    remoteRepository: "https://github.com/Bhashinee/ballerina-scenario-tests.git"
+    remoteBranch: "master"
+    description: creates infrastructure for ballerina scenario tests
+    scripts:
+      - name: ballerina-deployment
+        description: Creates Kubernetes infrastructure for a ballerina installed instance.
+        type: SHELL
+        phase: CREATE
+        file: test-grid-scripts/common/common_infra.sh
+      - name: destroy
+        file: test-grid-scripts/common/common_cleanup.sh
+        type: SHELL
+        phase: DESTROY
+deploymentConfig:
+  deploymentPatterns:
+    - name: 'ballerinaScenarios'
+      description: 'soap-scenario-tests'
+      remoteRepository: "https://github.com/Bhashinee/ballerina-scenario-tests.git"
+      remoteBranch: "master"
+      dir: .
+      scripts:
+        - name: 'default'
+          type: SHELL
+          file: test-grid-scripts/bbg/soap/deployment-soap-connector.sh
+          inputParameters:
+            BallerinaVersion: "0.990.3"
+            isDebugEnabled: "true"
+            TestGroup: "SOAPConnector"
+scenarioConfigs:
+- testType: TESTNG
+  remoteRepository: "https://github.com/Bhashinee/ballerina-scenario-tests.git"
+  remoteBranch: "master"
+  name: "ballerinaScenarios"
+  description: "soap-scenario-tests"
+  file: test-grid-scripts/bbg/soap/soap-test-runner.sh
+  inputParameters:
+    BallerinaVersion: "0.990.3"
+    isDebugEnabled: "true"
