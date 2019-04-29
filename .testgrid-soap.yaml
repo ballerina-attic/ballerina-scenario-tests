@@ -24,7 +24,7 @@ infrastructureConfig:
         phase: DESTROY
 deploymentConfig:
   deploymentPatterns:
-    - name: 'ballerinaScenarios'
+    - name: 'messaging-with-soap'
       description: 'soap-scenario-tests'
       remoteRepository: "https://github.com/Bhashinee/ballerina-scenario-tests.git"
       remoteBranch: "master"

@@ -108,6 +108,13 @@
             </modules>
         </profile>
         <profile>
+            <id>soap</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>bbg/soap</module>
+            </modules>
+        </profile>
+        <profile>
             <id>bbg-integration-patterns</id>
             <modules>
                 <module>scenarios-commons</module>

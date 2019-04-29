@@ -16,8 +16,8 @@
 # under the License.
 
 readonly deployment_soap_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly deployment_soap_grand_parent_path=$(dirname ${deployment_http_parent_path})
-readonly deployment_soap_great_grand_parent_path=$(dirname ${deployment_http_grand_parent_path})
+readonly deployment_soap_grand_parent_path=$(dirname ${deployment_soap_parent_path})
+readonly deployment_soap_great_grand_parent_path=$(dirname ${deployment_soap_grand_parent_path})
 
 . ${deployment_soap_great_grand_parent_path}/common/usage.sh
 . ${deployment_soap_great_grand_parent_path}/setup/setup_deployment_env.sh
