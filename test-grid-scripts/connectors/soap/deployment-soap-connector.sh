@@ -53,7 +53,7 @@ function print_kubernetes_debug_info() {
 function replace_variables_in_bal_file() {
     sed -i "s:<USERNAME>:${docker_user}:g" ${bal_path}
     sed -i "s:<PASSWORD>:${docker_password}:g" ${bal_path}
-    sed -i "s:ballerina.guides.io:${docker_user}:g" ${bal_path}
+    sed -i "s:ballerina.soap.io:${docker_user}:g" ${bal_path}
 }
 
 function build_and_deploy_soap_client() {
@@ -85,6 +85,11 @@ function retrieve_and_write_properties_to_data_bucket() {
         echo "ExternalIP: ${external_ip}"
         echo "NodePort: ${node_port}"
     fi
+}
+
+function clone_soap_repo() {
+    local bbg_repo=$1
+    git clone https://github.com/Bhashinee/${bbg_repo}
 }
 
 setup_deployment

@@ -78,11 +78,6 @@ clone_bbg() {
     git clone https://github.com/ballerina-guides/${bbg_repo} --branch testgrid-onboarding
 }
 
-clone_soap_repo() {
-    local bbg_repo=$1
-    git clone https://github.com/Bhashinee/${bbg_repo} --branch master
-}
-
 push_image_to_docker_registry() {
     local image=$1
     local tag=$2
