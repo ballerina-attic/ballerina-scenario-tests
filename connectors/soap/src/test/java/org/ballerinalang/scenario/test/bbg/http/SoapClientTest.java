@@ -28,7 +28,7 @@ import java.util.Properties;
 /**
  * Tests pass-through-messaging-service BBG.
  */
-@Test(groups = "IntegrationPatterns")
+@Test(groups = "SOAPConnector")
 public class SoapClientTest extends ScenarioTestBase {
     private static String host;
     private static String port;
