@@ -40,7 +40,7 @@ function setup_deployment() {
 function clone_bbg_and_set_bal_path() {
     local bbg_repo_name="soap-messaging"
     clone_soap_repo ${bbg_repo_name}
-    bal_path=${bbg_repo_name}/soap/soapMessaging.bal
+    bal_path=${bbg_repo_name}/soap-client/soapMessaging.bal
 }
 
 function print_kubernetes_debug_info() {
