@@ -32,7 +32,7 @@ deploymentConfig:
       scripts:
         - name: 'default'
           type: SHELL
-          file: test-grid-scripts/bbg/soap/deployment-soap-connector.sh
+          file: test-grid-scripts/connectors/soap/deployment-soap-connector.sh
           inputParameters:
             BallerinaVersion: "0.991.0"
             isDebugEnabled: "true"
@@ -43,7 +43,7 @@ scenarioConfigs:
   remoteBranch: "master"
   name: "ballerinaScenarios"
   description: "soap-scenario-tests"
-  file: test-grid-scripts/bbg/soap/soap-test-runner.sh
+  file: test-grid-scripts/connectors/soap/soap-test-runner.sh
   inputParameters:
     BallerinaVersion: "0.991.0"
     isDebugEnabled: "true"

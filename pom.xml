@@ -111,7 +111,7 @@
             <id>soap</id>
             <modules>
                 <module>scenarios-commons</module>
-                <module>bbg/soap</module>
+                <module>connectors/soap</module>
             </modules>
         </profile>
         <profile>

@@ -32,7 +32,7 @@ function run_tests() {
     sys_prop_array["soap.service.port"]=${node_port}
 
     # Builds and run tests of the given BBG section and copies resulting surefire reports to output directory
-    run_bbg_section_tests soap soap sys_prop_array ${input_dir} ${output_dir} "SOAPConnector"
+    run_connector_section_tests soap soap sys_prop_array ${input_dir} ${output_dir} "SOAPConnector"
 }
 
 run_tests
