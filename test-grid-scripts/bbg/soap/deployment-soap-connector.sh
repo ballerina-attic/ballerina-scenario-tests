@@ -57,18 +57,18 @@ function replace_variables_in_bal_file() {
 }
 
 function build_and_deploy_soap_client() {
-    #cd pass-through-messaging/guide
+    cd soap-messaging
     ${ballerina_home}/bin/ballerina init
-    ${ballerina_home}/bin/ballerina build soap-messaging --skiptests
-#    cd ../..
-    kubectl apply -f ${work_dir}/target/kubernetes/soap-messaging
+    ${ballerina_home}/bin/ballerina build soap-client --skiptests
+    cd ../
+    kubectl apply -f ${work_dir}/soap-messaging/target/kubernetes/soap-client
 }
 
 function deploy_soap_resources() {
     docker login --username=${docker_user} --password=${docker_password}
 
-    kubectl create -f soap-messaging/soap/resources/soap-deployment.yaml
-    kubectl create -f soap-messaging/soap/resources/soap-service.yaml
+    kubectl create -f soap-messaging/soap-client/resources/soap-deployment.yaml
+    kubectl create -f soap-messaging/soap-client/resources/soap-service.yaml
     wait_for_pod_readiness
     kubectl get svc
 }
