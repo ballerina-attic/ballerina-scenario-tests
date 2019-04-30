@@ -19,10 +19,10 @@ under the License.
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="ballerina-bbg-test-suite">
-    <test name="ballerina-bbg-test-suite" preserve-order="true" parallel="false">
+<suite name="ballerina-connector-test-suite">
+    <test name="ballerina-connector-test-suite" preserve-order="true" parallel="false">
         <packages>
-            <package name="org.ballerinalang.scenario.test.bbg.soap.*"/>
+            <package name="org.ballerinalang.scenario.test.connector.*"/>
         </packages>
     </test>
 </suite>

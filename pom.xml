@@ -91,6 +91,7 @@
                 <module>bbg/data</module>
                 <module>bbg/kafka</module>
                 <module>bbg/bbg-integration-patterns</module>
+                <module>connectors/soap</module>
             </modules>
         </profile>
         <profile>

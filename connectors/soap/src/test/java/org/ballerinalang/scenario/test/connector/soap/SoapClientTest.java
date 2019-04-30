@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.ballerinalang.scenario.test.bbg.http;
+package org.ballerinalang.scenario.test.connector.soap;
 
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.http.HttpClientRequest;
@@ -26,7 +26,7 @@ import org.testng.annotations.Test;
 import java.util.Properties;
 
 /**
- * Tests pass-through-messaging-service BBG.
+ * Tests soap connector scenarios.
  */
 @Test(groups = "SOAPConnector")
 public class SoapClientTest extends ScenarioTestBase {
