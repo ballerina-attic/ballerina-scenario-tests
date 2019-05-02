@@ -38,9 +38,8 @@ function setup_deployment() {
 ## Functions
 
 function clone_repo_and_set_bal_path() {
-    local repo_name="soap-messaging"
-    clone_soap_repo ${repo_name}
-    bal_path=${repo_name}/soap-client/soapMessaging.bal
+    git clone https://github.com/Bhashinee/soap-messaging
+    bal_path=soap-messaging/soap-client/soapMessaging.bal
 }
 
 function print_kubernetes_debug_info() {
@@ -85,11 +84,6 @@ function retrieve_and_write_properties_to_data_bucket() {
         echo "ExternalIP: ${external_ip}"
         echo "NodePort: ${node_port}"
     fi
-}
-
-function clone_soap_repo() {
-    local bbg_repo=$1
-    git clone https://github.com/Bhashinee/${bbg_repo}
 }
 
 setup_deployment
