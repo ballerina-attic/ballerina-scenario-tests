@@ -44,6 +44,6 @@ public class SoapClientTest extends ScenarioTestBase {
         String url = "http://" + host + ":" + port + "/SoapTestService";
         HttpResponse httpResponse = HttpClientRequest.doGet(url);
         Assert.assertEquals(httpResponse.getResponseCode(), 200, "Response code mismatching");
-        Assert.assertEquals(httpResponse.getData(), "Soap is working !");
+        Assert.assertEquals(httpResponse.getData(), "SOAP11 is working !");
     }
 }
