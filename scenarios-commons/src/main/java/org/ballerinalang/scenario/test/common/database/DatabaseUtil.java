@@ -32,6 +32,8 @@ public class DatabaseUtil {
                 if (!connection.getAutoCommit()) {
                     connection.commit();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

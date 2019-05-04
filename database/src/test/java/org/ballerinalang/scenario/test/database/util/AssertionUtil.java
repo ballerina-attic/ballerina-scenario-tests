@@ -56,6 +56,12 @@ public class AssertionUtil {
         }
     }
 
+    public static void assertCallQueryReturnValue(BValue returnedVal) {
+        Assert.assertNull(returnedVal, returnedVal instanceof BError ?
+                getErrorReturnedAssertionMessage((BError) returnedVal) :
+                "Return type invalid");
+    }
+
     public static String getIncorrectColumnValueMessage(String column) {
         return column + " column value isn't correct";
     }
@@ -104,6 +110,32 @@ public class AssertionUtil {
             Assert.assertEquals(datetimeReturnedEpoch, datetimeInserted);
 
             String timestampReturned = datetimeRecord.get("timestampStr").stringValue();
+            long timestampReturnedEpoch = dfDatetime.parse(timestampReturned).getTime();
+            Assert.assertEquals(timestampReturnedEpoch, timestampInserted);
+        } catch (ParseException e) {
+            Assert.fail("Parsing the returned date/time/timestamp value has failed", e);
+        }
+    }
+
+    public static void assertDateStringValues(BValueArray datetimeValues, long dateInserted, long timeInserted,
+            long datetimeInserted, long timestampInserted) {
+        try {
+            DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+            String dateReturned = datetimeValues.getBValue(0).stringValue();
+            long dateReturnedEpoch = dfDate.parse(dateReturned).getTime();
+            Assert.assertEquals(dateReturnedEpoch, dateInserted);
+
+            DateFormat dfTime = new SimpleDateFormat("HH:mm:ss.SSS");
+            String timeReturned = datetimeValues.getBValue(1).stringValue();
+            long timeReturnedEpoch = dfTime.parse(timeReturned).getTime();
+            Assert.assertEquals(timeReturnedEpoch, timeInserted);
+
+            DateFormat dfDatetime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            String datetimeReturned = datetimeValues.getBValue(2).stringValue();
+            long datetimeReturnedEpoch = dfDatetime.parse(datetimeReturned).getTime();
+            Assert.assertEquals(datetimeReturnedEpoch, datetimeInserted);
+
+            String timestampReturned = datetimeValues.getBValue(3).stringValue();
             long timestampReturnedEpoch = dfDatetime.parse(timestampReturned).getTime();
             Assert.assertEquals(timestampReturnedEpoch, timestampInserted);
         } catch (ParseException e) {
