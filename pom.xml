@@ -221,6 +221,12 @@
                 <scope>test</scope>
                 <version>${mysql.driver.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <scope>test</scope>
+                <version>${postgres.driver.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -293,6 +299,7 @@
         <netty.version>4.1.19.Final</netty.version>
         <maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
         <mysql.driver.version>5.1.46</mysql.driver.version>
+        <postgres.driver.version>42.2.1</postgres.driver.version>
     </properties>
 
 </project>
