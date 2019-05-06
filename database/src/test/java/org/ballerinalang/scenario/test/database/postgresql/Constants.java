@@ -17,7 +17,7 @@
  */
 
 
-package org.ballerinalang.scenario.test.database.postgres;
+package org.ballerinalang.scenario.test.database.postgresql;
 
 public class Constants {
     public static final String POSTGRES_JDBC_URL_KEY ="database.postgres.test.jdbc.url";

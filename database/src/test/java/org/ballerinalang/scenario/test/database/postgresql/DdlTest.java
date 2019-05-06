@@ -16,7 +16,7 @@
  *  under the License.
  */
 
-package org.ballerinalang.scenario.test.database.postgres;
+package org.ballerinalang.scenario.test.database.postgresql;
 
 import org.ballerinalang.config.ConfigRegistry;
 import org.ballerinalang.launcher.util.BCompileUtil;
