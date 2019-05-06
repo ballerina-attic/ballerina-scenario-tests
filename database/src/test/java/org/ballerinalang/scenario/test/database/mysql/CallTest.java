@@ -236,7 +236,7 @@ public class CallTest extends ScenarioTestBase {
             BRunUtil.invoke(callCompilerResult, "stopDatabaseClient");
         }
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
-                Paths.get(resourcePath.toString(), "sql-src", "mysql", "dml-select-test-cleanup.sql"));
+                Paths.get(resourcePath.toString(), "sql-src", "mysql", "select-update-test-cleanup.sql"));
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "mysql", "call-test-cleanup.sql"));
     }

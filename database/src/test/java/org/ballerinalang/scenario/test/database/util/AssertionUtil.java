@@ -29,7 +29,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -43,6 +45,23 @@ public class AssertionUtil {
                 "Return type invalid");
         Assert.assertEquals(((BInteger) ((BMap) returnedVal).get("updatedRowCount")).intValue(),
                 expectedUpdatedRowCount);
+    }
+
+    public static void assertUpdateQueryWithGeneratedKeysReturnValue(BValue returnedVal, int expectedUpdatedRowCount,
+            Map<String, Long> expectedGeneratedKeys) {
+        Assert.assertTrue(returnedVal instanceof BMap, returnedVal instanceof BError ?
+                getErrorReturnedAssertionMessage((BError) returnedVal) :
+                "Return type invalid");
+        Assert.assertEquals(((BInteger) ((BMap) returnedVal).get("updatedRowCount")).intValue(),
+                expectedUpdatedRowCount);
+        BMap actualGeneratedKeys = (BMap) ((BMap) returnedVal).get("generatedKeys");
+        Assert.assertEquals(actualGeneratedKeys.size(), expectedGeneratedKeys.size());
+        for (String key : expectedGeneratedKeys.keySet()) {
+            Assert.assertTrue(actualGeneratedKeys.getMap().containsKey(key),
+                    "Key: " + key + " does not exist in generated keys");
+            Assert.assertEquals(Long.valueOf(((BInteger) actualGeneratedKeys.get(key)).intValue()),
+                    expectedGeneratedKeys.get(key));
+        }
     }
 
     public static void assertBatchUpdateQueryReturnValue(BValue returnedVal, int[] expectedArrayOfUpdatedRowCount) {

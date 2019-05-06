@@ -37,7 +37,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
@@ -248,7 +247,7 @@ public class SelectTest extends ScenarioTestBase {
     public void cleanup() throws Exception {
         BRunUtil.invoke(selectCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
-                Paths.get(resourcePath.toString(), "sql-src", "mysql", "dml-select-test-cleanup.sql"));
+                Paths.get(resourcePath.toString(), "sql-src", "mysql", "select-update-test-cleanup.sql"));
     }
 
     private void setupDateTimeData() {

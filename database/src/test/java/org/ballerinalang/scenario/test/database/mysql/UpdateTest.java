@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class UpdateTest extends ScenarioTestBase {
@@ -87,12 +88,25 @@ public class UpdateTest extends ScenarioTestBase {
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 
+    @Test(description = "Test Update with generated keys")
+    public void testGeneratedKeyOnInsert() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testGeneratedKeyOnInsert");
+        Map<String, Long> expectedGeneratedKeys = new HashMap<>(1);
+        expectedGeneratedKeys.put("GENERATED_KEY", 1L);
+        AssertionUtil.assertUpdateQueryWithGeneratedKeysReturnValue(returns[0], 1, expectedGeneratedKeys);
+    }
+
+    @Test(description = "Test Update with generated keys - empty results scenario")
+    public void testGeneratedKeyOnInsertEmptyResults() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testGeneratedKeyOnInsertEmptyResults");
+        AssertionUtil.assertUpdateQueryWithGeneratedKeysReturnValue(returns[0], 1, new HashMap<>(0));
+    }
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
         BRunUtil.invoke(updateCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
-                Paths.get(resourcePath.toString(), "sql-src", "mysql", "dml-select-test-cleanup.sql"));
+                Paths.get(resourcePath.toString(), "sql-src", "mysql", "select-update-test-cleanup.sql"));
     }
 
 }
