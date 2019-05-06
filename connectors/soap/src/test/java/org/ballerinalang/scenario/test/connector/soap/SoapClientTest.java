@@ -39,11 +39,19 @@ public class SoapClientTest extends ScenarioTestBase {
         port = deploymentProperties.getProperty("NodePort");
     }
 
-    @Test(description = "Test SOAP client")
+    @Test(description = "Test SOAP client in the success scenario")
     public void testSoapClient() throws Exception {
-        String url = "http://" + host + ":" + port + "/SoapTestService";
+        String url = "http://" + host + ":" + port + "/SoapTestService/sendSoapRequest";
         HttpResponse httpResponse = HttpClientRequest.doGet(url);
         Assert.assertEquals(httpResponse.getResponseCode(), 200, "Response code mismatching");
         Assert.assertEquals(httpResponse.getData(), "SOAP11 is working !");
+    }
+
+    @Test(description = "Test SOAP client for failure scenario with incorrect password digest values")
+    public void testSoapClientError() throws Exception {
+        String url = "http://" + host + ":" + port + "/SoapTestService/sendErrorSoapRequest";
+        HttpResponse httpResponse = HttpClientRequest.doGet(url);
+        Assert.assertEquals(httpResponse.getResponseCode(), 401, "Response code mismatching");
+        Assert.assertEquals(httpResponse.getData(), "Authentication failure");
     }
 }
