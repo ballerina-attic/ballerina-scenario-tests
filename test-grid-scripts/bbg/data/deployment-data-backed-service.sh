@@ -70,7 +70,7 @@ build_and_deploy_guide() {
     cd data-backed-service/guide
     ${ballerina_home}/bin/ballerina build data_backed_service --skiptests
     cd ../..
-    kubectl apply -f ${work_dir}/data-backed-service/guide/target/kubernetes/data_backed_service
+    kubectl apply -f ${work_dir}/data-backed-service/guide/target/kubernetes/data_backed_service --namespace=${cluster_namespace}
 }
 
 write_properties_to_data_bucket() {

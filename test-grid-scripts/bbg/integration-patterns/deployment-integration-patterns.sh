@@ -60,7 +60,7 @@ function build_and_deploy_guide() {
     ${ballerina_home}/bin/ballerina init
     ${ballerina_home}/bin/ballerina build passthrough --skiptests
     cd ../..
-    kubectl apply -f ${work_dir}/pass-through-messaging/guide/target/kubernetes/passthrough
+    kubectl apply -f ${work_dir}/pass-through-messaging/guide/target/kubernetes/passthrough --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {

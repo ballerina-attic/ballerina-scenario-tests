@@ -35,10 +35,10 @@ setup_deployment_env() {
     readonly docker_password=${infra_config["dockerhub_ballerina_scenarios_password"]}
 
     # Create a custom random namespace
-    custom_namespace=$(generate_random_namespace)
-    kubectl create namespace ${custom_namespace}
+    readonly cluster_namespace=$(generate_random_namespace)
+    kubectl create namespace ${cluster_namespace}
     # Enforce the created namespace for future kubectl usages
-    kubectl config set-context $(kubectl config current-context) --namespace=${custom_namespace}
+    kubectl config set-context $(kubectl config current-context) --namespace=${cluster_namespace}
 
     local ballerina_version=${infra_config["BallerinaVersion"]}
     # Install ballerina
@@ -49,7 +49,7 @@ setup_deployment_env() {
 
 propagate_cleanup_properties() {
     # Store namespace to be cleaned up at the end
-    echo "NamespacesToCleanup=${custom_namespace}" >> ${output_dir}/infrastructure-cleanup.properties
+    echo "NamespacesToCleanup=${cluster_namespace}" >> ${output_dir}/infrastructure-cleanup.properties
 }
 
 if setup_deployment_env; then
