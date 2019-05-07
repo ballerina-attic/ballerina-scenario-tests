@@ -25,7 +25,7 @@ infrastructureConfig:
     - OracleJDK-8
   provisioners:
   - name: ballerina-deployment
-    remoteRepository: "https://github.com/bhashinee/ballerina-scenario-tests.git"
+    remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
     remoteBranch: "master"
     description: creates infrastructure for ballerina scenario tests
     scripts:
@@ -42,7 +42,7 @@ deploymentConfig:
   deploymentPatterns:
     - name: 'messaging-with-soap'
       description: 'soap-scenario-tests'
-      remoteRepository: "https://github.com/bhashinee/ballerina-scenario-tests.git"
+      remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
       remoteBranch: "master"
       dir: .
       scripts:
@@ -55,7 +55,7 @@ deploymentConfig:
             TestGroup: "SOAPConnector"
 scenarioConfigs:
 - testType: TESTNG
-  remoteRepository: "https://github.com/bhashinee/ballerina-scenario-tests.git"
+  remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
   remoteBranch: "master"
   name: "ballerinaScenarios"
   description: "soap-scenario-tests"
