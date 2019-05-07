@@ -87,7 +87,7 @@ function build_and_deploy_guide() {
     cd messaging-with-kafka/guide
     ${ballerina_home}/bin/ballerina build product_admin_portal --skiptests
     cd ../..
-    kubectl apply -f ${work_dir}/messaging-with-kafka/guide/target/kubernetes/product_admin_portal
+    kubectl apply -f ${work_dir}/messaging-with-kafka/guide/target/kubernetes/product_admin_portal --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {

@@ -60,7 +60,7 @@ function build_and_deploy_soap_client() {
     ${ballerina_home}/bin/ballerina init
     ${ballerina_home}/bin/ballerina build soap-client --skiptests
     cd ../
-    kubectl apply -f ${work_dir}/soap-messaging/target/kubernetes/soap-client
+    kubectl apply -f ${work_dir}/soap-messaging/target/kubernetes/soap-client --namespace=${cluster_namespace}
 }
 
 function deploy_soap_resources() {
