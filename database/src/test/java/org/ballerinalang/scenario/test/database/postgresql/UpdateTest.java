@@ -107,7 +107,7 @@ public class UpdateTest extends ScenarioTestBase {
     public void cleanup() throws Exception {
         BRunUtil.invoke(updateCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
-                Paths.get(resourcePath.toString(), "sql-src", "postgresql", "ddl-select-test-cleanup.sql"));
+                Paths.get(resourcePath.toString(), "sql-src", "postgresql", "cleanup-select-test.sql"));
     }
 
 }

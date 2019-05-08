@@ -97,7 +97,7 @@ public class BatchUpdateTest extends ScenarioTestBase {
     public void cleanup() throws Exception {
         BRunUtil.invoke(batchUpdateCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
-                Paths.get(resourcePath.toString(), "sql-src", "mysql", "select-update-test-cleanup.sql"));
+                Paths.get(resourcePath.toString(), "sql-src", "mysql", "cleanup-select-update-test.sql"));
     }
     
 }

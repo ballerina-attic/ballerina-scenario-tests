@@ -247,7 +247,7 @@ public class SelectTest extends ScenarioTestBase {
     public void cleanup() throws Exception {
         BRunUtil.invoke(selectCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
-                Paths.get(resourcePath.toString(), "sql-src", "mysql", "select-update-test-cleanup.sql"));
+                Paths.get(resourcePath.toString(), "sql-src", "mysql", "cleanup-select-update-test.sql"));
     }
 
     private void setupDateTimeData() {
