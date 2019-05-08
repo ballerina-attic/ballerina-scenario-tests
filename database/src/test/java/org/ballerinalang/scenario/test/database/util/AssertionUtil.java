@@ -48,7 +48,7 @@ public class AssertionUtil {
     }
 
     public static void assertUpdateQueryWithGeneratedKeysReturnValue(BValue returnedVal, int expectedUpdatedRowCount,
-            Map<String, Long> expectedGeneratedKeys) {
+            Map<String, String> expectedGeneratedKeys) {
         Assert.assertTrue(returnedVal instanceof BMap, returnedVal instanceof BError ?
                 getErrorReturnedAssertionMessage((BError) returnedVal) :
                 "Return type invalid");
@@ -59,7 +59,7 @@ public class AssertionUtil {
         for (String key : expectedGeneratedKeys.keySet()) {
             Assert.assertTrue(actualGeneratedKeys.getMap().containsKey(key),
                     "Key: " + key + " does not exist in generated keys");
-            Assert.assertEquals(Long.valueOf(((BInteger) actualGeneratedKeys.get(key)).intValue()),
+            Assert.assertEquals(actualGeneratedKeys.get(key).stringValue(),
                     expectedGeneratedKeys.get(key));
         }
     }

@@ -89,7 +89,7 @@ function testUpdateDateTimeWithValuesParam() returns sql:UpdateResult | error {
 }
 
 function testGeneratedKeyOnInsert() returns sql:UpdateResult | error {
-    return testDB->update("INSERT INTO UPDATE_TEST_GENERATED_KEYS (ID, COL1, COL2) VALUES (1, 'abc', 92)");
+    return testDB->update("INSERT INTO UPDATE_TEST_GENERATED_KEYS (COL1, COL2) VALUES ('abc', 92)");
 }
 
 function testGeneratedKeyOnInsertEmptyResults() returns sql:UpdateResult | error {
@@ -134,8 +134,3 @@ returns sql:UpdateResult | error {
 function stopDatabaseClient() {
     checkpanic testDB.stop();
 }
-
-
-
-
-
