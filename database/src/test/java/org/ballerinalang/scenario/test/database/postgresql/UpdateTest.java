@@ -15,6 +15,7 @@ import org.testng.annotations.Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class UpdateTest extends ScenarioTestBase {
@@ -80,6 +81,26 @@ public class UpdateTest extends ScenarioTestBase {
         BValue[] returns = BRunUtil.invokeFunction(updateCompileResult, "testUpdateDateTimeWithValues");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
+
+    @Test(description = "Test Update with generated keys")
+    public void testGeneratedKeyOnInsert() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testGeneratedKeyOnInsert");
+        Map<String, String> expectedGeneratedKeys = new HashMap<>(3);
+        expectedGeneratedKeys.put("id", "1");
+        expectedGeneratedKeys.put("col1", "abc");
+        expectedGeneratedKeys.put("col2", "92");
+        AssertionUtil.assertUpdateQueryWithGeneratedKeysReturnValue(returns[0], 1, expectedGeneratedKeys);
+    }
+
+    @Test(description = "Test Update with generated keys - empty results scenario")
+    public void testGeneratedKeyOnInsertEmptyResults() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testGeneratedKeyOnInsertEmptyResults");
+        Map<String, String> expectedGeneratedKeys = new HashMap<>(2);
+        expectedGeneratedKeys.put("col1", "xyz");
+        expectedGeneratedKeys.put("col2", "24");
+        AssertionUtil.assertUpdateQueryWithGeneratedKeysReturnValue(returns[0], 1, expectedGeneratedKeys);
+    }
+
 
 
     @AfterClass(alwaysRun = true)

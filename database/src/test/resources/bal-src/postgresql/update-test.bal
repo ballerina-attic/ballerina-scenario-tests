@@ -71,6 +71,14 @@ function testUpdateDateTimeWithValues() returns sql:UpdateResult | error {
     return runInsertQueryWithParams("SELECT_UPDATE_TEST_DATETIME_TYPES", id, dateVal, timeVal, timestampVal, timestampzVal);
 }
 
+function testGeneratedKeyOnInsert() returns sql:UpdateResult | error {
+    return testDB->update("INSERT INTO UPDATE_TEST_GENERATED_KEYS (COL1, COL2) VALUES ('abc', 92)");
+}
+
+function testGeneratedKeyOnInsertEmptyResults() returns sql:UpdateResult | error {
+    return testDB->update("INSERT INTO UPDATE_TEST_GENERATED_KEYS_NO_KEY (COL1, COL2) VALUES ('xyz', 24)");
+}
+
 function runInsertQueryWithValues(string tableName, (int | float | string | byte[])... parameters)
              returns sql:UpdateResult | error {
     int paramLength = parameters.length();
