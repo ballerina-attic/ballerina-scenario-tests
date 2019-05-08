@@ -25,7 +25,7 @@ jdbc:Client testDB =  new jdbc:Client({
     });
 
 function testUpdateNumericTypesWithValues() returns sql:UpdateResult | error {
-    return runInsertQueryWithValues("SELECT_UPDATE_TEST_NUMERIC_TYPES", 1, 32765, 8388603, 2147483644, 1034.789);
+    return runInsertQueryWithValues("SELECT_UPDATE_TEST_NUMERIC_TYPES", 1, 32765, 8388603, 2147483644, 1034.789, 15678.9845);
 }
 
 function testUpdateNumericTypesWithParams() returns sql:UpdateResult | error {
@@ -34,6 +34,7 @@ function testUpdateNumericTypesWithParams() returns sql:UpdateResult | error {
     sql:Parameter intVal = { sqlType: sql:TYPE_INTEGER, value: 8388603 };
     sql:Parameter bigIntVal = { sqlType: sql:TYPE_BIGINT, value: 2147483644 };
     sql:Parameter numericVal = { sqlType: sql:TYPE_NUMERIC, value: 1034.789 };
+    sql:Parameter decimalVal = { sqlType: sql:TYPE_DECIMAL, value: 15678.9845 };
 
     return runInsertQueryWithParams("SELECT_UPDATE_TEST_NUMERIC_TYPES", id, smallIntVal, intVal, bigIntVal, numericVal);
 }
