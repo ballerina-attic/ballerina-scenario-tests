@@ -47,14 +47,26 @@ public class UpdateTest extends ScenarioTestBase {
     }
 
     @Test(description = "Test update numeric types with values")
-    public void testUpdateNumericTypesWithValues() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateNumericTypesWithValues");
+    public void testUpdateIntegerTypesWithValues() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateIntegerTypesWithValues");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 
     @Test(description = "Test update numeric types with params")
-    public void testUpdateNumericTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateNumericTypesWithParams");
+    public void testUpdateIntegerTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateIntegerTypesWithParams");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+    }
+
+    @Test(description = "Test update numeric types with values")
+    public void testUpdateFixedPointTypesWithValues() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFixedPointTypesWithValues");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+    }
+
+    @Test(description = "Test update numeric types with values")
+    public void testUpdateFixedPointTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFixedPointTypesWithParams");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 
