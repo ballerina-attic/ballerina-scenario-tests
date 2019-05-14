@@ -56,19 +56,19 @@ public class CallTest extends ScenarioTestBase {
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "mysql", "dml-call-test.sql"));
         callCompilerResult = BCompileUtil
-                .compile(Paths.get(resourcePath.toString(), "bal-src", "mysql", "call-test.bal").toString());
+                .compileAndSetup(Paths.get(resourcePath.toString(), "bal-src", "mysql", "call-test.bal").toString());
         setupDateTimeData();
     }
 
 //    @Test(description = "Test numeric type In params")
 //    public void testCallInParamNumericTypes() {
-//        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamNumericTypes");
+//        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInParamNumericTypes");
 //        AssertionUtil.assertCallQueryReturnValue(returns[0]);
 //    }
 
     @Test(description = "Test numeric type OUT params")
     public void testCallOutParamNumericTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamNumericTypes");
+        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamNumericTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray numericValues = (BValueArray) returns[1];
@@ -84,7 +84,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test numeric type INOUT params")
     public void testCallInOutParamNumericTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamNumericTypes");
+        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamNumericTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray numericValues = (BValueArray) returns[1];
@@ -100,7 +100,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test string type OUT params")
     public void testCallOutParamStringTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamStringTypes");
+        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamStringTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray stringValues = (BValueArray) returns[1];
@@ -115,7 +115,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test string type INOUT params")
     public void testCallInOutParamStringTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamStringTypes");
+        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamStringTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray stringValues = (BValueArray) returns[1];
@@ -130,7 +130,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test datetime type OUT params")
     public void testCallOutParamDateTimeValues() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamDateTimeValues");
+        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamDateTimeValues");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray valueArray = (BValueArray) returns[1];
         AssertionUtil.assertDateStringValues(valueArray, date, time, datetime, timestamp);
@@ -138,7 +138,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test datetime type INOUT params")
     public void testCallInOutParamDateTimeValues() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamDateTimeValues");
+        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamDateTimeValues");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray valueArray = (BValueArray) returns[1];
         AssertionUtil.assertDateStringValues(valueArray, date, time, datetime, timestamp);
@@ -146,7 +146,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test complex type OUT params")
     public void testCallOutParamComplexTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamComplexTypes");
+        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamComplexTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray complexTypes = (BValueArray) returns[1];
         String[] expectedValues = {
@@ -168,7 +168,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test complex type OUT params")
     public void testCallInOutParamComplexTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamComplexTypes");
+        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamComplexTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray complexTypes = (BValueArray) returns[1];
         String[] expectedValues = {
@@ -227,13 +227,13 @@ public class CallTest extends ScenarioTestBase {
         timestamp = cal.getTimeInMillis();
         args[3] = new BInteger(timestamp);
 
-        BRunUtil.invoke(callCompilerResult, "setUpDatetimeData", args);
+        BRunUtil.invokeStateful(callCompilerResult, "setUpDatetimeData", args);
     }
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
         if (callCompilerResult != null) {
-            BRunUtil.invoke(callCompilerResult, "stopDatabaseClient");
+            BRunUtil.invokeStateful(callCompilerResult, "stopDatabaseClient");
         }
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "mysql", "cleanup-select-update-test.sql"));
