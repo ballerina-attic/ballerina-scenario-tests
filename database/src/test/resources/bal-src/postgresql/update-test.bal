@@ -24,7 +24,7 @@ jdbc:Client testDB =  new jdbc:Client({
         password: config:getAsString("database.postgres.test.jdbc.password")
     });
 
-function testUpdateNumericTypesWithValues() returns sql:UpdateResult | error {
+function testUpdateIntegerTypesWithValues() returns sql:UpdateResult | error {
     return runInsertQueryWithValues("SELECT_UPDATE_TEST_INTEGER_TYPES", 1, 32765, 8388603, 2147483644);
 }
 
@@ -76,10 +76,11 @@ function testUpdateDateTimeWithValues() returns sql:UpdateResult | error {
     sql:Parameter dateVal = { sqlType: sql:TYPE_DATE, value: "2019-03-27-08:01" };
     sql:Parameter timeVal = { sqlType: sql:TYPE_TIME, value: "17:43:21.999999" };
     sql:Parameter timezVal = { sqlType: sql:TYPE_TIME, value: "17:43:21.999999+08:33" };
-    sql:Parameter timestampVal = { sqlType: sql:TYPE_TIMESTAMP, value: "1948-02-04T01:05:15.999" };
-    sql:Parameter timestampzVal = { sqlType: sql:TYPE_TIMESTAMP, value: "1970-02-01T01:05:15.999-08:00" };
+    sql:Parameter timestampVal = { sqlType: sql:TYPE_TIMESTAMP, value: "2004-10-19T10:23:54+02:00" };
+    sql:Parameter timestampzVal = { sqlType: sql:TYPE_TIMESTAMP, value: "2004-10-19T10:23:54+02:00" };
 
-    return runInsertQueryWithParams("SELECT_UPDATE_TEST_DATETIME_TYPES", id, dateVal, timeVal, timestampVal, timestampzVal);
+    return runInsertQueryWithParams("SELECT_UPDATE_TEST_DATETIME_TYPES", id, dateVal, timeVal, timezVal, timestampVal,
+        timestampzVal);
 }
 
 function testGeneratedKeyOnInsert() returns sql:UpdateResult | error {
