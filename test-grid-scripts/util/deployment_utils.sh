@@ -24,12 +24,56 @@ readonly cluster_name="ballerina-testgrid-cluster-v2"
 # $1 - Ballerina version
 install_ballerina() {
     local ballerina_version=$1
+    if [[ "${ballerina_version}" = "" ]]; then
+        echo "Ballerina version not provided!"
+        exit 2
+    fi
+    echo "Installing Ballerina version: ${ballerina_version}"
     wget https://product-dist.ballerina.io/downloads/${ballerina_version}/ballerina-${ballerina_version}.zip --quiet
+    local wget_output=$?
+    if [ ${wget_output} -ne 0 ]; then
+        echo "Ballerina download failed!"
+        exit 2;
+    fi
     unzip -q ballerina-${ballerina_version}.zip -d ${utils_parent_path}
     ${utils_parent_path}/ballerina-${ballerina_version}/bin/ballerina version
     readonly ballerina_home=${utils_parent_path}/ballerina-${ballerina_version}
 }
 
+# Install the provided Ballerina version
+#
+# $1 - Ballerina version
+install_ballerina_nightly() {
+    local ballerina_version=$1
+    echo "Installing Ballerina version: ${ballerina_version}"
+    wget https://product-dist.ballerina.io/nightly/${ballerina_version}/ballerina-${ballerina_version}.zip --quiet
+    local wget_output=$?
+    if [ ${wget_output} -ne 0 ]; then
+        echo "Ballerina download failed!"
+        exit 2;
+    fi
+    unzip -q ballerina-${ballerina_version}.zip -d ${utils_parent_path}
+    ${utils_parent_path}/ballerina-${ballerina_version}/bin/ballerina version
+    readonly ballerina_home=${utils_parent_path}/ballerina-${ballerina_version}
+}
+
+# Download and install Ballerina from the provided link
+#
+# $1 - link to download Ballerina
+install_ballerina_from_link() {
+    mkdir ${utils_parent_path}/temp_ballerina_download
+    echo "Downloading Ballerina pack from: $1"
+    wget $1 -P ${utils_parent_path}/temp_ballerina_download
+    local wget_output=$?
+    if [ ${wget_output} -ne 0 ]; then
+        echo "Ballerina download failed!"
+        exit 2;
+    fi
+    local ballerina_dist=$(ls ${utils_parent_path}/temp_ballerina_download | head -1)
+    unzip -q ${utils_parent_path}/temp_ballerina_download/${ballerina_dist} -d ${utils_parent_path}
+    local ballerina_home_dir_name=$(sed "s:.zip::g" <<< ${ballerina_dist})
+    readonly ballerina_home=${utils_parent_path}/${ballerina_home_dir_name}
+}
 # Downloads and extracts the MySQL connector
 #
 # $1 - Download location
