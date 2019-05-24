@@ -57,8 +57,8 @@ deploy_mysql_resources() {
 }
 
 replace_variables_in_bal_file() {
-    sed -i "s/default = \"localhost\"/default = \"mysql-service\"/" ${bal_path}
-    sed -i "s/<BALLERINA_VERSION>/${infra_config["BallerinaVersion"]}/" ${bal_path}
+    sed -i "s/defaultValue = \"localhost\"/defaultValue = \"mysql-service\"/" ${bal_path}
+    sed -i "s/<BALLERINA_VERSION>/${ballerina_version}/" ${bal_path}
     sed -i "s:<path_to_JDBC_jar>:"${work_dir}/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47.jar":g" ${bal_path}
     sed -i "s:<USERNAME>:${docker_user}:g" ${bal_path}
     sed -i "s:<PASSWORD>:${docker_password}:g" ${bal_path}
@@ -68,6 +68,11 @@ replace_variables_in_bal_file() {
 build_and_deploy_guide() {
     download_and_extract_mysql_connector ${work_dir}
     cd data-backed-service/guide
+    local is_debug_enabled=${infra_config["isDebugEnabled"]}
+    if [ "${is_debug_enabled}" = "true" ]; then
+       # Set the environmental variable so that ballerina k8s artifact creation can be debugged
+       export BAL_DOCKER_DEBUG=true
+    fi
     ${ballerina_home}/bin/ballerina build data_backed_service --skiptests
     cd ../..
     kubectl apply -f ${work_dir}/data-backed-service/guide/target/kubernetes/data_backed_service --namespace=${cluster_namespace}

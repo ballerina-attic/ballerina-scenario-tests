@@ -40,9 +40,37 @@ setup_deployment_env() {
     # Enforce the created namespace for future kubectl usages
     kubectl config set-context $(kubectl config current-context) --namespace=${cluster_namespace}
 
-    local ballerina_version=${infra_config["BallerinaVersion"]}
-    # Install ballerina
-    install_ballerina ${ballerina_version}
+    local ballerina_version_type=${infra_config["BallerinaVersionType"]:-""}
+
+    if [ ${ballerina_version_type:-""} = "LatestSnapshot" ]; then
+        wget https://raw.githubusercontent.com/ballerina-platform/ballerina-lang/master/pom.xml -O ballerinalang-pom.xml
+        local ballerina_version_in_pom=$(grep -oP '(?<=<version>).*?(?=</version>)' ballerinalang-pom.xml  | head -1)
+        echo "Ballerina version in pom: ${ballerina_version_in_pom}"
+        echo "Installing the nightly corresponding to the version: ${ballerina_version_in_pom}"
+        # Install ballerina
+        install_ballerina_nightly ${ballerina_version_in_pom}
+    elif [ "${ballerina_version_type}" = "RC" ]; then
+        local rc_location="${infra_config["RCLocation"]}";
+        if [ "${rc_location}" = "" ]; then
+            echo "RC link not provided!"
+            exit 2
+        fi
+        # This is a temporary solution until wso2/testgrid#218 is fixed
+        local corrected_url=$(sed 's:https\\:https:g' <<< ${rc_location})
+        corrected_url=$(sed 's:http\\:http:g' <<< ${corrected_url})
+        echo "Ballerina download location: ${corrected_url}"
+        install_ballerina_from_link ${corrected_url}
+    else
+        local ballerina_version_in_yaml="${infra_config["BallerinaVersion"]}"
+        if [ "${ballerina_version_in_yaml}" = "" ]; then
+            echo "No information provided regarding the Ballerina version to use!"
+            exit 2
+        fi
+        install_ballerina ${ballerina_version_in_yaml}
+    fi
+
+    local ballerina_version_cmd_output="$(${ballerina_home}/bin/ballerina version)"
+    ballerina_version=$(sed "s:Ballerina ::g" <<< ${ballerina_version_cmd_output})
 
     echo "TestGroup=${infra_config["TestGroup"]}" >> ${output_dir}/deployment.properties
 }
