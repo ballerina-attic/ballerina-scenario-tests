@@ -44,8 +44,6 @@ fi
 
 database_name=$(generate_random_db_name)
 
-cat ${input_dir}/testplan-props.properties
-
 echo "Creating database..."
 echo "Database details: DB_TYPE: ${database_type} | DB_VERSION:${database_version} | DB_NAME: ${database_name}"
 create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" database_host
@@ -58,4 +56,5 @@ if [ ${database_type} = "MySQL" ]; then
     echo "database.mysql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
     echo "database.mysql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
     echo "TestGroup=mysql" >> ${output_dir}/infrastructure.properties
+    echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
 fi

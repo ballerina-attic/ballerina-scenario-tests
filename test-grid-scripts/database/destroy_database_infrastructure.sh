@@ -16,4 +16,4 @@ declare -A infra_cleanup_config
 read_infra_cleanup_props ${input_dir} infra_cleanup_config
 
 db_identifier=${infra_cleanup_config[DatabaseName]}
-delete_database db_identifier
+delete_database ${db_identifier}
