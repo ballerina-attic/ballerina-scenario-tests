@@ -35,6 +35,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
+@Test(groups = Constants.MYSQL_TESTNG_GROUP)
 public class BatchUpdateTest extends ScenarioTestBase {
     private CompileResult batchUpdateCompileResult;
     private String jdbcUrl;

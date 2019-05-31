@@ -43,7 +43,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Properties;
 
-@Test(groups = "MySQLTest")
+@Test(groups = Constants.MYSQL_TESTNG_GROUP)
 public class SelectTest extends ScenarioTestBase {
     private CompileResult selectCompileResult;
     private String jdbcUrl;

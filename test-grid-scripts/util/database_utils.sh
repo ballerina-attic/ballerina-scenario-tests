@@ -92,6 +92,15 @@ function generate_random_db_name() {
     echo $(generate_random_name "ballerina-database")
 }
 
+# Generates a random string with the provided prefix
+#
+# $1 - prefix
+function generate_random_name() {
+    local prefix=$1
+    local new_uuid=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
+    echo ${prefix}-${new_uuid}
+}
+
 # Returns the port value for a given database type.
 #
 #$1 - db type
