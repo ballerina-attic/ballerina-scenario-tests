@@ -35,7 +35,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
-@Test(groups = "PostgresTest")
+@Test(groups = Constants.POSTGRES_TESTNG_GROUP)
 public class DdlTest extends ScenarioTestBase {
     private CompileResult ddlCompileResult;
     private String jdbcUrl;

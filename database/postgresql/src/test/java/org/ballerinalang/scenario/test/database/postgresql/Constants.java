@@ -23,6 +23,8 @@ public class Constants {
     public static final String POSTGRES_JDBC_URL_KEY ="database.postgres.test.jdbc.url";
     public static final String POSTGRES_JDBC_USERNAME_KEY ="database.postgres.test.jdbc.username";
     public static final String POSTGRES_JDBC_PASSWORD_KEY ="database.postgres.test.jdbc.password";
+    public static final String POSTGRES_TESTNG_GROUP = "postgres";
+
 
     public static final String SMALLINT_VAL_FIELD = "smallIntVal";
     public static final String INT_VAL_FIELD = "intVal";

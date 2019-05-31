@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Properties;
 
-
+@Test(groups = Constants.POSTGRES_TESTNG_GROUP)
 public class CallTest extends ScenarioTestBase {
     private CompileResult callCompilerResult;
     private String jdbcUrl;

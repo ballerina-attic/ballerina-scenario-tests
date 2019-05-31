@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Properties;
 
+@Test(groups = Constants.POSTGRES_TESTNG_GROUP)
 public class SelectTest extends ScenarioTestBase {
     private CompileResult selectCompileResult;
     private String jdbcUrl;

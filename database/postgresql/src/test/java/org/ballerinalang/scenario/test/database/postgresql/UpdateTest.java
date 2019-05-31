@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+@Test(groups = Constants.POSTGRES_TESTNG_GROUP)
 public class UpdateTest extends ScenarioTestBase {
     private CompileResult updateCompileResult;
     private String jdbcUrl;
