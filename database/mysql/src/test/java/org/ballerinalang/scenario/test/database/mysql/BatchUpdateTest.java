@@ -60,12 +60,12 @@ public class BatchUpdateTest extends ScenarioTestBase {
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "ddl-select-update-test.sql"));
         batchUpdateCompileResult = BCompileUtil
-                .compile(Paths.get(resourcePath.toString(), "bal-src", "batch-update-test.bal").toString());
+                .compileAndSetup(Paths.get(resourcePath.toString(), "bal-src", "batch-update-test.bal").toString());
     }
 
     @Test(description = "Test update numeric types with params")
     public void testBatchUpdateNumericTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateNumericTypesWithParams");
+        BValue[] returns = BRunUtil.invokeStateful(batchUpdateCompileResult, "testBatchUpdateNumericTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
@@ -73,21 +73,21 @@ public class BatchUpdateTest extends ScenarioTestBase {
 
     @Test(description = "Test update string types with params")
     public void testBatchUpdateStringTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateStringTypesWithParams");
+        BValue[] returns = BRunUtil.invokeStateful(batchUpdateCompileResult, "testBatchUpdateStringTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
     
     @Test(description = "Test update complex types with params")
     public void testBatchUpdateComplexTypesWithParams() {
-        BValue[] returns = BRunUtil.invokeFunction(batchUpdateCompileResult, "testBatchUpdateComplexTypesWithParams");
+        BValue[] returns = BRunUtil.invokeStateful(batchUpdateCompileResult, "testBatchUpdateComplexTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update datetime types with params")
     public void testBatchUpdateDateTimeWithValuesParam() {
-        BValue[] returns = BRunUtil.invokeFunction(batchUpdateCompileResult, "testBatchUpdateDateTimeWithValuesParam");
+        BValue[] returns = BRunUtil.invokeStateful(batchUpdateCompileResult, "testBatchUpdateDateTimeWithValuesParam");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
@@ -95,7 +95,7 @@ public class BatchUpdateTest extends ScenarioTestBase {
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
-        BRunUtil.invoke(batchUpdateCompileResult, "stopDatabaseClient");
+        BRunUtil.invokeStateful(batchUpdateCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "cleanup-select-update-test.sql"));
     }
