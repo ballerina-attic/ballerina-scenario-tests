@@ -4,9 +4,9 @@ import ballerina/time;
 import ballerinax/jdbc;
 
 jdbc:Client testDB = new({
-        url: config:getAsString("database.postgres.test.jdbc.url"),
-        username: config:getAsString("database.postgres.test.jdbc.username"),
-        password: config:getAsString("database.postgres.test.jdbc.password")
+        url: config:getAsString("database.postgresql.test.jdbc.url"),
+        username: config:getAsString("database.postgresql.test.jdbc.username"),
+        password: config:getAsString("database.postgresql.test.jdbc.password")
     });
 
 function testCallOutParamIntegerTypes() returns (table<record{}>[]|error?, any[]) {

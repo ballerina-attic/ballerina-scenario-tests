@@ -65,9 +65,9 @@ const string TIMESTAMP_VAL = "TIMESTAMP_VAL";
 const string TIMESTAMPZ_VAL = "TIMESTAMPZ_VAL";
 
 jdbc:Client testDB = new({
-        url: config:getAsString("database.postgres.test.jdbc.url"),
-        username: config:getAsString("database.postgres.test.jdbc.username"),
-        password: config:getAsString("database.postgres.test.jdbc.password")
+        url: config:getAsString("database.postgresql.test.jdbc.url"),
+        username: config:getAsString("database.postgresql.test.jdbc.username"),
+        password: config:getAsString("database.postgresql.test.jdbc.password")
     });
 
 function testSelectIntegerTypes() returns record{} | error {

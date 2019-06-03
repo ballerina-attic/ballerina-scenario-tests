@@ -57,4 +57,13 @@ if [ ${database_type} = "MySQL" ]; then
     echo "database.mysql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
     echo "TestGroup=mysql" >> ${output_dir}/infrastructure.properties
     echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
+elif [ ${database_type} = "Postgres" ]; then
+    sudo apt-get install -y postgresql-client
+    PGPASSWORD=masteruserpassword psql -h "${database_host}" -p 5432 --username 'masterawsuser' -d postgres < ${database_parent_path}/db_init.sql
+    jdbc_url="jdbc:postgresql://${database_host}:5432/testdb"
+    echo "database.postgresql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
+    echo "database.postgresql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
+    echo "database.postgresql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
+    echo "TestGroup=postgresql" >> ${output_dir}/infrastructure.properties
+    echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
 fi
