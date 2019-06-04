@@ -319,11 +319,18 @@
             </activation>
         </profile>
         <profile>
-            <id>database</id>
+            <id>database-mysql</id>
             <modules>
                 <module>scenarios-commons</module>
                 <module>database/util</module>
                 <module>database/mysql</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>database-postgresql</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>database/util</module>
                 <module>database/postgresql</module>
             </modules>
         </profile>

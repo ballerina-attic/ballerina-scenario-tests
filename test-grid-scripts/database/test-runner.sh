@@ -31,7 +31,7 @@ set -o xtrace
 run_database_module() {
     cat ${input_dir}/deployment.properties
     local module=$1
-    mvn clean install -f ${test_database_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${input_dir} -Dtestng.groups=${module} -P database
+    mvn clean install -f ${test_database_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${input_dir} -P database-${module}
 
     mkdir -p ${output_dir}/scenarios
 

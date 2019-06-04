@@ -38,24 +38,6 @@ infrastructureConfig:
           file: test-grid-scripts/database/destroy_database_infrastructure.sh
           type: SHELL
           phase: DESTROY
-#deploymentConfig:
-#  deploymentPatterns:
-#    - name: 'data-backed-service'
-#      description: 'data-backed-service BBG tests'
-#      remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
-#      remoteBranch: "master"
-#      dir: .
-#      scripts:
-#        - name: 'default'
-#          type: SHELL
-#          file: test-grid-scripts/bbg/data/deployment-data-backed-service.sh
-#          inputParameters:
-#            BallerinaVersionType: "LatestSnapshot" #LatestSnapshot/RC
-#            #BallerinaVersionType: "RC"
-#            #BallerinaVersion: "0.991.0"
-#            #RCLocation: "https://product-dist.ballerina.io/nightly/0.992.0-m2-SNAPSHOT/ballerina-0.992.0-m2-SNAPSHOT.zip"
-#            isDebugEnabled: "true"
-#            TestGroup: "DataBackedService"
 scenarioConfigs:
   - testType: TESTNG
     remoteRepository: "https://github.com/Manuri/ballerina-scenario-tests.git"

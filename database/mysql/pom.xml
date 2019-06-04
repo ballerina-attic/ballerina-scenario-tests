@@ -165,7 +165,6 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
-                    <groups>${testng.groups}</groups>
                     <!-- Required to set ballerina.home to target directory as the target/lib includes extracted balos -->
                     <systemPropertyVariables>
                         <ballerina.home>${project.build.directory}</ballerina.home>
