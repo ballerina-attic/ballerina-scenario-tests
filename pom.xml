@@ -92,6 +92,7 @@
                 <module>bbg/kafka</module>
                 <module>bbg/bbg-integration-patterns</module>
                 <module>connectors/soap</module>
+                <module>connectors/artemis</module>
             </modules>
         </profile>
         <profile>
@@ -113,6 +114,13 @@
             <modules>
                 <module>scenarios-commons</module>
                 <module>connectors/soap</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>messaging-artemis</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>connectors/artemis</module>
             </modules>
         </profile>
         <profile>
