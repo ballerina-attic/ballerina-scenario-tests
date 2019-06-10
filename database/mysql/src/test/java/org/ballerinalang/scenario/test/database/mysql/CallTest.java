@@ -38,7 +38,7 @@ public class CallTest extends ScenarioTestBase {
     @BeforeClass
     public void setup() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
-        jdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY);
+        jdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY) + "/testdb";
         userName = deploymentProperties.getProperty(Constants.MYSQL_JDBC_USERNAME_KEY);
         password = deploymentProperties.getProperty(Constants.MYSQL_JDBC_PASSWORD_KEY);
 

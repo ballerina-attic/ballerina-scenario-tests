@@ -28,7 +28,7 @@ public class BatchUpdateTest extends ScenarioTestBase {
     @BeforeClass
     public void setup() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
-        jdbcUrl = deploymentProperties.getProperty(org.ballerinalang.scenario.test.database.postgresql.Constants.POSTGRES_JDBC_URL_KEY);
+        jdbcUrl = deploymentProperties.getProperty(org.ballerinalang.scenario.test.database.postgresql.Constants.POSTGRES_JDBC_URL_KEY) + "/testdb";
         userName = deploymentProperties.getProperty(Constants.POSTGRES_JDBC_USERNAME_KEY);
         password = deploymentProperties.getProperty(Constants.POSTGRES_JDBC_PASSWORD_KEY);
 

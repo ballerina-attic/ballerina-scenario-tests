@@ -34,6 +34,7 @@ import org.ballerinalang.scenario.test.database.util.AssertionUtil;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
@@ -46,7 +47,7 @@ import java.util.Properties;
 @Test(groups = Constants.MYSQL_TESTNG_GROUP)
 public class SelectTest extends ScenarioTestBase {
     private CompileResult selectCompileResult;
-    private String jdbcUrl;
+    private String testdbJdbcUrl;
     private String userName;
     private String password;
     private Path resourcePath;
@@ -59,24 +60,35 @@ public class SelectTest extends ScenarioTestBase {
     private static long datetimeRec;
     private static long timestampRec;
 
+    @BeforeSuite
+    public void createDatabase() throws Exception {
+        Properties deploymentProperties = getDeploymentProperties();
+        String jdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY) + "/mysql";
+        String userName = deploymentProperties.getProperty(Constants.MYSQL_JDBC_USERNAME_KEY);
+        String password = deploymentProperties.getProperty(Constants.MYSQL_JDBC_PASSWORD_KEY);
+        resourcePath = Paths.get("src", "test", "resources").toAbsolutePath();
+
+        DatabaseUtil.executeSqlFile(jdbcUrl, userName, password, Paths.get(resourcePath.toString(), "sql-src", "db-init.sql"));
+    }
+
     @BeforeClass
     public void setup() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
-        jdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY);
+        testdbJdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY) + "/testdb";
         userName = deploymentProperties.getProperty(Constants.MYSQL_JDBC_USERNAME_KEY);
         password = deploymentProperties.getProperty(Constants.MYSQL_JDBC_PASSWORD_KEY);
 
         ConfigRegistry registry = ConfigRegistry.getInstance();
         HashMap<String, String> configMap = new HashMap<>(3);
-        configMap.put(Constants.MYSQL_JDBC_URL_KEY, jdbcUrl);
+        configMap.put(Constants.MYSQL_JDBC_URL_KEY, testdbJdbcUrl);
         configMap.put(Constants.MYSQL_JDBC_USERNAME_KEY, userName);
         configMap.put(Constants.MYSQL_JDBC_PASSWORD_KEY, password);
         registry.initRegistry(configMap, null, null);
 
         resourcePath = Paths.get("src", "test", "resources").toAbsolutePath();
-        DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
+        DatabaseUtil.executeSqlFile(testdbJdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "ddl-select-update-test.sql"));
-        DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
+        DatabaseUtil.executeSqlFile(testdbJdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "dml-select-test.sql"));
         selectCompileResult = BCompileUtil
                 .compileAndSetup(Paths.get(resourcePath.toString(), "bal-src", "select-test.bal").toString());
@@ -246,7 +258,7 @@ public class SelectTest extends ScenarioTestBase {
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
         BRunUtil.invokeStateful(selectCompileResult, "stopDatabaseClient");
-        DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
+        DatabaseUtil.executeSqlFile(testdbJdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "cleanup-select-update-test.sql"));
     }
 
