@@ -50,17 +50,17 @@ create_database ${database_type} ${database_version} ${database_name} "db.t2.mic
 echo "DB Host: ${database_host}"
 
 if [ ${database_type} = "MySQL" ]; then
-    mysql -h "${database_host}" -P 3306 -u 'masterawsuser' -p'masteruserpassword' <${database_parent_path}/db_init.sql
-    jdbc_url="jdbc:mysql://${database_host}:3306/testdb"
+    #mysql -h "${database_host}" -P 3306 -u 'masterawsuser' -p'masteruserpassword' <${database_parent_path}/db_init.sql
+    jdbc_url="jdbc:mysql://${database_host}:3306"
     echo "database.mysql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
     echo "database.mysql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
     echo "database.mysql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
     echo "TestGroup=mysql" >> ${output_dir}/infrastructure.properties
     echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
 elif [ ${database_type} = "Postgres" ]; then
-    sudo apt-get install -y postgresql-client
-    PGPASSWORD=masteruserpassword psql -h "${database_host}" -p 5432 --username 'masterawsuser' -d postgres < ${database_parent_path}/db_init.sql
-    jdbc_url="jdbc:postgresql://${database_host}:5432/testdb"
+    #sudo apt-get install -y postgresql-client
+    #PGPASSWORD=masteruserpassword psql -h "${database_host}" -p 5432 --username 'masterawsuser' -d postgres < ${database_parent_path}/db_init.sql
+    jdbc_url="jdbc:postgresql://${database_host}:5432"
     echo "database.postgresql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
     echo "database.postgresql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
     echo "database.postgresql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
