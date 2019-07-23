@@ -136,7 +136,7 @@ public class CallTest extends ScenarioTestBase {
         }
     }
 
-    @Test(description = "Test datetime type OUT params")
+    @Test(description = "Test datetime type OUT params", enabled = false)
     public void testCallOutParamDateTimeValues() {
         BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamDateTimeValues");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -144,7 +144,7 @@ public class CallTest extends ScenarioTestBase {
         assertDateStringValues(valueArray, date, time, timez, timestamp, timestampz);
     }
 
-    @Test(description = "Test datetime type INOUT params")
+    @Test(description = "Test datetime type INOUT params", enabled = false)
     public void testCallInOutParamDateTimeValues() {
         BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamDateTimeValues");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -153,8 +153,8 @@ public class CallTest extends ScenarioTestBase {
     }
 
 
-    public static void assertDateStringValues(BValueArray datetimeRecord, long dateInserted, long timeInserted,
-                                              long timezInserted, long timestampInserted, long timestampzInserted) {
+    private static void assertDateStringValues(BValueArray datetimeRecord, long dateInserted, long timeInserted,
+            long timezInserted, long timestampInserted, long timestampzInserted) {
         try {
             DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
             String dateReturned = datetimeRecord.getRefValue(0).stringValue();
