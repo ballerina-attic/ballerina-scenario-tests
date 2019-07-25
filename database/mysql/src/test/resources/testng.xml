@@ -20,7 +20,11 @@ under the License.
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="ballerina-database-test-suite" parallel="false">
+    <listeners>
+        <listener class-name="org.ballerinalang.scenario.test.database.util.JBallerinaTestInitializer"/>
+    </listeners>
     <test name="ballerina-database-postgres-test" preserve-order="true" parallel="false">
+        <parameter name="enableJBallerinaTests" value="true"/>
         <packages>
             <package name="org.ballerinalang.scenario.test.database.mysql.*"/>
         </packages>

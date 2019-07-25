@@ -45,7 +45,6 @@ public class DdlTest extends ScenarioTestBase {
 
     @BeforeClass
     public void setUp() throws Exception {
-        System.setProperty("enableJBallerinaTests", "true");
         Properties deploymentProperties = getDeploymentProperties();
         jdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY) + "/testdb";
         userName = deploymentProperties.getProperty(Constants.MYSQL_JDBC_USERNAME_KEY);
