@@ -15,8 +15,7 @@
 // under the License.
 
 import ballerina/config;
-import ballerina/sql;
-import ballerinax/jdbc;
+import ballerinax/java.jdbc;
 
 jdbc:Client testDB = new({
       url: config:getAsString("database.mysql.test.jdbc.url"),
@@ -24,32 +23,32 @@ jdbc:Client testDB = new({
       password: config:getAsString("database.mysql.test.jdbc.password")
 });
 
-function testCreateTable() returns sql:UpdateResult | error {
+function testCreateTable() returns jdbc:UpdateResult | error {
     return testDB->update("CREATE TABLE IF NOT EXISTS DDL_TEST_CREATE_TABLE(X INT, Y VARCHAR(20))");
 }
 
-function testAlterTable() returns sql:UpdateResult | error {
+function testAlterTable() returns jdbc:UpdateResult | error {
     return testDB->update("ALTER TABLE DDL_TEST_ALTER_TABLE CHANGE COLUMN X X INT NOT NULL AUTO_INCREMENT");
 }
 
-function testDropTable() returns sql:UpdateResult | error {
+function testDropTable() returns jdbc:UpdateResult | error {
     return testDB->update("DROP TABLE DDL_TEST_DROP_TABLE");
 }
 
-function testCreateProcedure() returns sql:UpdateResult | error {
+function testCreateProcedure() returns jdbc:UpdateResult | error {
     return testDB->update("CREATE PROCEDURE DDL_TEST_CREATE_PROC(IN X INT, OUT Y VARCHAR(50), INOUT Z BOOLEAN) 
       BEGIN SELECT \"DDL_TEST_CREATE_PROC called\" END");
 }
 
-function testDropProcedure() returns sql:UpdateResult | error {
+function testDropProcedure() returns jdbc:UpdateResult | error {
     return testDB->update("DROP PROCEDURE DDL_TEST_DROPPING_PROC");
 }
 
-function testCreateIndex() returns sql:UpdateResult | error {
+function testCreateIndex() returns jdbc:UpdateResult | error {
     return testDB->update("CREATE INDEX DDL_TEST_CREATING_INDEX ON DDL_TEST_TABLE");
 }
 
-function testDropIndex() returns sql:UpdateResult | error {
+function testDropIndex() returns jdbc:UpdateResult | error {
     return testDB->update("DROP INDEX DDL_TEST_DROP_INDEX ON DDL_TEST_TABLE");
 }
 

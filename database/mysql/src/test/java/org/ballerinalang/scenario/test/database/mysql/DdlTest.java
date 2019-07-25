@@ -19,10 +19,10 @@
 package org.ballerinalang.scenario.test.database.mysql;
 
 import org.ballerinalang.config.ConfigRegistry;
-import org.ballerinalang.launcher.util.BCompileUtil;
-import org.ballerinalang.launcher.util.BRunUtil;
-import org.ballerinalang.launcher.util.CompileResult;
 import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.test.util.BCompileUtil;
+import org.ballerinalang.test.util.BRunUtil;
+import org.ballerinalang.test.util.CompileResult;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.database.DatabaseUtil;
 import org.ballerinalang.scenario.test.database.util.AssertionUtil;
@@ -45,6 +45,7 @@ public class DdlTest extends ScenarioTestBase {
 
     @BeforeClass
     public void setUp() throws Exception {
+        System.setProperty("enableJBallerinaTests", "true");
         Properties deploymentProperties = getDeploymentProperties();
         jdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY) + "/testdb";
         userName = deploymentProperties.getProperty(Constants.MYSQL_JDBC_USERNAME_KEY);
@@ -61,30 +62,30 @@ public class DdlTest extends ScenarioTestBase {
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "ddl-test.sql"));
         ddlCompileResult = BCompileUtil
-                .compileAndSetup(Paths.get(resourcePath.toString(), "bal-src", "ddl-test.bal").toString());
+                .compile(Paths.get(resourcePath.toString(), "bal-src", "ddl-test.bal").toString());
     }
 
     @Test(description = "Tests table creation DDL query")
     public void testCreateTable() {
-        BValue[] returns = BRunUtil.invokeStateful(ddlCompileResult, "testCreateTable");
+        BValue[] returns = BRunUtil.invoke(ddlCompileResult, "testCreateTable");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 0);
     }
 
     @Test(description = "Tests table dropping DDL query")
     public void testDropTable() {
-        BValue[] returns = BRunUtil.invokeStateful(ddlCompileResult, "testDropTable");
+        BValue[] returns = BRunUtil.invoke(ddlCompileResult, "testDropTable");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 0);
     }
 
     @Test(description = "Tests table alteration DDL query")
     public void testAlterTable() {
-        BValue[] returns = BRunUtil.invokeStateful(ddlCompileResult, "testAlterTable");
+        BValue[] returns = BRunUtil.invoke(ddlCompileResult, "testAlterTable");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 0);
     }
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
-        BRunUtil.invokeStateful(ddlCompileResult, "stopDatabaseClient");
+        BRunUtil.invoke(ddlCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "cleanup-ddl-test.sql"));
     }

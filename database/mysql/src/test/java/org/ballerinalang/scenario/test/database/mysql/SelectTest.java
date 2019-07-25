@@ -18,9 +18,9 @@
 package org.ballerinalang.scenario.test.database.mysql;
 
 import org.ballerinalang.config.ConfigRegistry;
-import org.ballerinalang.launcher.util.BCompileUtil;
-import org.ballerinalang.launcher.util.BRunUtil;
-import org.ballerinalang.launcher.util.CompileResult;
+import org.ballerinalang.test.util.BCompileUtil;
+import org.ballerinalang.test.util.BRunUtil;
+import org.ballerinalang.test.util.CompileResult;
 import org.ballerinalang.model.values.BBoolean;
 import org.ballerinalang.model.values.BDecimal;
 import org.ballerinalang.model.values.BFloat;
@@ -73,6 +73,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @BeforeClass
     public void setup() throws Exception {
+        System.setProperty("enableJBallerinaTests", "true");
         Properties deploymentProperties = getDeploymentProperties();
         testdbJdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY) + "/testdb";
         userName = deploymentProperties.getProperty(Constants.MYSQL_JDBC_USERNAME_KEY);
@@ -91,13 +92,13 @@ public class SelectTest extends ScenarioTestBase {
         DatabaseUtil.executeSqlFile(testdbJdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "dml-select-test.sql"));
         selectCompileResult = BCompileUtil
-                .compileAndSetup(Paths.get(resourcePath.toString(), "bal-src", "select-test.bal").toString());
+                .compile(Paths.get(resourcePath.toString(), "bal-src", "select-test.bal").toString());
         setupDateTimeData();
     }
 
     @Test(description = "Test numeric type selection query.")
     public void testSelectNumericTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testSelectNumericTypes");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectNumericTypes");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap numericTypeRecord = (BMap) returns[0];
         Assert.assertTrue(((BBoolean) numericTypeRecord.get(Constants.BIT_VAL_FIELD)).booleanValue(),
@@ -120,7 +121,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test nil numeric type selection query.")
     public void testSelectNumericTypesNil() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testSelectNumericTypesNil");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectNumericTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap numericTypeRecord = (BMap) returns[0];
         AssertionUtil.assertNullValues(numericTypeRecord, 9, "id");
@@ -128,7 +129,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test float type selection query.")
     public void testSelectFloatTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testSelectFloatTypes");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectFloatTypes");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap floatTypeRecord = (BMap) returns[0];
         Assert.assertEquals(getFloatValFromBMap(floatTypeRecord, Constants.FLOAT_VAL_FIELD), 999.12569, 0.001,
@@ -139,7 +140,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test nil float type selection query.")
     public void testSelectFloatTypesNil() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testSelectFloatTypesNil");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectFloatTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap floatTypeRecord = (BMap) returns[0];
         AssertionUtil.assertNullValues(floatTypeRecord, 3, "id");
@@ -147,7 +148,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test string type selection query.")
     public void testSelectStringTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testSelectStringTypes");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectStringTypes");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap stringTypeRecord = (BMap) returns[0];
         String[] fieldValues = {
@@ -159,7 +160,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test nil string type selection query.")
     public void testSelectStringTypesNil() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testSelectStringTypesNil");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectStringTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap stringTypeRecord = (BMap) returns[0];
         AssertionUtil.assertNullValues(stringTypeRecord, 9, "id", "setVal", "enumVal");
@@ -167,7 +168,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test date time type selection query")
     public void testDateTimeTypesString() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testDateTimeTypesString");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesString");
         Assert.assertTrue(returns[0] instanceof BMap);
         AssertionUtil.assertDateStringValues((BMap) returns[0], date, time, datetime, timestamp);
     }
@@ -175,7 +176,7 @@ public class SelectTest extends ScenarioTestBase {
     // TODO: Add year
     @Test(description = "Test date time type selection query")
     public void testDateTimeTypesInt() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testDateTimeTypesInt");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesInt");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap dateTimeTypeRecord = (BMap) returns[0];
 
@@ -197,7 +198,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test nil date time type selection query")
     public void testDateTimeTypesNil() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testDateTimeTypesNil");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
         AssertionUtil.assertNullValues((BMap) returns[0], 5);
     }
@@ -205,7 +206,7 @@ public class SelectTest extends ScenarioTestBase {
     // TODO: Add year
     @Test(description = "Test date time type selection query")
     public void testDateTimeTypesRecord() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testDateTimeTypesRecord");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesRecord");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap dateTimeTypeRecord = (BMap) returns[0];
         long[] dateTimeExpectedValues = { dateRec, timeRec, datetimeRec, timestampRec };
@@ -221,7 +222,7 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test complex type selection query")
     public void testComplexTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testComplexTypes");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testComplexTypes");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap complexTypeRecord = (BMap) returns[0];
         String[] expectedValues = {
@@ -250,14 +251,14 @@ public class SelectTest extends ScenarioTestBase {
 
     @Test(description = "Test nil complex type selection query")
     public void testComplexTypesNil() {
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "testComplexTypesNil");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testComplexTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
         AssertionUtil.assertNullValues((BMap) returns[0], 7, "id");
     }
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
-        BRunUtil.invokeStateful(selectCompileResult, "stopDatabaseClient");
+        BRunUtil.invoke(selectCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(testdbJdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "cleanup-select-update-test.sql"));
     }
@@ -300,9 +301,9 @@ public class SelectTest extends ScenarioTestBase {
         timestamp = cal.getTimeInMillis();
         args[3] = new BInteger(timestamp);
 
-        BRunUtil.invokeStateful(selectCompileResult, "setUpDatetimeData", args);
+        BRunUtil.invoke(selectCompileResult, "setUpDatetimeData", args);
 
-        BValue[] returns = BRunUtil.invokeStateful(selectCompileResult, "setupDatetimeRecordData");
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "setupDatetimeRecordData");
         dateRec = ((BInteger) returns[0]).intValue();
         timeRec = ((BInteger) returns[1]).intValue();
         datetimeRec = ((BInteger) returns[2]).intValue();

@@ -18,8 +18,8 @@
 
 package org.ballerinalang.scenario.test.database.util;
 
+import org.ballerinalang.model.values.BByte;
 import org.ballerinalang.model.values.BError;
-import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.model.values.BValueArray;
@@ -42,7 +42,7 @@ public class AssertionUtil {
         Assert.assertTrue(returnedVal instanceof BMap, returnedVal instanceof BError ?
                 getErrorReturnedAssertionMessage((BError) returnedVal) :
                 "Return type invalid");
-        Assert.assertEquals(((BInteger) ((BMap) returnedVal).get("updatedRowCount")).intValue(),
+        Assert.assertEquals(((BByte) ((BMap) returnedVal).get("updatedRowCount")).intValue(),
                 expectedUpdatedRowCount);
     }
 
@@ -51,7 +51,7 @@ public class AssertionUtil {
         Assert.assertTrue(returnedVal instanceof BMap, returnedVal instanceof BError ?
                 getErrorReturnedAssertionMessage((BError) returnedVal) :
                 "Return type invalid");
-        Assert.assertEquals(((BInteger) ((BMap) returnedVal).get("updatedRowCount")).intValue(),
+        Assert.assertEquals(((BByte) ((BMap) returnedVal).get("updatedRowCount")).intValue(),
                 expectedUpdatedRowCount);
         BMap actualGeneratedKeys = (BMap) ((BMap) returnedVal).get("generatedKeys");
         Assert.assertEquals(actualGeneratedKeys.size(), expectedGeneratedKeys.size());

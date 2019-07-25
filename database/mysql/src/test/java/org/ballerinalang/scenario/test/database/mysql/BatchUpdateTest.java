@@ -19,9 +19,9 @@
 package org.ballerinalang.scenario.test.database.mysql;
 
 import org.ballerinalang.config.ConfigRegistry;
-import org.ballerinalang.launcher.util.BCompileUtil;
-import org.ballerinalang.launcher.util.BRunUtil;
-import org.ballerinalang.launcher.util.CompileResult;
+import org.ballerinalang.test.util.BCompileUtil;
+import org.ballerinalang.test.util.BRunUtil;
+import org.ballerinalang.test.util.CompileResult;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.database.DatabaseUtil;
@@ -45,6 +45,7 @@ public class BatchUpdateTest extends ScenarioTestBase {
 
     @BeforeClass
     public void setup() throws Exception {
+        System.setProperty("enableJBallerinaTests", "true");
         Properties deploymentProperties = getDeploymentProperties();
         jdbcUrl = deploymentProperties.getProperty(Constants.MYSQL_JDBC_URL_KEY) + "/testdb";
         userName = deploymentProperties.getProperty(Constants.MYSQL_JDBC_USERNAME_KEY);
@@ -61,12 +62,12 @@ public class BatchUpdateTest extends ScenarioTestBase {
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "ddl-select-update-test.sql"));
         batchUpdateCompileResult = BCompileUtil
-                .compileAndSetup(Paths.get(resourcePath.toString(), "bal-src", "batch-update-test.bal").toString());
+                .compile(Paths.get(resourcePath.toString(), "bal-src", "batch-update-test.bal").toString());
     }
 
     @Test(description = "Test update numeric types with params")
     public void testBatchUpdateNumericTypesWithParams() {
-        BValue[] returns = BRunUtil.invokeStateful(batchUpdateCompileResult, "testBatchUpdateNumericTypesWithParams");
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateNumericTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
@@ -74,21 +75,21 @@ public class BatchUpdateTest extends ScenarioTestBase {
 
     @Test(description = "Test update string types with params")
     public void testBatchUpdateStringTypesWithParams() {
-        BValue[] returns = BRunUtil.invokeStateful(batchUpdateCompileResult, "testBatchUpdateStringTypesWithParams");
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateStringTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
     
     @Test(description = "Test update complex types with params")
     public void testBatchUpdateComplexTypesWithParams() {
-        BValue[] returns = BRunUtil.invokeStateful(batchUpdateCompileResult, "testBatchUpdateComplexTypesWithParams");
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateComplexTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update datetime types with params")
     public void testBatchUpdateDateTimeWithValuesParam() {
-        BValue[] returns = BRunUtil.invokeStateful(batchUpdateCompileResult, "testBatchUpdateDateTimeWithValuesParam");
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateDateTimeWithValuesParam");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
@@ -96,7 +97,7 @@ public class BatchUpdateTest extends ScenarioTestBase {
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
-        BRunUtil.invokeStateful(batchUpdateCompileResult, "stopDatabaseClient");
+        BRunUtil.invoke(batchUpdateCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "cleanup-select-update-test.sql"));
     }
