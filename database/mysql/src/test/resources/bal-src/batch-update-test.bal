@@ -9,7 +9,7 @@ jdbc:Client testDB =  new jdbc:Client({
 
 function testBatchUpdateNumericTypesWithParams() returns int[] | error {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
-    jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: 1 };
+    jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: true };
     jdbc:Parameter tinyIntVal = { sqlType: jdbc:TYPE_TINYINT, value: 126 };
     jdbc:Parameter smallIntVal = { sqlType: jdbc:TYPE_SMALLINT, value: 32765 };
     jdbc:Parameter mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32765 };
@@ -21,7 +21,7 @@ function testBatchUpdateNumericTypesWithParams() returns int[] | error {
     jdbc:Parameter?[] paramBatch1 = [id, bitVal, tinyIntVal, smallIntVal, mediumIntVal, intVal, bigIntVal, decimalVal, numericVal];
 
     id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
-    bitVal = { sqlType: jdbc:TYPE_BIT, value: 1 };
+    bitVal = { sqlType: jdbc:TYPE_BIT, value: true };
     tinyIntVal = { sqlType: jdbc:TYPE_TINYINT, value: 126 };
     smallIntVal = { sqlType: jdbc:TYPE_SMALLINT, value: 32765 };
     mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32765 };
