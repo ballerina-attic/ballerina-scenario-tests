@@ -1,9 +1,10 @@
 package org.ballerinalang.scenario.test.database.postgresql;
 
 import org.ballerinalang.config.ConfigRegistry;
-import org.ballerinalang.launcher.util.BCompileUtil;
-import org.ballerinalang.launcher.util.BRunUtil;
-import org.ballerinalang.launcher.util.CompileResult;
+import org.ballerinalang.jvm.values.DecimalValue;
+import org.ballerinalang.test.util.BCompileUtil;
+import org.ballerinalang.test.util.BRunUtil;
+import org.ballerinalang.test.util.CompileResult;
 import org.ballerinalang.model.values.*;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.database.DatabaseUtil;
@@ -56,12 +57,12 @@ public class CallTest extends ScenarioTestBase {
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "dml-call-test.sql"));
         callCompilerResult = BCompileUtil
-                .compileAndSetup(Paths.get(resourcePath.toString(), "bal-src", "call-test.bal").toString());
+                .compile(Paths.get(resourcePath.toString(), "bal-src", "call-test.bal").toString());
         setupDateTimeData();
     }
 
     private void setupDateTimeData() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "setupDatetimeData");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "setupDatetimeData");
         date = ((BInteger) returns[0]).intValue();
         time = ((BInteger) returns[1]).intValue();
         timez = ((BInteger) returns[2]).intValue();
@@ -72,7 +73,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test integer type OUT params")
     public void testCallOutParamIntegerTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamIntegerTypes");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray integerValues = (BValueArray) returns[1];
@@ -83,7 +84,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test integer type INOUT params")
     public void testCallInOutParamIntegerTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamIntegerTypes");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray integerValues = (BValueArray) returns[1];
@@ -94,27 +95,27 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test fixed point types OUT params")
     public void testCallOutParamFixedPointTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamFixedPointTypes");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamFixedPointTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray fixedPointValues = (BValueArray) returns[1];
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
-        Assert.assertEquals(((BFloat) fixedPointValues.getRefValue(0)).floatValue(), 123496789.1234567D, 0.00001);
-        Assert.assertEquals(((BFloat) fixedPointValues.getRefValue(1)).floatValue(), 12345678.12345D, 0.00000001);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(0)).floatValue(), 123496789.1234567D, 0.00001);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(1)).floatValue(), 12345678.12345D, 0.00000001);
     }
 
     @Test(description = "Test fixed point types OUT params")
     public void testCallInOutParamFixedPointTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamFixedPointTypes");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamFixedPointTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray fixedPointValues = (BValueArray) returns[1];
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
-        Assert.assertEquals(((BFloat) fixedPointValues.getRefValue(0)).floatValue(), 123496789.1234567D, 0.00001);
-        Assert.assertEquals(((BFloat) fixedPointValues.getRefValue(1)).floatValue(), 12345678.12345D, 0.00000001);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(0)).floatValue(), 123496789.1234567D, 0.00001);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(1)).floatValue(), 12345678.12345D, 0.00000001);
     }
 
     @Test(description = "Test string type OUT params")
     public void testCallOutParamStringTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamStringTypes");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamStringTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray stringValues = (BValueArray) returns[1];
@@ -126,7 +127,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test string type INOUT params")
     public void testCallInOutParamStringTypes() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamStringTypes");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamStringTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray stringValues = (BValueArray) returns[1];
@@ -138,7 +139,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test datetime type OUT params", enabled = false)
     public void testCallOutParamDateTimeValues() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallOutParamDateTimeValues");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamDateTimeValues");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray valueArray = (BValueArray) returns[1];
         assertDateStringValues(valueArray, date, time, timez, timestamp, timestampz);
@@ -146,7 +147,7 @@ public class CallTest extends ScenarioTestBase {
 
     @Test(description = "Test datetime type INOUT params", enabled = false)
     public void testCallInOutParamDateTimeValues() {
-        BValue[] returns = BRunUtil.invokeStateful(callCompilerResult, "testCallInOutParamDateTimeValues");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamDateTimeValues");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray valueArray = (BValueArray) returns[1];
         assertDateStringValues(valueArray, date, time, timez, timestamp, timestampz);
@@ -189,7 +190,7 @@ public class CallTest extends ScenarioTestBase {
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
-        BRunUtil.invokeStateful(callCompilerResult, "stopDatabaseClient");
+        BRunUtil.invoke(callCompilerResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "cleanup-call-test.sql"));
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,

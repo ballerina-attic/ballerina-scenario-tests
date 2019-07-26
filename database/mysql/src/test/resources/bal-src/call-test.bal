@@ -64,7 +64,7 @@ function testCallOutParamNumericTypes() returns @tainted [table<record{}>[]|erro
 function testCallInOutParamNumericTypes() returns @tainted [table<record{}>[]|error?, any[]] {
     jdbc:Parameter id_in = { sqlType: jdbc:TYPE_INTEGER, value: 2, direction: jdbc:DIRECTION_IN };
     jdbc:Parameter id_out = { sqlType: jdbc:TYPE_INTEGER, value: 1, direction: jdbc:DIRECTION_IN };
-    jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: 1, direction: jdbc:DIRECTION_INOUT };
+    jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: true, direction: jdbc:DIRECTION_INOUT };
     jdbc:Parameter tinyIntVal = { sqlType: jdbc:TYPE_TINYINT, value: 124, direction: jdbc:DIRECTION_INOUT };
     jdbc:Parameter smallIntVal = { sqlType: jdbc:TYPE_SMALLINT, value: 32745, direction: jdbc:DIRECTION_INOUT };
     jdbc:Parameter mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32745, direction: jdbc:DIRECTION_INOUT };

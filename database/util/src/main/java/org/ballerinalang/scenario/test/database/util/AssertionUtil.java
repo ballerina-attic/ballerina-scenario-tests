@@ -70,7 +70,8 @@ public class AssertionUtil {
         BValueArray actualArrayOfUpdatedRowCount = (BValueArray) returnedVal;
         Assert.assertEquals(actualArrayOfUpdatedRowCount.size(), expectedArrayOfUpdatedRowCount.length);
         for(int i = 0; i < expectedArrayOfUpdatedRowCount.length; i++) {
-            Assert.assertEquals(actualArrayOfUpdatedRowCount.getInt(i), expectedArrayOfUpdatedRowCount[i], "Actual row count of param batch " + (i + 1) + " is incorrect" );
+            Assert.assertEquals(actualArrayOfUpdatedRowCount.getInt(i), expectedArrayOfUpdatedRowCount[i],
+                    "Actual row count of param batch " + (i + 1) + " is incorrect");
         }
     }
 
