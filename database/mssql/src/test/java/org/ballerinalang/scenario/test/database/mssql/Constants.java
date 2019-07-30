@@ -24,21 +24,20 @@ public class Constants {
     public static final String MSSQL_JDBC_PASSWORD_KEY = "database.mssql.test.jdbc.password";
     public static final String MSSQL_TESTNG_GROUP = "mssql";
 
-    public static String BIT_VAL_FIELD = "bitVal";
-    public static String TINYINT_VAL_FIELD = "tinyIntVal";
-    public static String SMALLINT_VAL_FIELD = "smallIntVal";
-    public static String MEDIUMINT_VAL_FIELD = "mediumIntVal";
-    public static String INT_VAL_FIELD = "intVal";
-    public static String BIGINT_VAL_FIELD = "bigIntVal";
-    public static String DECIMAL_VAL_FIELD = "decimalVal";
-    public static String NUMERIC_VAL_FIELD = "numericVal";
-    public static String MONEY_VAL_FIELD = "moneyVal";
-    public static String SMALLMONEY_VAL_FIELD = "smallMoneyVal";
+    public static final String BIT_VAL_FIELD = "bitVal";
+    public static final String TINYINT_VAL_FIELD = "tinyIntVal";
+    public static final String SMALLINT_VAL_FIELD = "smallIntVal";
+    public static final String INT_VAL_FIELD = "intVal";
+    public static final String BIGINT_VAL_FIELD = "bigIntVal";
+    public static final String DECIMAL_VAL_FIELD = "decimalVal";
+    public static final String NUMERIC_VAL_FIELD = "numericVal";
+    public static final String MONEY_VAL_FIELD = "moneyVal";
+    public static final String SMALLMONEY_VAL_FIELD = "smallMoneyVal";
 
-    public static String FLOAT_VAL_FIELD = "floatVal";
-    public static String REAL_VAL_FIELD = "realVal";
+    public static final String FLOAT_VAL_FIELD = "floatVal";
+    public static final String REAL_VAL_FIELD = "realVal";
 
-    public static String BINARY_FIELD = "binaryVal";
-    public static String VARBINARY_FIELD = "varBinaryVal";
-    public static String IMAGE_FIELD = "imageVal";
+    public static final String BINARY_FIELD = "binaryVal";
+    public static final String VARBINARY_FIELD = "varBinaryVal";
+    public static final String IMAGE_FIELD = "imageVal";
 }

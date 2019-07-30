@@ -18,9 +18,6 @@
 package org.ballerinalang.scenario.test.database.mssql;
 
 import org.ballerinalang.config.ConfigRegistry;
-import org.ballerinalang.test.util.BCompileUtil;
-import org.ballerinalang.test.util.BRunUtil;
-import org.ballerinalang.test.util.CompileResult;
 import org.ballerinalang.model.values.BBoolean;
 import org.ballerinalang.model.values.BDecimal;
 import org.ballerinalang.model.values.BFloat;
@@ -31,6 +28,9 @@ import org.ballerinalang.model.values.BValueArray;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.database.DatabaseUtil;
 import org.ballerinalang.scenario.test.database.util.AssertionUtil;
+import org.ballerinalang.test.util.BCompileUtil;
+import org.ballerinalang.test.util.BRunUtil;
+import org.ballerinalang.test.util.CompileResult;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -58,7 +58,8 @@ public class SelectTest extends ScenarioTestBase {
         String userName = deploymentProperties.getProperty(Constants.MSSQL_JDBC_USERNAME_KEY);
         String password = deploymentProperties.getProperty(Constants.MSSQL_JDBC_PASSWORD_KEY);
         resourcePath = Paths.get("src", "test", "resources").toAbsolutePath();
-        DatabaseUtil.executeSqlFile(jdbcUrl, userName, password, Paths.get(resourcePath.toString(), "sql-src", "db-init.sql"));
+        DatabaseUtil.executeSqlFile(jdbcUrl, userName, password, Paths.get(resourcePath.toString(),
+                "sql-src", "db-init.sql"));
     }
 
     @BeforeClass
@@ -103,9 +104,11 @@ public class SelectTest extends ScenarioTestBase {
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.DECIMAL_VAL_FIELD));
         Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.NUMERIC_VAL_FIELD).floatValue(),
                 1.051f, AssertionUtil.getIncorrectColumnValueMessage(Constants.NUMERIC_VAL_FIELD));
-        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.MONEY_VAL_FIELD).floatValue(), 922337203685477.5807f,
+        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.MONEY_VAL_FIELD).floatValue(),
+                922337203685477.5807f,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.MONEY_VAL_FIELD));
-        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.SMALLMONEY_VAL_FIELD).floatValue(), 214748.3647f,
+        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.SMALLMONEY_VAL_FIELD).floatValue(),
+                214748.3647f,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLMONEY_VAL_FIELD));
     }
 
@@ -124,7 +127,8 @@ public class SelectTest extends ScenarioTestBase {
         BMap floatTypeRecord = (BMap) returns[0];
         Assert.assertEquals(getFloatValFromBMap(floatTypeRecord, Constants.FLOAT_VAL_FIELD), 123.45678f,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.FLOAT_VAL_FIELD));
-        Assert.assertEquals(getFloatValFromBMap(floatTypeRecord, Constants.REAL_VAL_FIELD), 123456789012345678901234567890f,
+        Assert.assertEquals(getFloatValFromBMap(floatTypeRecord, Constants.REAL_VAL_FIELD),
+                123456789012345678901234567890f,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.REAL_VAL_FIELD));
     }
 
