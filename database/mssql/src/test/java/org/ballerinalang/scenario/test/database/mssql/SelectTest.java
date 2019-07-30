@@ -50,6 +50,7 @@ public class SelectTest extends ScenarioTestBase {
     private String userName;
     private String password;
     private Path resourcePath;
+    private static final String DISABLED = "disabled";
 
     @BeforeSuite
     public void createDatabase() throws Exception {
@@ -189,6 +190,24 @@ public class SelectTest extends ScenarioTestBase {
         AssertionUtil.assertNullValues((BMap) returns[0], 4, "id");
     }
 
+    @Test(description = "Test date time type selection query", groups = { DISABLED })
+    public void testDateTimeTypes() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypes");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap dateTimeTypeRecord = (BMap) returns[0];
+        String[] fieldValues = {
+                "2007-05-08", "2007-05-08 12:35:29.1234567 +12:15", "2007-05-08 12:35:29.123",
+                "2007-05-08 12:35:29.1234567", "2007-05-08 12:35:00", "12:35:29.1234567"
+        };
+        AssertionUtil.assertNonNullStringValues(dateTimeTypeRecord, 7, fieldValues, "id");
+    }
+
+    @Test(description = "Test nil date time type selection query", groups = { DISABLED })
+    public void testDateTimeTypesNil() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesNil");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        AssertionUtil.assertNullValues((BMap) returns[0], 7, "id");
+    }
     private long getIntValFromBMap(BMap bMap, String key) {
         return ((BInteger) bMap.get(key)).intValue();
     }

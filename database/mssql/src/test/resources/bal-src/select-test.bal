@@ -101,6 +101,14 @@ function testComplexTypesNil() returns @tainted record{}|error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_COMPLEX_TYPES", "2", ComplexType);
 }
 
+function testDateTimeTypes() returns @tainted record{}|error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_DATETIME_TYPES", "1", DateTimeTypeStr);
+}
+
+function testDateTimeTypesNil() returns @tainted record{}|error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_DATETIME_TYPES", "2", DateTimeTypeStr);
+}
+
 function runSelectSetQuery(string tableName, string id, typedesc<record{}> recordType, string... fields)
                                                                         returns @tainted record{}|error {
     string fieldString = fields[0];
