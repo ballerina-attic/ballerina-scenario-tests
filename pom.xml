@@ -314,6 +314,12 @@
                 <version>${postgres.driver.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>mssql-jdbc</artifactId>
+                <version>${mssql.driver.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.ballerinalang</groupId>
                 <artifactId>util</artifactId>
                 <version>${project.version}</version>
@@ -874,6 +880,7 @@
                 <module>bbg/bbg-integration-patterns</module>
                 <module>connectors/soap</module>
                 <module>database/mysql</module>
+                <module>database/mssql</module>
                 <module>database/postgresql</module>
                 <module>database/oracle</module>
                 <module>database/util</module>
@@ -926,6 +933,14 @@
                 <module>database/postgresql</module>
             </modules>
         </profile>
+        <profile>
+            <id>database-mssql</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>database/util</module>
+                <module>database/mssql</module>
+            </modules>
+        </profile>
     </profiles>
 
     <properties>
@@ -943,6 +958,7 @@
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
         <mysql.driver.version>5.1.46</mysql.driver.version>
         <postgres.driver.version>42.2.5</postgres.driver.version>
+        <mssql.driver.version>7.0.0.jre8</mssql.driver.version>
     </properties>
 
 </project>
