@@ -1,5 +1,8 @@
 package org.ballerinalang.scenario.test.common.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DatabaseUtil {
+    public static final Logger LOG = LoggerFactory.getLogger(DatabaseUtil.class);
     /**
      * Create a DB and initialize with given SQL file.
      *
@@ -27,13 +31,15 @@ public class DatabaseUtil {
                 String sql = readFileToString(sqlFile);
                 String[] sqlQuery = sql.trim().split("/");
                 for (String query : sqlQuery) {
-                    st.executeUpdate(query.trim());
+                    try {
+                        st.executeUpdate(query.trim());
+                    } catch (SQLException e) {
+                        LOG.error(e.getMessage(), e);
+                    }
                 }
                 if (!connection.getAutoCommit()) {
                     connection.commit();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
 
