@@ -106,11 +106,9 @@ public class SelectTest extends ScenarioTestBase {
         Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.NUMERIC_VAL_FIELD).floatValue(),
                 1.051f, AssertionUtil.getIncorrectColumnValueMessage(Constants.NUMERIC_VAL_FIELD));
         Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.MONEY_VAL_FIELD).floatValue(),
-                922337203685477.5807f,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.MONEY_VAL_FIELD));
+                922337203685477.5807f, AssertionUtil.getIncorrectColumnValueMessage(Constants.MONEY_VAL_FIELD));
         Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.SMALLMONEY_VAL_FIELD).floatValue(),
-                214748.3647f,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLMONEY_VAL_FIELD));
+                214748.3647f, AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLMONEY_VAL_FIELD));
     }
 
     @Test(description = "Test nil numeric type selection query.")
