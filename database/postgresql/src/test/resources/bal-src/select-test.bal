@@ -1,8 +1,7 @@
 import ballerina/config;
 import ballerina/io;
-import ballerina/sql;
 import ballerina/time;
-import ballerinax/jdbc;
+import ballerinax/java.jdbc;
 
 type IntegerType record {
     int id;
@@ -70,67 +69,67 @@ jdbc:Client testDB = new({
         password: config:getAsString("database.postgresql.test.jdbc.password")
     });
 
-function testSelectIntegerTypes() returns record{} | error {
+function testSelectIntegerTypes() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", 1, IntegerType);
 }
 
-function testSelectIntegerTypesNil() returns record{} | error {
+function testSelectIntegerTypesNil() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", 2, IntegerType);
 }
 
-function testSelectFixedPointTypes() returns record{} | error {
+function testSelectFixedPointTypes() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 1, FixedPointType);
 }
 
-function testSelectFixedPointTypesNil() returns record{} | error {
+function testSelectFixedPointTypesNil() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 2, FixedPointType);
 }
 
-function testSelectFloatTypes() returns record{} | error {
+function testSelectFloatTypes() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_FLOAT_TYPES", 1, FloatingPointType);
 }
 
-function testSelectFloatTypesNil() returns record{} | error {
+function testSelectFloatTypesNil() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_FLOAT_TYPES", 2, FloatingPointType);
 }
 
-function testSelectStringTypes() returns record{} | error {
+function testSelectStringTypes() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_STRING_TYPES", 1, StringType);
 }
 
-function testSelectStringTypesNil() returns record{} | error {
+function testSelectStringTypesNil() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_STRING_TYPES", 2, StringType);
 }
 
-function testDateTimeTypesString() returns record{} | error {
+function testDateTimeTypesString() returns @tainted record{} | error {
     return runSelectSetQuery("SELECT_UPDATE_TEST_DATETIME_TYPES", 1, DateTimeTypeStr, DATE_VAL, TIME_VAL, TIMEZ_VAL,
         TIMESTAMP_VAL, TIMESTAMPZ_VAL);
 }
 
-function testDateTimeTypesInt() returns record{} | error {
+function testDateTimeTypesInt() returns @tainted record{} | error {
     return runSelectSetQuery("SELECT_UPDATE_TEST_DATETIME_TYPES", 1, DateTimeTypeInt, DATE_VAL, TIME_VAL, TIMEZ_VAL,
         TIMESTAMP_VAL, TIMESTAMPZ_VAL);
 }
 
-function testDateTimeTypesNil() returns record{} | error {
+function testDateTimeTypesNil() returns @tainted record{} | error {
     return runSelectSetQuery("SELECT_UPDATE_TEST_DATETIME_TYPES", 2, DateTimeTypeInt, DATE_VAL, TIME_VAL, TIMEZ_VAL,
         TIMESTAMP_VAL, TIMESTAMPZ_VAL);
 }
 
-function testDateTimeTypesRecord() returns record{} | error {
+function testDateTimeTypesRecord() returns @tainted record{} | error {
     return runSelectSetQuery("SELECT_UPDATE_TEST_DATETIME_TYPES", 1, DateTimeTypeRec, DATE_VAL, TIME_VAL, TIMEZ_VAL,
         TIMESTAMP_VAL, TIMESTAMPZ_VAL);
 }
 
-function testComplexTypes() returns record{} | error {
+function testComplexTypes() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_COMPLEX_TYPES", 1, ComplexType);
 }
 
-function testComplexTypesNil() returns record{} | error {
+function testComplexTypesNil() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_TEST_COMPLEX_TYPES", 2, ComplexType);
 }
 
-function setupDatetimeData() returns (int, int, int, int, int) {
+function setupDatetimeData() returns [int, int, int, int, int] {
     int dateInserted = -1;
     int timeInserted = -1;
     int timezInserted = -1;
@@ -149,19 +148,19 @@ function setupDatetimeData() returns (int, int, int, int, int) {
     timestampInserted = timestampzRecord.time;
     timestampzInserted = timestampzRecord.time;
 
-    sql:Parameter para0 = { sqlType: sql:TYPE_INTEGER, value: 1 };
-    sql:Parameter para1 = { sqlType: sql:TYPE_DATE, value: dateRecord };
-    sql:Parameter para2 = { sqlType: sql:TYPE_TIME, value: timezRecord };
-    sql:Parameter para3 = { sqlType: sql:TYPE_TIME, value: timezRecord };
-    sql:Parameter para4 = { sqlType: sql:TYPE_TIMESTAMP, value: timestampzRecord };
-    sql:Parameter para5 = { sqlType: sql:TYPE_TIMESTAMP, value: timestampzRecord };
+    jdbc:Parameter para0 = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
+    jdbc:Parameter para1 = { sqlType: jdbc:TYPE_DATE, value: dateRecord };
+    jdbc:Parameter para2 = { sqlType: jdbc:TYPE_TIME, value: timezRecord };
+    jdbc:Parameter para3 = { sqlType: jdbc:TYPE_TIME, value: timezRecord };
+    jdbc:Parameter para4 = { sqlType: jdbc:TYPE_TIMESTAMP, value: timestampzRecord };
+    jdbc:Parameter para5 = { sqlType: jdbc:TYPE_TIMESTAMP, value: timestampzRecord };
 
     _ = checkpanic testDB->update("Insert into SELECT_UPDATE_TEST_DATETIME_TYPES values (?,?,?,?,?,?)",
         para0, para1, para2, para3, para4, para5);
-    return (dateInserted, timeInserted, timezInserted, timestampInserted, timestampzInserted);
+    return [dateInserted, timeInserted, timezInserted, timestampInserted, timestampzInserted];
 }
 
-function runSelectSetQuery(string tableName, int id, typedesc recordType, string... fields) returns record{} | error {
+function runSelectSetQuery(string tableName, int id, typedesc<record{}> recordType, string... fields) returns @tainted record{} | error {
     string fieldString = fields[0];
     if (fields.length() > 1) {
         int i = 1;
@@ -184,7 +183,7 @@ function runSelectSetQuery(string tableName, int id, typedesc recordType, string
     return returnedRecord;
 }
 
-function runSelectAllQuery(string tableName, int id, typedesc recordType) returns record{} | error {
+function runSelectAllQuery(string tableName, int id, typedesc<record{}> recordType) returns @tainted record{} | error {
     return runSelectSetQuery(tableName, id, recordType, "*");
 }
 

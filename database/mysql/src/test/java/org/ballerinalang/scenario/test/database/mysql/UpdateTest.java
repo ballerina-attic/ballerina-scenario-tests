@@ -89,7 +89,7 @@ public class UpdateTest extends ScenarioTestBase {
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 
-    @Test(description = "Test Update with generated keys", enabled = false)
+    @Test(description = "Test Update with generated keys")
     public void testGeneratedKeyOnInsert() {
         BValue[] returns = BRunUtil.invoke(updateCompileResult, "testGeneratedKeyOnInsert");
         Map<String, String> expectedGeneratedKeys = new HashMap<>(1);

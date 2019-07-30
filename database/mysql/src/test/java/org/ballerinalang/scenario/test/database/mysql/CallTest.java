@@ -2,6 +2,8 @@ package org.ballerinalang.scenario.test.database.mysql;
 
 import org.ballerinalang.config.ConfigRegistry;
 import org.ballerinalang.model.values.BBoolean;
+import org.ballerinalang.model.values.BByte;
+import org.ballerinalang.model.values.BDecimal;
 import org.ballerinalang.model.values.BFloat;
 import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BValue;
@@ -74,13 +76,13 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray numericValues = (BValueArray) returns[1];
         Assert.assertTrue(((BBoolean) numericValues.getRefValue(0)).booleanValue());
-        Assert.assertEquals(((BInteger) numericValues.getRefValue(1)).intValue(), 126);
+        Assert.assertEquals(((BByte) numericValues.getRefValue(1)).intValue(), 126);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(2)).intValue(), 32765);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(3)).intValue(), 8388603);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(4)).intValue(), 2147483644);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(5)).intValue(), 2147483649L);
-        Assert.assertEquals(((BFloat) numericValues.getRefValue(6)).floatValue(), 143.78);
-        Assert.assertEquals(((BFloat) numericValues.getRefValue(7)).floatValue(), 1034.789);
+        Assert.assertEquals(((BDecimal) numericValues.getRefValue(6)).floatValue(), 143.78);
+        Assert.assertEquals(((BDecimal) numericValues.getRefValue(7)).floatValue(), 1034.789);
     }
 
     @Test(description = "Test numeric type INOUT params")
@@ -90,13 +92,13 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray numericValues = (BValueArray) returns[1];
         Assert.assertTrue(((BBoolean) numericValues.getRefValue(0)).booleanValue());
-        Assert.assertEquals(((BInteger) numericValues.getRefValue(1)).intValue(), 126);
+        Assert.assertEquals(((BByte) numericValues.getRefValue(1)).intValue(), 126);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(2)).intValue(), 32765);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(3)).intValue(), 8388603);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(4)).intValue(), 2147483644);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(5)).intValue(), 2147483649L);
-        Assert.assertEquals(((BFloat) numericValues.getRefValue(6)).floatValue(), 143.78);
-        Assert.assertEquals(((BFloat) numericValues.getRefValue(7)).floatValue(), 1034.789);
+        Assert.assertEquals(((BDecimal) numericValues.getRefValue(6)).floatValue(), 143.78);
+        Assert.assertEquals(((BDecimal) numericValues.getRefValue(7)).floatValue(), 1034.789);
     }
 
     @Test(description = "Test string type OUT params")
