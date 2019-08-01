@@ -884,6 +884,11 @@
                 <classifier>bir-jar</classifier>
                 <version>${ballerina.version}</version>
             </dependency>
+            <dependency>
+                <groupId>oracle</groupId>
+                <artifactId>ojdbc6</artifactId>
+                <version>${oracle.driver.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -997,6 +1002,14 @@
                 <module>database/mssql</module>
             </modules>
         </profile>
+        <profile>
+            <id>database-oracle</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>database/util</module>
+                <module>database/oracle</module>
+            </modules>
+        </profile>
     </profiles>
 
     <properties>
@@ -1014,6 +1027,7 @@
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
         <mysql.driver.version>5.1.46</mysql.driver.version>
         <postgres.driver.version>42.2.5</postgres.driver.version>
+        <oracle.driver.version>11.2.0.3</oracle.driver.version>
         <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
         <maven.checkstyle.version>8.18</maven.checkstyle.version>
         <maven.spotbugsplugin.version>3.1.1</maven.spotbugsplugin.version>
