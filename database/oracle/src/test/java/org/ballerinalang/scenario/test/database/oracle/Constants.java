@@ -19,6 +19,12 @@
 package org.ballerinalang.scenario.test.database.oracle;
 
 public class Constants {
+    public static final String INT_VAL_FIELD = "intVal";
+    public static final String NUMERIC_VAL_FIELD = "numericVal";
+    public static final String DECIMAL_VAL_FIELD = "decimalVal";
+    public static final String BINARY_FLOAT_VAL_FIELD = "binaryFloatVal";
+    public static final String BINARY_DOUBLE_VAL_FIELD = "binaryDoubleVal";
+    public static final String BLOB_FIELD = "blobVal";
     static final String ORACLE_JDBC_URL_KEY = "database.oracle.test.jdbc.url";
     static final String ORACLE_JDBC_USERNAME_KEY = "database.oracle.test.jdbc.username";
     static final String ORACLE_JDBC_PASSWORD_KEY = "database.oracle.test.jdbc.password";
