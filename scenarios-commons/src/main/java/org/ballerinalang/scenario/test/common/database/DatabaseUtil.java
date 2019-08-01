@@ -34,7 +34,7 @@ public class DatabaseUtil {
                     try {
                         st.executeUpdate(query.trim());
                     } catch (SQLException e) {
-                        LOG.error(e.getMessage(), e);
+                        LOG.error(e.getMessage() + ":" + query, e);
                     }
                 }
                 if (!connection.getAutoCommit()) {

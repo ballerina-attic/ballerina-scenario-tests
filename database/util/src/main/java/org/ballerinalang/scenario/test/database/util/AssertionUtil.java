@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -60,6 +61,23 @@ public class AssertionUtil {
                     "Key: " + key + " does not exist in generated keys");
             Assert.assertEquals(actualGeneratedKeys.get(key).stringValue(),
                     expectedGeneratedKeys.get(key));
+        }
+    }
+
+    public static void assertUpdateQueryWithGeneratedKeysReturnValue(BValue returnedVal, int expectedUpdatedRowCount,
+            List<String> expectedGeneratedKeys) {
+        Assert.assertTrue(returnedVal instanceof BMap, returnedVal instanceof BError ?
+                getErrorReturnedAssertionMessage((BError) returnedVal) :
+                "Return type invalid");
+        Assert.assertEquals(((BByte) ((BMap) returnedVal).get("updatedRowCount")).intValue(),
+                expectedUpdatedRowCount);
+        BMap actualGeneratedKeys = (BMap) ((BMap) returnedVal).get("generatedKeys");
+        Assert.assertEquals(actualGeneratedKeys.size(), expectedGeneratedKeys.size());
+        for (String key : expectedGeneratedKeys) {
+            Assert.assertTrue(actualGeneratedKeys.getMap().containsKey(key),
+                    "Key: " + key + " does not exist in generated keys");
+            Assert.assertTrue(!actualGeneratedKeys.get(key).stringValue().isEmpty(), "Value of the generated"
+                    + "key shouldn't be null");
         }
     }
 
