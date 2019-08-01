@@ -65,15 +65,39 @@ public class UpdateTest extends ScenarioTestBase {
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "update-test.bal").toString());
     }
 
-    @Test(description = "Test update numeric types with values")
-    public void testUpdateNumericTypesWithValues() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateNumericTypesWithValues");
+    @Test(description = "Test update integer types with values")
+    public void testUpdateIntegerTypesWithValues() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateIntegerTypesWithValues");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 
-    @Test(description = "Test update numeric types with params")
-    public void testUpdateNumericTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateNumericTypesWithParams");
+    @Test(description = "Test update integer types with params")
+    public void testUpdateIntegerTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateIntegerTypesWithParams");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+    }
+
+    @Test(description = "Test update floating point types with values")
+    public void testUpdateFloatingPointTypesWithValues() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFloatingPointTypesWithValues");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+    }
+
+    @Test(description = "Test update floating point types with params")
+    public void testUpdateFloatingPointTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFloatingPointTypesWithParams");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+    }
+
+    @Test(description = "Test update fixed point types with values")
+    public void testUpdateFixedPointTypesWithValues() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFixedPointTypesWithValues");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+    }
+
+    @Test(description = "Test update fixed point types with params")
+    public void testUpdateFixedPointTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFixedPointTypesWithParams");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 

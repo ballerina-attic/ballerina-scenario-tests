@@ -23,15 +23,27 @@ jdbc:Client testDB =  new jdbc:Client({
     password: config:getAsString("database.oracle.test.jdbc.password")
 });
 
-function testUpdateNumericTypesWithValues() returns jdbc:UpdateResult | error {
+function testUpdateIntegerTypesWithValues() returns jdbc:UpdateResult | error {
     return runInsertQueryWithValues("SELECT_UPDATE_INTEGER_TYPES", 1, 9223372036854775805);
 }
 
-function testUpdateNumericTypesWithParams() returns jdbc:UpdateResult | error {
+function testUpdateIntegerTypesWithParams() returns jdbc:UpdateResult | error {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
     jdbc:Parameter intVal = { sqlType: jdbc:TYPE_INTEGER, value: 9223372036854775805 };
 
     return runInsertQueryWithParams("SELECT_UPDATE_INTEGER_TYPES", id, intVal);
+}
+
+function testUpdateFloatingPointTypesWithValues() returns jdbc:UpdateResult | error {
+    return runInsertQueryWithValues("SELECT_UPDATE_FLOAT_TYPES", 1, 999.125698, 109999.123412378914545);
+}
+
+function testUpdateFloatingPointTypesWithParams() returns jdbc:UpdateResult | error {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
+    jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 999.125698 };
+    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 109999.123412378914545 };
+
+    return runInsertQueryWithParams("SELECT_UPDATE_FLOAT_TYPES", id, numericVal, decimalVal);
 }
 
 function testUpdateFixedPointTypesWithValues() returns jdbc:UpdateResult | error {
