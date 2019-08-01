@@ -47,7 +47,7 @@ public class DdlTest extends ScenarioTestBase {
     public void setUp() throws Exception {
 
         Properties deploymentProperties = getDeploymentProperties();
-        jdbcUrl = deploymentProperties.getProperty(Constants.MSSQL_JDBC_URL_KEY) + ";databaseName=simpledb";
+        jdbcUrl = deploymentProperties.getProperty(Constants.MSSQL_JDBC_URL_KEY) + ";databaseName=testdb";
         userName = deploymentProperties.getProperty(Constants.MSSQL_JDBC_USERNAME_KEY);
         password = deploymentProperties.getProperty(Constants.MSSQL_JDBC_PASSWORD_KEY);
 

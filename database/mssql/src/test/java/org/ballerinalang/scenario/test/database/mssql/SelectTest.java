@@ -66,7 +66,7 @@ public class SelectTest extends ScenarioTestBase {
     @BeforeClass
     public void setup() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
-        testdbJdbcUrl = deploymentProperties.getProperty(Constants.MSSQL_JDBC_URL_KEY) + ";databaseName=simpledb";
+        testdbJdbcUrl = deploymentProperties.getProperty(Constants.MSSQL_JDBC_URL_KEY) + ";databaseName=testdb";
         userName = deploymentProperties.getProperty(Constants.MSSQL_JDBC_USERNAME_KEY);
         password = deploymentProperties.getProperty(Constants.MSSQL_JDBC_PASSWORD_KEY);
 
@@ -86,37 +86,52 @@ public class SelectTest extends ScenarioTestBase {
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "select-test.bal").toString());
     }
 
-    @Test(description = "Test numeric type selection query.")
-    public void testSelectNumericTypes() {
-        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectNumericTypes");
+    @Test(description = "Test integer type selection query.")
+    public void testSelectIntegerTypes() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectIntegerTypes");
         Assert.assertTrue(returns[0] instanceof BMap);
-        BMap numericTypeRecord = (BMap) returns[0];
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.SMALLINT_VAL_FIELD), 32767,
+        BMap integerTypeRecord = (BMap) returns[0];
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.SMALLINT_VAL_FIELD), 32767,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLINT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.BIGINT_VAL_FIELD), 9223372036854775807L,
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.BIGINT_VAL_FIELD), 9223372036854775807L,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.BIGINT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.TINYINT_VAL_FIELD), 255,
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.TINYINT_VAL_FIELD), 255,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.TINYINT_VAL_FIELD));
-        Assert.assertTrue(((BBoolean) numericTypeRecord.get(Constants.BIT_VAL_FIELD)).booleanValue(),
+        Assert.assertTrue(((BBoolean) integerTypeRecord.get(Constants.BIT_VAL_FIELD)).booleanValue(),
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.BIT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.INT_VAL_FIELD), 2147483647,
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.INT_VAL_FIELD), 2147483647,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.INT_VAL_FIELD));
-        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.DECIMAL_VAL_FIELD).floatValue(), 10.05f,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.DECIMAL_VAL_FIELD));
-        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.NUMERIC_VAL_FIELD).floatValue(),
+    }
+
+    @Test(description = "Test nil integer type selection query.")
+    public void testSelectIntegerTypesNil() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectIntegerTypesNil");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap integerTypeRecord = (BMap) returns[0];
+        AssertionUtil.assertNullValues(integerTypeRecord, 6, "id");
+    }
+
+    @Test(description = "Test fixed point type selection query.")
+    public void testSelectFixedPointTypes() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectFixedPointTypes");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap fixedPointTypeRecord = (BMap) returns[0];
+        Assert.assertEquals(getDecimalValFromBMap(fixedPointTypeRecord, Constants.DECIMAL_VAL_FIELD).floatValue(),
+                10.05f, AssertionUtil.getIncorrectColumnValueMessage(Constants.DECIMAL_VAL_FIELD));
+        Assert.assertEquals(getDecimalValFromBMap(fixedPointTypeRecord, Constants.NUMERIC_VAL_FIELD).floatValue(),
                 1.051f, AssertionUtil.getIncorrectColumnValueMessage(Constants.NUMERIC_VAL_FIELD));
-        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.MONEY_VAL_FIELD).floatValue(),
+        Assert.assertEquals(getDecimalValFromBMap(fixedPointTypeRecord, Constants.MONEY_VAL_FIELD).floatValue(),
                 922337203685477.5807f, AssertionUtil.getIncorrectColumnValueMessage(Constants.MONEY_VAL_FIELD));
-        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.SMALLMONEY_VAL_FIELD).floatValue(),
+        Assert.assertEquals(getDecimalValFromBMap(fixedPointTypeRecord, Constants.SMALLMONEY_VAL_FIELD).floatValue(),
                 214748.3647f, AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLMONEY_VAL_FIELD));
     }
 
-    @Test(description = "Test nil numeric type selection query.")
-    public void testSelectNumericTypesNil() {
-        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectNumericTypesNil");
+    @Test(description = "Test nil fixed point type selection query.")
+    public void testSelectFixedPointTypesNil() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectFixedPointTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
-        BMap numericTypeRecord = (BMap) returns[0];
-        AssertionUtil.assertNullValues(numericTypeRecord, 10, "id");
+        BMap fixedPointTypeRecord = (BMap) returns[0];
+        AssertionUtil.assertNullValues(fixedPointTypeRecord, 5, "id");
     }
 
     @Test(description = "Test float type selection query.")
@@ -145,7 +160,7 @@ public class SelectTest extends ScenarioTestBase {
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap stringTypeRecord = (BMap) returns[0];
         String[] fieldValues = {
-                "ABCD", "SQL Server VARCHAR", "This is test message", "ああ", "ありがとうございまし", "Text"
+                "ABCD", "SQL Server VARCHAR", "This is test message", "MS", "0E984725Ac", "Text"
         };
         AssertionUtil.assertNonNullStringValues(stringTypeRecord, 7, fieldValues, "id");
     }
@@ -164,7 +179,7 @@ public class SelectTest extends ScenarioTestBase {
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap complexTypeRecord = (BMap) returns[0];
         String[] expectedValues = {
-                "Binary Column", "varbinary Column", "0x89504E470D0A1A0A00000"
+                "Binary Column", "varbinary Column", "Blob Column"
         };
         String[] fields = {
                 Constants.BINARY_FIELD, Constants.VARBINARY_FIELD, Constants.IMAGE_FIELD
@@ -206,6 +221,7 @@ public class SelectTest extends ScenarioTestBase {
         Assert.assertTrue(returns[0] instanceof BMap);
         AssertionUtil.assertNullValues((BMap) returns[0], 7, "id");
     }
+
     private long getIntValFromBMap(BMap bMap, String key) {
         return ((BInteger) bMap.get(key)).intValue();
     }

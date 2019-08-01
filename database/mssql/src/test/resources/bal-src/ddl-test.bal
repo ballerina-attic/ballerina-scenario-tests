@@ -15,7 +15,6 @@
 // under the License.
 
 import ballerina/config;
-import ballerina/io;
 import ballerinax/java.jdbc;
 
 jdbc:Client testDB = new({

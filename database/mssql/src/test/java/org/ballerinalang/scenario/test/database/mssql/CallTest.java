@@ -53,7 +53,7 @@ public class CallTest extends ScenarioTestBase {
     @BeforeClass
     public void setup() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
-        jdbcUrl = deploymentProperties.getProperty(Constants.MSSQL_JDBC_URL_KEY) + ";databaseName=simpledb";
+        jdbcUrl = deploymentProperties.getProperty(Constants.MSSQL_JDBC_URL_KEY) + ";databaseName=testdb";
         userName = deploymentProperties.getProperty(Constants.MSSQL_JDBC_USERNAME_KEY);
         password = deploymentProperties.getProperty(Constants.MSSQL_JDBC_PASSWORD_KEY);
 
@@ -75,44 +75,66 @@ public class CallTest extends ScenarioTestBase {
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "call-test.bal").toString());
     }
 
-    @Test(description = "Test numeric type IN params")
-    public void testCallInParamNumericTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamNumericTypes");
+    @Test(description = "Test Integer type IN params")
+    public void testCallInParamIntegerTypes() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
     }
 
-    @Test(description = "Test numeric type OUT params")
-    public void testCallOutParamNumericTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamNumericTypes");
+    @Test(description = "Test Integer type OUT params")
+    public void testCallOutParamIntegerTypes() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
-        BValueArray numericValues = (BValueArray) returns[1];
-        Assert.assertEquals(((BInteger) numericValues.getRefValue(0)).intValue(), 32767);
-        Assert.assertEquals(((BInteger) numericValues.getRefValue(1)).intValue(), 9223372036854775807L);
-        Assert.assertEquals(((BByte) numericValues.getRefValue(2)).intValue(), 126);
-        Assert.assertTrue(((BBoolean) numericValues.getRefValue(3)).booleanValue());
-        Assert.assertEquals(((BInteger) numericValues.getRefValue(4)).intValue(), 2147483647);
-        Assert.assertEquals(((BDecimal) numericValues.getRefValue(5)).floatValue(), 10.05);
-        Assert.assertEquals(((BDecimal) numericValues.getRefValue(6)).floatValue(), 1.051);
-        Assert.assertEquals(((BDecimal) numericValues.getRefValue(7)).floatValue(), 922337203685477.5807);
-        Assert.assertEquals(((BDecimal) numericValues.getRefValue(8)).floatValue(), 214748.3647);
+        BValueArray integerValues = (BValueArray) returns[1];
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(0)).intValue(), 32767);
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(1)).intValue(), 9223372036854775807L);
+        Assert.assertEquals(((BByte) integerValues.getRefValue(2)).intValue(), 126);
+        Assert.assertTrue(((BBoolean) integerValues.getRefValue(3)).booleanValue());
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(4)).intValue(), 2147483647);
     }
 
-    @Test(description = "Test numeric type INOUT params")
-    public void testCallInOutParamNumericTypes() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamNumericTypes");
+    @Test(description = "Test Integer type INOUT params")
+    public void testCallInOutParamIntegerTypes() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
-        BValueArray numericValues = (BValueArray) returns[1];
-        Assert.assertEquals(((BInteger) numericValues.getRefValue(0)).intValue(), 32767);
-        Assert.assertEquals(((BInteger) numericValues.getRefValue(1)).intValue(), 9223372036854775807L);
-        Assert.assertEquals(((BByte) numericValues.getRefValue(2)).intValue(), 126);
-        Assert.assertTrue(((BBoolean) numericValues.getRefValue(3)).booleanValue());
-        Assert.assertEquals(((BInteger) numericValues.getRefValue(4)).intValue(), 2147483647);
-        Assert.assertEquals(((BDecimal) numericValues.getRefValue(5)).floatValue(), 10.05);
-        Assert.assertEquals(((BDecimal) numericValues.getRefValue(6)).floatValue(), 1.051);
-        Assert.assertEquals(((BDecimal) numericValues.getRefValue(7)).floatValue(), 922337203685477.5807);
-        Assert.assertEquals(((BDecimal) numericValues.getRefValue(8)).floatValue(), 214748.3647);
+        BValueArray integerValues = (BValueArray) returns[1];
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(0)).intValue(), 32767);
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(1)).intValue(), 9223372036854775807L);
+        Assert.assertEquals(((BByte) integerValues.getRefValue(2)).intValue(), 126);
+        Assert.assertTrue(((BBoolean) integerValues.getRefValue(3)).booleanValue());
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(4)).intValue(), 2147483647);
+    }
+
+    @Test(description = "Test fixed point type IN params")
+    public void testCallInParamFixedPointTypes() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamFixedPointTypes");
+        AssertionUtil.assertCallQueryReturnValue(returns[0]);
+    }
+
+    @Test(description = "Test fixed point type OUT params")
+    public void testCallOutParamFixedPointTypes() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamFixedPointTypes");
+        AssertionUtil.assertCallQueryReturnValue(returns[0]);
+        Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
+        BValueArray fixedPointValues = (BValueArray) returns[1];
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(0)).floatValue(), 10.05);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(1)).floatValue(), 1.051);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(2)).floatValue(), 922337203685477.5807);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(3)).floatValue(), 214748.3647);
+    }
+
+    @Test(description = "Test fixed point type INOUT params")
+    public void testCallInOutParamFixedPointTypes() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamFixedPointTypes");
+        AssertionUtil.assertCallQueryReturnValue(returns[0]);
+        Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
+        BValueArray fixedPointValues = (BValueArray) returns[1];
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(0)).floatValue(), 10.05);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(1)).floatValue(), 1.051);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(2)).floatValue(), 922337203685477.5807);
+        Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(3)).floatValue(), 214748.3647);
     }
 
     @Test(description = "Test Float type IN params")
@@ -126,9 +148,9 @@ public class CallTest extends ScenarioTestBase {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamFloatTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
-        BValueArray numericValues = (BValueArray) returns[1];
-        Assert.assertEquals(((BFloat) numericValues.getRefValue(0)).floatValue(), 123.45678D, 0.01);
-        Assert.assertEquals(((BFloat) numericValues.getRefValue(1)).floatValue(), 1234.567D, 0.01);
+        BValueArray floatValues = (BValueArray) returns[1];
+        Assert.assertEquals(((BFloat) floatValues.getRefValue(0)).floatValue(), 123.45678D, 0.01);
+        Assert.assertEquals(((BFloat) floatValues.getRefValue(1)).floatValue(), 1234.567D, 0.01);
     }
 
     @Test(description = "Test Float type INOUT params")
@@ -136,9 +158,9 @@ public class CallTest extends ScenarioTestBase {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamFloatTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
-        BValueArray numericValues = (BValueArray) returns[1];
-        Assert.assertEquals(((BFloat) numericValues.getRefValue(0)).floatValue(), 123.45678D, 0.01);
-        Assert.assertEquals(((BFloat) numericValues.getRefValue(1)).floatValue(), 1234.567D, 0.01);
+        BValueArray floatValues = (BValueArray) returns[1];
+        Assert.assertEquals(((BFloat) floatValues.getRefValue(0)).floatValue(), 123.45678D, 0.01);
+        Assert.assertEquals(((BFloat) floatValues.getRefValue(1)).floatValue(), 1234.567D, 0.01);
     }
 
     @Test(description = "Test string type IN params")
@@ -154,7 +176,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray stringValues = (BValueArray) returns[1];
         String[] fieldValues = {
-                "ABCD", "SQL Server VARCHAR", "This is test message", "ああ", "ありがとうございまし", "Text"
+                "ABCD", "SQL Server VARCHAR", "This is test message", "MS", "0E984725Ac", "Text"
         };
         for (int i = 0; i < stringValues.size(); i++) {
             Assert.assertEquals(stringValues.getRefValue(i).stringValue(), fieldValues[i]);
@@ -168,7 +190,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray stringValues = (BValueArray) returns[1];
         String[] fieldValues = {
-                "ABCD", "SQL Server VARCHAR", "This is test message", "ああ", "ありがとうございまし", "Text"
+                "ABCD", "SQL Server VARCHAR", "This is test message", "MS", "0E984725Ac", "Text"
         };
         for (int i = 0; i < stringValues.size(); i++) {
             Assert.assertEquals(stringValues.getRefValue(i).stringValue(), fieldValues[i]);
@@ -230,7 +252,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray stringValues = (BValueArray) returns[1];
         String[] fieldValues = {
-                "ABCD", "SQL Server VARCHAR", "ああ", "ありがとうございまし"
+                "ABCD", "SQL Server VARCHAR", "MS", "0E984725Ac"
         };
         for (int i = 0; i < stringValues.size(); i++) {
             Assert.assertEquals(stringValues.getRefValue(i).stringValue(), fieldValues[i]);

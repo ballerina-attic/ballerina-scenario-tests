@@ -17,13 +17,17 @@
 import ballerina/config;
 import ballerinax/java.jdbc;
 
-type NumericType record {
+type IntegerType record {
     int id;
     int? smallIntVal;
     int? bigIntVal;
     int? tinyIntVal;
     boolean? bitVal;
     int? intVal;
+};
+
+type FixedPointType record {
+    int id;
     decimal? decimalVal;
     decimal? numericVal;
     decimal? moneyVal;
@@ -69,12 +73,20 @@ jdbc:Client testDB = new({
     password: config:getAsString("database.mssql.test.jdbc.password")
 });
 
-function testSelectNumericTypes() returns @tainted record{}|error {
-    return runSelectAllQuery("SELECT_UPDATE_TEST_NUMERIC_TYPES", "1", NumericType);
+function testSelectIntegerTypes() returns @tainted record{}|error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", "1", IntegerType);
 }
 
-function testSelectNumericTypesNil() returns @tainted record{}|error {
-    return runSelectAllQuery("SELECT_UPDATE_TEST_NUMERIC_TYPES", "2", NumericType);
+function testSelectIntegerTypesNil() returns @tainted record{}|error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", "2", IntegerType);
+}
+
+function testSelectFixedPointTypes() returns @tainted record{}|error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", "1", FixedPointType);
+}
+
+function testSelectFixedPointTypesNil() returns @tainted record{}|error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", "2", FixedPointType);
 }
 
 function testSelectFloatTypes() returns @tainted record{}|error {

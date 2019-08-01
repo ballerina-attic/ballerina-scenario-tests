@@ -1,7 +1,7 @@
-IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'simpledb')
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = N'testdb')
 BEGIN
-    CREATE DATABASE simpledb;
+    CREATE DATABASE testdb;
 END;
 /
-USE simpledb;
+USE testdb;
 /
