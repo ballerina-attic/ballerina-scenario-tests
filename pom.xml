@@ -370,6 +370,12 @@
                 <version>${postgres.driver.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>mssql-jdbc</artifactId>
+                <version>${mssql.driver.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.ballerinalang</groupId>
                 <artifactId>util</artifactId>
                 <version>${project.version}</version>
@@ -935,6 +941,7 @@
                 <module>bbg/bbg-integration-patterns</module>
                 <module>connectors/soap</module>
                 <module>database/mysql</module>
+                <module>database/mssql</module>
                 <module>database/postgresql</module>
                 <module>database/oracle</module>
                 <module>database/util</module>
@@ -988,6 +995,14 @@
             </modules>
         </profile>
         <profile>
+            <id>database-mssql</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>database/util</module>
+                <module>database/mssql</module>
+            </modules>
+        </profile>
+        <profile>
             <id>database-oracle</id>
             <modules>
                 <module>scenarios-commons</module>
@@ -1017,6 +1032,7 @@
         <maven.checkstyle.version>8.18</maven.checkstyle.version>
         <maven.spotbugsplugin.version>3.1.1</maven.spotbugsplugin.version>
         <maven.spotbugsplugin.exclude.file>spotbugs-exclude.xml</maven.spotbugsplugin.exclude.file>
+        <mssql.driver.version>7.0.0.jre8</mssql.driver.version>
     </properties>
 
 </project>
