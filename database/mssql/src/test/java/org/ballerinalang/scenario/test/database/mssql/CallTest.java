@@ -203,6 +203,34 @@ public class CallTest extends ScenarioTestBase {
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
     }
 
+    @Test(description = "Test datetime type OUT params")
+    public void testCallOutParamDateTimeValues() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamDateTimeValues");
+        AssertionUtil.assertCallQueryReturnValue(returns[0]);
+        BValueArray valueArray = (BValueArray) returns[1];
+        String[] fieldValues = {
+                "2007-05-08", "2007-05-08T12:35:29.123+05:30", "2007-05-08T12:35:29.450",
+                "2007-05-08T12:35:29.123", "2007-05-08T12:35:00", "12:35:29.123"
+        };
+        MssqlUtils.assertDateTimeValues(valueArray.getBValue(0).stringValue(), valueArray.getBValue(1).stringValue(),
+                valueArray.getBValue(2).stringValue(), valueArray.getBValue(3).stringValue(),
+                valueArray.getBValue(4).stringValue(), valueArray.getBValue(5).stringValue(), fieldValues);
+    }
+
+    @Test(description = "Test datetime type INOUT params")
+    public void testCallInOutParamDateTimeValues() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamDateTimeValues");
+        AssertionUtil.assertCallQueryReturnValue(returns[0]);
+        BValueArray valueArray = (BValueArray) returns[1];
+        String[] fieldValues = {
+                "2007-05-08", "2007-05-08T12:35:29.123+05:30", "2007-05-08T12:35:29.450",
+                "2007-05-08T12:35:29.123", "2007-05-08T12:35:00", "12:35:29.123"
+        };
+        MssqlUtils.assertDateTimeValues(valueArray.getBValue(0).stringValue(), valueArray.getBValue(1).stringValue(),
+                valueArray.getBValue(2).stringValue(), valueArray.getBValue(3).stringValue(),
+                valueArray.getBValue(4).stringValue(), valueArray.getBValue(5).stringValue(), fieldValues);
+    }
+
     @Test(description = "Test complex type IN params")
     public void testCallInParamComplexTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamComplexTypes");

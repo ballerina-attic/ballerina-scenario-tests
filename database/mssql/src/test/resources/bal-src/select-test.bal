@@ -114,7 +114,7 @@ function testComplexTypesNil() returns @tainted record{}|error {
 }
 
 function testDateTimeTypes() returns @tainted record{}|error {
-    return runSelectAllQuery("SELECT_UPDATE_TEST_DATETIME_TYPES", "1", DateTimeTypeStr);
+    return runSelectAllQuery("SELECT_UPDATE_TEST_DATETIME_TYPES", "3", DateTimeTypeStr);
 }
 
 function testDateTimeTypesNil() returns @tainted record{}|error {
@@ -142,6 +142,28 @@ function runSelectSetQuery(string tableName, string id, typedesc<record{}> recor
         return returnedTable;
     }
     return returnedRecord;
+}
+
+function setUpDatetimeData() {
+    string stmt = "INSERT INTO SELECT_UPDATE_TEST_DATETIME_TYPES values (?,?,?,?,?,?,?)";
+
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 3 };
+    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: "2007-05-08" };
+    jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "2007-05-08T12:35:29.123+05:30" };
+    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.45+05:30" };
+    jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30" };
+    jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30" };
+    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: "12:35:29.123+05:30" };
+
+    var insertRet = testDB->update(stmt, id, dateVal, dateTimeOffsetVal, dateTimeVal, dateTime2Val, smallDateTimeVal,
+                                    timeVal);
+    if (insertRet is error) {
+       error err = insertRet;
+       anydata|error detailContent = err.detail()["message"];
+       string errorMessage = detailContent is string ? detailContent : "Error trace continues";
+       error e = error("Setting up date time data failed: " + errorMessage);
+       panic e;
+    }
 }
 
 function runSelectAllQuery(string tableName, string id, typedesc<record{}> recordType) returns @tainted record{}|error {

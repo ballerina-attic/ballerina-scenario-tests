@@ -210,12 +210,12 @@ function testCallInOutParamStringTypes() returns @tainted [table<record{}>[]|err
 
 function testCallInParamDateTimeValues() returns @tainted error? {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
-    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: "2017-01-30-08:01" };
-    jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "2017-01-30T13:27:01.999-08:00" };
-    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2017-01-30T13:27:01.999999" };
-    jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, value: "2017-01-30T13:27:01.999999" };
-    jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2017-01-30T13:27:01.999999" };
-    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: "13:27:01.999999" };
+    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: "2007-05-08" };
+    jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "2007-05-08T12:35:29.123+05:30" };
+    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.45+05:30" };
+    jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30" };
+    jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30" };
+    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: "12:35:29.123+05:30" };
 
     var ret = testDB->call("{CALL CALL_TEST_IN_DATETIME_VALUES(?, ?, ?, ?, ?, ?, ?)}", (), id, dateVal,
                             dateTimeOffsetVal, dateTimeVal, dateTime2Val, smallDateTimeVal, timeVal);
@@ -226,6 +226,42 @@ function testCallInParamDateTimeValues() returns @tainted error? {
         error e = error("Unexpected return type: table");
         return e;
     }
+}
+
+function testCallOutParamDateTimeValues() returns @tainted [table<record{}>[]|error?, any[]] {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
+    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, direction: jdbc:DIRECTION_OUT };
+    jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, direction: jdbc:DIRECTION_OUT };
+    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, direction: jdbc:DIRECTION_OUT };
+    jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, direction: jdbc:DIRECTION_OUT };
+    jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, direction: jdbc:DIRECTION_OUT };
+    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, direction: jdbc:DIRECTION_OUT };
+
+    var ret = testDB->call("{CALL CALL_TEST_OUT_DATETIME_TYPES(?, ?, ?, ?, ?, ?, ?)}", (), id, dateVal,
+    dateTimeOffsetVal, dateTimeVal, dateTime2Val, smallDateTimeVal, timeVal);
+    any[] ourParamValues = [ dateVal.value, dateTimeOffsetVal.value, dateTimeVal.value, dateTime2Val.value,
+                             smallDateTimeVal.value, timeVal.value ];
+    return [ret, ourParamValues];
+}
+
+function testCallInOutParamDateTimeValues() returns @tainted [table<record{}>[]|error?, any[]] {
+   jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
+   jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: "2007-05-08", direction: jdbc:DIRECTION_INOUT };
+   jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "2007-05-08T12:35:29.123+05:30",
+                                        direction: jdbc:DIRECTION_INOUT };
+   jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.45+05:30",
+                                  direction: jdbc:DIRECTION_INOUT };
+   jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30",
+                                   direction: jdbc:DIRECTION_INOUT };
+   jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30",
+                                       direction: jdbc:DIRECTION_INOUT };
+   jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: "12:35:29.123+05:30" };
+
+    var ret = testDB->call("{CALL CALL_TEST_INOUT_DATETIME_TYPES(?, ?, ?, ?, ?, ?, ?)}", (), id, dateVal,
+                             dateTimeOffsetVal, dateTimeVal, dateTime2Val, smallDateTimeVal, timeVal);
+    any[] ourParamValues = [ dateVal.value, dateTimeOffsetVal.value, dateTimeVal.value, dateTime2Val.value,
+                             smallDateTimeVal.value, timeVal.value ];
+    return [ret, ourParamValues];
 }
 
 function testCallInParamComplexTypes() returns @tainted error? {

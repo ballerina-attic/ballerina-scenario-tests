@@ -51,7 +51,6 @@ public class UpdateTest extends ScenarioTestBase {
     private String userName;
     private String password;
     private Path resourcePath;
-    private static final String DISABLED = "disabled";
 
     @BeforeClass
     public void setup() throws Exception {
@@ -214,17 +213,23 @@ public class UpdateTest extends ScenarioTestBase {
         }
     }
 
-    @Test(description = "Test update datetime types with params", groups = { DISABLED })
+    @Test(description = "Test update datetime types with params")
     public void testUpdateDateTimeWithValuesParam() {
         BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateDateTimeWithValuesParam");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
         Assert.assertTrue(returns[1] instanceof BMap);
         BMap dateTimeTypeRecord = (BMap) returns[1];
         String[] fieldValues = {
-                "2007-05-08", "2007-05-08 12:35:29.1234567 +12:15", "2007-05-08 12:35:29.123",
-                "2007-05-08 12:35:29.1234567", "2007-05-08 12:35:00", "12:35:29.1234567"
+                "2007-05-08", "2007-05-08T12:35:29.123+05:30", "2007-05-08T12:35:29.450",
+                "2007-05-08T12:35:29.123", "2007-05-08T12:35:00", "12:35:29.123"
         };
-        AssertionUtil.assertNonNullStringValues(dateTimeTypeRecord, 7, fieldValues, "id");
+        MssqlUtils.assertDateTimeValues(
+                dateTimeTypeRecord.get("dateVal").stringValue(),
+                dateTimeTypeRecord.get("dateTimeOffsetVal").stringValue(),
+                dateTimeTypeRecord.get("dateTimeVal").stringValue(),
+                dateTimeTypeRecord.get("dateTime2Val").stringValue(),
+                dateTimeTypeRecord.get("smallDateTimeVal").stringValue(),
+                dateTimeTypeRecord.get("timeVal").stringValue(), fieldValues);
     }
 
     @Test(description = "Test Update with generated keys")
