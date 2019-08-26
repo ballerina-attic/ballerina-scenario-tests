@@ -85,16 +85,15 @@ function testUpdateComplexTypesWithParams() returns jdbc:UpdateResult | error {
     return runInsertQueryWithParams("SELECT_UPDATE_COMPLEX_TYPES", id, blobVal, clobVal, nclobVal);
 }
 
-//function testUpdateDateTimeWithValuesParam() returns jdbc:UpdateResult | error {
-//    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
-//    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: "2019-03-27-08:01" };
-//    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: "17:43:21.999999+08:33" };
-//    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "1948-02-04T01:05:15.999-08:00" };
-//    jdbc:Parameter timestampVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "1970-02-01T01:05:15.999-08:00" };
-//    jdbc:Parameter yearVal = { sqlType: jdbc:TYPE_INTEGER, value: "1991" };
-//
-//    return runInsertQueryWithParams("SELECT_UPDATE_TEST_DATETIME_TYPES", id, dateVal, timeVal, dateTimeVal, timestampVal, yearVal);
-//}
+function testUpdateDateTimeWithValuesParam() returns jdbc:UpdateResult | error {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
+    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: "2019-03-27-08:01" };
+    jdbc:Parameter timestampVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "1948-02-04T01:05:15.999-08:00" };
+    jdbc:Parameter timestampTzVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "1970-02-01T01:05:15.999-08:00" };
+    jdbc:Parameter timestampTzLocalVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "1970-02-01T01:05:15.999-08:00" };
+
+    return runInsertQueryWithParams("SELECT_UPDATE_DATETIME_TYPES", id, dateVal, timestampVal, timestampTzVal, timestampTzLocalVal);
+}
 
 function testGeneratedKeyOnInsert() returns jdbc:UpdateResult | error {
     return testDB->update("INSERT INTO UPDATE_GENERATED_KEYS (COL1) VALUES ('abc')");

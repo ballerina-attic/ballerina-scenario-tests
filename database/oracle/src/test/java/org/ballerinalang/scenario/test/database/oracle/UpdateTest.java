@@ -125,11 +125,11 @@ public class UpdateTest extends ScenarioTestBase {
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 
-//    @Test(description = "Test update datetime types with params")
-//    public void testUpdateDateTimeWithValuesParam() {
-//        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateDateTimeWithValuesParam");
-//        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
-//    }
+    @Test(description = "Test update datetime types with params")
+    public void testUpdateDateTimeWithValuesParam() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateDateTimeWithValuesParam");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+    }
 
     @Test(description = "Test Update with generated keys")
     public void testGeneratedKeyOnInsert() {

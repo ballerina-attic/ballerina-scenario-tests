@@ -20,6 +20,7 @@ package org.ballerinalang.scenario.test.database.oracle;
 import org.ballerinalang.config.ConfigRegistry;
 import org.ballerinalang.model.values.BDecimal;
 import org.ballerinalang.model.values.BFloat;
+import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.model.values.BValueArray;
@@ -50,6 +51,11 @@ public class SelectTest extends ScenarioTestBase {
     private String password;
     private Path resourcePath;
 
+    private static long date;
+    private static long timestamp;
+    private static long dateRec;
+    private static long timestampRec;
+
     @BeforeClass
     public void setUp() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
@@ -71,6 +77,7 @@ public class SelectTest extends ScenarioTestBase {
                 Paths.get(resourcePath.toString(), "sql-src", "dml-select-test.sql"));
         selectCompileResult = BCompileUtil
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "select-test.bal").toString());
+        setupDateTimeData();
     }
 
     @Test(description = "Test numeric type selection query.")
@@ -142,52 +149,57 @@ public class SelectTest extends ScenarioTestBase {
         AssertionUtil.assertNullValues(stringTypeRecord, 5, "id");
     }
 
-//    @Test(description = "Test date time type selection query")
-//    public void testDateTimeTypesString() {
-//        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesString");
-//        Assert.assertTrue(returns[0] instanceof BMap);
-//        assertDateStringValues((BMap) returns[0], date, time, timez, timestamp, timestampz);
-//    }
-//
-//    @Test(description = "Test date time type selection query")
-//    public void testDateTimeTypesInt() {
-//        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesInt");
-//        Assert.assertTrue(returns[0] instanceof BMap);
-//        BMap dateTimeTypeRecord = (BMap) returns[0];
-//
-//        long[] dateTimeExpectedValues = { date, time, timez, timestamp, timestampz };
-//        String[] fields = {
-//                Constants.DATE_VAL_FIELD_INT, Constants.TIME_VAL_FIELD_INT, Constants.TIMEZ_VAL_FIELD_INT,
-//                Constants.TIMESTAMP_VAL_FIELD_INT, Constants.TIMESTAMPTZ_VAL_FIELD_INT
-//        };
-//        for (int i = 0; i < fields.length; i++) {
-//            Assert.assertEquals(((BInteger) dateTimeTypeRecord.get(fields[i])).intValue(), dateTimeExpectedValues[i],
-//                    AssertionUtil.getIncorrectColumnValueMessage(fields[i]));
-//        }
-//    }
+    @Test(description = "Test date time type selection query")
+    public void testDateTimeTypesString() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesString");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap dateTimeTypeRecord = (BMap) returns[0];
+        assertDateStringValues(dateTimeTypeRecord, date, timestamp);
+    }
 
-    @Test(description = "Test nil date time type selection query", enabled = false)
+    @Test(description = "Test date time type selection query")
+    public void testDateTimeTypesInt() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesInt");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap dateTimeTypeRecord = (BMap) returns[0];
+
+        long[] dateTimeExpectedValues = { date, timestamp };
+        String[] fields = {
+                Constants.DATE_VAL_FIELD_INT, Constants.TIMESTAMP_VAL_FIELD_INT
+        };
+        // In Oracle date is also mapped to timestamp type. Therefore a timezone will be associated with
+        // each value at retrieval (By our code).
+
+        // At insertion (in setupDatetime function) we are creating a time:Time record and obtain time in milli seconds
+        // and insert that value. So if we pass a time zone at time:Time record creation, the integer value would
+        // reflect that.
+        for (int i = 0; i < fields.length; i++) {
+            Assert.assertEquals(((BInteger) dateTimeTypeRecord.get(fields[i])).intValue(), dateTimeExpectedValues[i],
+                    AssertionUtil.getIncorrectColumnValueMessage(fields[i]));
+        }
+    }
+
+    @Test(description = "Test nil date time type selection query")
     public void testDateTimeTypesNil() {
         BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
-        AssertionUtil.assertNullValues((BMap) returns[0], 5);
+        AssertionUtil.assertNullValues((BMap) returns[0], 2);
     }
 
-//    @Test(description = "Test date time type selection query")
-//    public void testDateTimeTypesRecord() {
-//        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesRecord");
-//        Assert.assertTrue(returns[0] instanceof BMap);
-//        BMap dateTimeTypeRecord = (BMap) returns[0];
-//        long[] dateTimeExpectedValues = { date, time, timez, timestamp, timestampz };
-//        String[] fields = {
-//                Constants.DATE_VAL_FIELD_REC, Constants.TIME_VAL_FIELD_REC, Constants.TIMEZ_VAL_FIELD_REC,
-//                Constants.TIMESTAMP_VAL_FIELD_REC, Constants.TIMESTAMPZ_VAL_FIELD_REC
-//        };
-//        for (int i = 0; i < fields.length; i++) {
-//            Assert.assertEquals(((BInteger) ((BMap) dateTimeTypeRecord.get(fields[i])).get("time")).intValue(),
-//                    dateTimeExpectedValues[i], AssertionUtil.getIncorrectColumnValueMessage(fields[i]));
-//        }
-//    }
+    @Test(description = "Test date time type selection query")
+    public void testDateTimeTypesRecord() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesRecord");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap dateTimeTypeRecord = (BMap) returns[0];
+        long[] dateTimeExpectedValues = { date, timestamp };
+        String[] fields = {
+                Constants.DATE_VAL_FIELD_REC, Constants.TIMESTAMP_VAL_FIELD_REC
+        };
+        for (int i = 0; i < fields.length; i++) {
+            Assert.assertEquals(((BInteger) ((BMap) dateTimeTypeRecord.get(fields[i])).get("time")).intValue(),
+                    dateTimeExpectedValues[i], AssertionUtil.getIncorrectColumnValueMessage(fields[i]));
+        }
+    }
 
     @Test(description = "Test complex type selection query")
     public void testComplexTypes() {
@@ -215,14 +227,11 @@ public class SelectTest extends ScenarioTestBase {
                 Paths.get(resourcePath.toString(), "sql-src", "cleanup-select-update-test.sql"));
     }
 
-//    private void setupDateTimeData() {
-//        BValue[] returns = BRunUtil.invoke(selectCompileResult, "setupDatetimeData");
-//        date = ((BInteger) returns[0]).intValue();
-//        time = ((BInteger) returns[1]).intValue();
-//        timez = ((BInteger) returns[2]).intValue();
-//        timestamp = ((BInteger) returns[3]).intValue();
-//        timestampz = ((BInteger) returns[4]).intValue();
-//    }
+    private void setupDateTimeData() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "setupDatetimeData");
+        date = ((BInteger) returns[0]).intValue();
+        timestamp = ((BInteger) returns[1]).intValue();
+    }
 
     private long getIntValFromBMap(BMap bMap, String key) {
         return ((BDecimal) bMap.get(key)).intValue();
@@ -236,33 +245,20 @@ public class SelectTest extends ScenarioTestBase {
         return ((BDecimal) bMap.get(key)).decimalValue();
     }
 
-    private static void assertDateStringValues(BMap datetimeRecord, long dateInserted, long timeInserted,
-            long timezInserted, long timestampInserted, long timestampzInserted) {
+    private static void assertDateStringValues(BMap datetimeRecord, long dateInserted, long timestampInserted) {
         try {
-            DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd");
+            // If we neglect the time and zone here (i.e. remove 'T'HH:mm:ss.SSS) then actual time instance
+            // represented by the string will not be taken into account. This will result in a wrong
+            // assertion of the values.
+            DateFormat dfDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             String dateReturned = datetimeRecord.get("dateStr").stringValue();
             long dateReturnedEpoch = dfDate.parse(dateReturned).getTime();
             Assert.assertEquals(dateReturnedEpoch, dateInserted);
-
-            DateFormat dfTime = new SimpleDateFormat("HH:mm:ss.SSS");
-            String timeReturned = datetimeRecord.get("timeStr").stringValue();
-            long timeReturnedEpoch = dfTime.parse(timeReturned).getTime();
-            Assert.assertEquals(timeReturnedEpoch, timeInserted);
-
-            DateFormat dfTimez = new SimpleDateFormat("HH:mm:ss.SSS");
-            String timezReturned = datetimeRecord.get("timezStr").stringValue();
-            long timezReturnedEpoch = dfTimez.parse(timezReturned).getTime();
-            Assert.assertEquals(timezReturnedEpoch, timezInserted);
 
             DateFormat dfTimestmap = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             String timestampReturned = datetimeRecord.get("timestampStr").stringValue();
             long timestampReturnedEpoch = dfTimestmap.parse(timestampReturned).getTime();
             Assert.assertEquals(timestampReturnedEpoch, timestampInserted);
-
-            DateFormat dfTimestmapz = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-            String timestampzReturned = datetimeRecord.get("timestampzStr").stringValue();
-            long timestampzReturnedEpoch = dfTimestmapz.parse(timestampzReturned).getTime();
-            Assert.assertEquals(timestampzReturnedEpoch, timestampzInserted);
 
         } catch (ParseException e) {
             Assert.fail("Parsing the returned date/time/timestamp value has failed", e);
