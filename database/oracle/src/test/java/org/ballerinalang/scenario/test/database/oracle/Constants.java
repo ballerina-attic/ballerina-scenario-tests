@@ -25,6 +25,10 @@ public class Constants {
     public static final String BINARY_FLOAT_VAL_FIELD = "binaryFloatVal";
     public static final String BINARY_DOUBLE_VAL_FIELD = "binaryDoubleVal";
     public static final String BLOB_FIELD = "blobVal";
+    public static final String TIMESTAMP_VAL_FIELD_INT = "timestampInt";
+    public static final String DATE_VAL_FIELD_INT = "dateInt";
+    public static final String DATE_VAL_FIELD_REC = "dateRec";
+    public static final String TIMESTAMP_VAL_FIELD_REC = "timestampRec";
     static final String ORACLE_JDBC_URL_KEY = "database.oracle.test.jdbc.url";
     static final String ORACLE_JDBC_USERNAME_KEY = "database.oracle.test.jdbc.username";
     static final String ORACLE_JDBC_PASSWORD_KEY = "database.oracle.test.jdbc.password";

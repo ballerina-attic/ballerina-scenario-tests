@@ -45,26 +45,23 @@ type StringType record {
 
 type DateTimeTypeStr record {
     string? dateStr;
-    string? timeStr;
-    string? timezStr;
     string? timestampStr;
-    string? timestampzStr;
+   // string? timestampzStr;
+   // string? timestampzLocalStr;
 };
 
 type DateTimeTypeInt record {
     int? dateInt;
-    int? timeInt;
-    int? timezInt;
     int? timestampInt;
-    int? timestampzInt;
+    //int? timestampzInt;
+    //int? timestampzLocalInt;
 };
 
 type DateTimeTypeRec record {
     time:Time? dateRec;
-    time:Time? timeRec;
-    time:Time? timezRec;
     time:Time? timestampRec;
-    time:Time? timestampzRec;
+    //time:Time? timestampzRec;
+    //time:Time? timestampzLocalRec;
 };
 
 type ComplexType record {
@@ -75,10 +72,9 @@ type ComplexType record {
 };
 
 const string DATE_VAL = "DATE_VAL";
-const string TIME_VAL = "TIME_VAL";
-const string TIMEZ_VAL = "TIMEZ_VAL";
 const string TIMESTAMP_VAL = "TIMESTAMP_VAL";
-const string TIMESTAMPZ_VAL = "TIMESTAMPZ_VAL";
+const string TIMESTAMP_WITH_TZ_VAL = "TIMESTAMP_WITH_TZ_VAL";
+const string TIMESTAMPZ_WITH_LOCAL_TZ_VAL = "TIMESTAMPZ_WITH_LOCAL_TZ_VAL";
 
 jdbc:Client testDB = new({
         url: config:getAsString("database.oracle.test.jdbc.url"),
@@ -119,23 +115,19 @@ function testSelectStringTypesNil() returns @tainted record{} | error {
 }
 
 function testDateTimeTypesString() returns @tainted record{} | error {
-    return runSelectSetQuery("SELECT_UPDATE_DATETIME_TYPES", 1, DateTimeTypeStr, DATE_VAL, TIME_VAL, TIMEZ_VAL,
-        TIMESTAMP_VAL, TIMESTAMPZ_VAL);
+    return runSelectSetQuery("SELECT_UPDATE_DATETIME_TYPES", 1, DateTimeTypeStr, DATE_VAL, TIMESTAMP_VAL);//,
 }
 
 function testDateTimeTypesInt() returns @tainted record{} | error {
-    return runSelectSetQuery("SELECT_UPDATE_DATETIME_TYPES", 1, DateTimeTypeInt, DATE_VAL, TIME_VAL, TIMEZ_VAL,
-        TIMESTAMP_VAL, TIMESTAMPZ_VAL);
+    return runSelectSetQuery("SELECT_UPDATE_DATETIME_TYPES", 1, DateTimeTypeInt, DATE_VAL, TIMESTAMP_VAL);
 }
 
 function testDateTimeTypesNil() returns @tainted record{} | error {
-    return runSelectSetQuery("SELECT_UPDATE_DATETIME_TYPES", 2, DateTimeTypeInt, DATE_VAL, TIME_VAL, TIMEZ_VAL,
-        TIMESTAMP_VAL, TIMESTAMPZ_VAL);
+    return runSelectSetQuery("SELECT_UPDATE_DATETIME_TYPES", 2, DateTimeTypeInt, DATE_VAL, TIMESTAMP_VAL);
 }
 
 function testDateTimeTypesRecord() returns @tainted record{} | error {
-    return runSelectSetQuery("SELECT_UPDATE_DATETIME_TYPES", 1, DateTimeTypeRec, DATE_VAL, TIME_VAL, TIMEZ_VAL,
-        TIMESTAMP_VAL, TIMESTAMPZ_VAL);
+    return runSelectSetQuery("SELECT_UPDATE_DATETIME_TYPES", 1, DateTimeTypeRec, DATE_VAL, TIMESTAMP_VAL);
 }
 
 function testComplexTypes() returns @tainted record{} | error {
@@ -146,35 +138,25 @@ function testComplexTypesNil() returns @tainted record{} | error {
     return runSelectAllQuery("SELECT_UPDATE_COMPLEX_TYPES", 2, ComplexType);
 }
 
-function setupDatetimeData() returns [int, int, int, int, int] {
+function setupDatetimeData() returns [int, int] {
     int dateInserted = -1;
-    int timeInserted = -1;
-    int timezInserted = -1;
     int timestampInserted = -1;
-    int timestampzInserted = -1;
-    time:Time dateRecord = checkpanic time:createTime(2017, 5, 23, 0, 0, 0, 0, "");
+    time:Time dateRecord = checkpanic time:createTime(2017, 5, 23, 0, 0, 0, 0, "GMT+05:30");
 
-    time:TimeZone currentZone = dateRecord.zone;
+    time:Time timestampRecord = checkpanic time:createTime(2017, 1, 25, 16, 12, 23, 0, "GMT+05:30");
 
-    time:Time timezRecord = { time: 51323000, zone: currentZone };
-
-    time:Time timestampzRecord = checkpanic time:createTime(2017, 1, 25, 16, 12, 23, 0, "");
     dateInserted = dateRecord.time;
-    timeInserted = timezRecord.time;
-    timezInserted = timezRecord.time;
-    timestampInserted = timestampzRecord.time;
-    timestampzInserted = timestampzRecord.time;
+    timestampInserted = timestampRecord.time;
 
     jdbc:Parameter para0 = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     jdbc:Parameter para1 = { sqlType: jdbc:TYPE_DATE, value: dateRecord };
-    jdbc:Parameter para2 = { sqlType: jdbc:TYPE_TIME, value: timezRecord };
-    jdbc:Parameter para3 = { sqlType: jdbc:TYPE_TIME, value: timezRecord };
-    jdbc:Parameter para4 = { sqlType: jdbc:TYPE_TIMESTAMP, value: timestampzRecord };
-    jdbc:Parameter para5 = { sqlType: jdbc:TYPE_TIMESTAMP, value: timestampzRecord };
+    // For TIMESTAMP type, user inserted zone details should be ignored. However, if user inserts an integer value,
+    // then its up to him to drop any timezone info when obtaining that int value.
+    jdbc:Parameter para2 = { sqlType: jdbc:TYPE_TIMESTAMP, value: timestampInserted };
 
-    _ = checkpanic testDB->update("Insert into SELECT_UPDATE_TEST_DATETIME_TYPES values (?,?,?,?,?,?)",
-        para0, para1, para2, para3, para4, para5);
-    return [dateInserted, timeInserted, timezInserted, timestampInserted, timestampzInserted];
+    _ = checkpanic testDB->update("Insert into SELECT_UPDATE_DATETIME_TYPES (ID, DATE_VAL, TIMESTAMP_VAL)
+    values (?,?,?)", para0, para1, para2);
+    return [dateInserted, timestampInserted];
 }
 
 function runSelectSetQuery(string tableName, int id, typedesc<record{}> recordType, string... fields) returns @tainted record{} | error {
