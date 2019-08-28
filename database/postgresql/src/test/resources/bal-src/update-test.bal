@@ -15,6 +15,7 @@
 // under the License.
 
 import ballerina/config;
+import ballerina/time;
 import ballerinax/java.jdbc;
 
 jdbc:Client testDB =  new jdbc:Client({
@@ -23,51 +24,141 @@ jdbc:Client testDB =  new jdbc:Client({
         password: config:getAsString("database.postgresql.test.jdbc.password")
     });
 
-function testUpdateIntegerTypesWithValues() returns jdbc:UpdateResult | error {
-    return runInsertQueryWithValues("SELECT_UPDATE_TEST_INTEGER_TYPES", 1, 32765, 8388603, 2147483644);
+type IntegerType record {
+    int id;
+    int? smallIntVal;
+    int? intVal;
+    int? bigIntVal;
+};
+
+type FixedPointType record {
+    int id;
+    decimal? numericVal;
+    decimal? decimalVal;
+};
+
+type FloatingPointType record {
+    int id;
+    float? realVal;
+    float? doubleVal;
+};
+
+type StringType record {
+    int id;
+    string? varcharVal;
+    string? textVal;
+};
+
+type DateTimeTypeStr record {
+    string? dateStr;
+    string? timeStr;
+    string? timezStr;
+    string? timestampStr;
+    string? timestampzStr;
+};
+
+type DateTimeTypeInt record {
+    int? dateInt;
+    int? timeInt;
+    int? timezInt;
+    int? timestampInt;
+    int? timestampzInt;
+};
+
+type DateTimeTypeRec record {
+    time:Time? dateRec;
+    time:Time? timeRec;
+    time:Time? timezRec;
+    time:Time? timestampRec;
+    time:Time? timestampzRec;
+};
+
+type ComplexType record {
+    int id;
+    byte[]|() binaryVal;
+};
+
+function testUpdateIntegerTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    var updateRet = runInsertQueryWithValues("SELECT_UPDATE_TEST_INTEGER_TYPES", 1, 32765, 8388603, 2147483644);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", 1, IntegerType);
+
+    return [updateRet, selectRet];
 }
 
-function testUpdateIntegerTypesWithParams() returns jdbc:UpdateResult | error {
+function testUpdateIntegerTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
     jdbc:Parameter smallIntVal = { sqlType: jdbc:TYPE_SMALLINT, value: 32765 };
     jdbc:Parameter intVal = { sqlType: jdbc:TYPE_INTEGER, value: 8388603 };
     jdbc:Parameter bigIntVal = { sqlType: jdbc:TYPE_BIGINT, value: 2147483644 };
 
-    return runInsertQueryWithParams("SELECT_UPDATE_TEST_INTEGER_TYPES", id, smallIntVal, intVal, bigIntVal);
+    var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_INTEGER_TYPES", id, smallIntVal, intVal, bigIntVal);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", 2, IntegerType);
+
+    return [updateRet, selectRet];
 }
 
-function testUpdateFixedPointTypesWithValues() returns jdbc:UpdateResult | error {
-    return runInsertQueryWithValues("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 1, 1034.789, 15678.9845);
+function testUpdateFixedPointTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    var updateRet = runInsertQueryWithValues("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 1, 1034.789, 15678.9845);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 1, FixedPointType);
+
+    return [updateRet, selectRet];
 }
 
-function testUpdateFixedPointTypesWithParams() returns jdbc:UpdateResult | error {
+function testUpdateFixedPointTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
     jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 1034.789 };
     jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 15678.9845 };
 
-    return runInsertQueryWithParams("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", id, numericVal, decimalVal);
+    var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", id, numericVal, decimalVal);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 2, FixedPointType);
+
+    return [updateRet, selectRet];
 }
 
-function testUpdateStringTypesWithValues() returns jdbc:UpdateResult | error {
-    return runInsertQueryWithValues("SELECT_UPDATE_TEST_STRING_TYPES", 1, "Varchar column", "Text column");
+function testUpdateFloatingPointTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    var updateRet = runInsertQueryWithValues("SELECT_UPDATE_TEST_FLOAT_TYPES", 1, 999.12569, 109999.1234123789145);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_FLOAT_TYPES", 1, FloatingPointType);
+
+    return [updateRet, selectRet];
 }
 
-function testUpdateStringTypesWithParams() returns jdbc:UpdateResult | error {
-    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
+function testUpdateFloatingPointTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
+    jdbc:Parameter realVal = { sqlType: jdbc:TYPE_NUMERIC, value: 999.12569 };
+    jdbc:Parameter doubleVal = { sqlType: jdbc:TYPE_DECIMAL, value: 109999.1234123789145 };
+
+    var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_FLOAT_TYPES", id, realVal, doubleVal);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_FLOAT_TYPES", 2, FloatingPointType);
+
+    return [updateRet, selectRet];
+}
+
+function testUpdateStringTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    var updateRet = runInsertQueryWithValues("SELECT_UPDATE_TEST_STRING_TYPES", 1, "Varchar column", "Text column");
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_STRING_TYPES", 1, StringType);
+
+    return [updateRet, selectRet];
+}
+
+function testUpdateStringTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
     jdbc:Parameter varcharVal = { sqlType: jdbc:TYPE_VARCHAR, value: "Varchar column" };
     jdbc:Parameter textVal = { sqlType: jdbc:TYPE_LONGVARCHAR, value: "Text column" };
 
-    return runInsertQueryWithParams("SELECT_UPDATE_TEST_STRING_TYPES", id, varcharVal, textVal);
+    var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_STRING_TYPES", id, varcharVal, textVal);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_STRING_TYPES", 2, StringType);
+
+    return [updateRet, selectRet];
 }
 
-function testUpdateComplexTypesWithValues() returns jdbc:UpdateResult | error {
-    return runInsertQueryWithValues("SELECT_UPDATE_TEST_COMPLEX_TYPES", 1, "QmluYXJ5IENvbHVtbg==");
-}
-
-function testUpdateComplexTypesWithParams() returns jdbc:UpdateResult | error {
+function testUpdateComplexTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
     jdbc:Parameter id =  { sqlType: jdbc:TYPE_INTEGER, value: 2 };
     jdbc:Parameter binaryVal =  { sqlType: jdbc:TYPE_BINARY, value: "QmluYXJ5IENvbHVtbg==" };
-    return runInsertQueryWithParams("SELECT_UPDATE_TEST_COMPLEX_TYPES", id, binaryVal);
+
+    var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_COMPLEX_TYPES", id, binaryVal);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_COMPLEX_TYPES", 2, ComplexType);
+
+    return [updateRet, selectRet];
 }
 
 function testUpdateDateTimeWithValues() returns jdbc:UpdateResult | error {
@@ -123,6 +214,33 @@ function runInsertQueryWithParams(string tableName, jdbc:Parameter... parameters
         }
     }
     return testDB->update("INSERT INTO " + tableName + " VALUES(" + paramString + ")", ...parameters);
+}
+
+function runSelectSetQuery(string tableName, int id, typedesc<record{}> recordType, string... fields) returns @tainted record{} | error {
+    string fieldString = fields[0];
+    if (fields.length() > 1) {
+        int i = 1;
+        while(i < fields.length()) {
+            fieldString += ("," + fields[i]);
+            i = i + 1;
+        }
+    }
+    string queryStr = "SELECT " + fieldString + " FROM " + tableName + " WHERE ID = ?";
+    table<record{}> | error returnedTable = testDB->select(queryStr, recordType, id);
+
+    record {} returnedRecord;
+    if (returnedTable is table<record{}>) {
+        foreach var entry in returnedTable {
+            returnedRecord = entry;
+        }
+    } else {
+        return returnedTable;
+    }
+    return returnedRecord;
+}
+
+function runSelectAllQuery(string tableName, int id, typedesc<record{}> recordType) returns @tainted record{} | error {
+    return runSelectSetQuery(tableName, id, recordType, "*");
 }
 
 function stopDatabaseClient() {
