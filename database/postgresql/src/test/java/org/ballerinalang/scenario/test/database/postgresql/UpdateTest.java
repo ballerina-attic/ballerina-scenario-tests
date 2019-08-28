@@ -19,13 +19,13 @@
 package org.ballerinalang.scenario.test.database.postgresql;
 
 import org.ballerinalang.config.ConfigRegistry;
-import org.ballerinalang.test.util.BCompileUtil;
-import org.ballerinalang.test.util.BRunUtil;
-import org.ballerinalang.test.util.CompileResult;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.database.DatabaseUtil;
 import org.ballerinalang.scenario.test.database.util.AssertionUtil;
+import org.ballerinalang.test.util.BCompileUtil;
+import org.ballerinalang.test.util.BRunUtil;
+import org.ballerinalang.test.util.CompileResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -131,8 +131,6 @@ public class UpdateTest extends ScenarioTestBase {
         expectedGeneratedKeys.put("col2", "24");
         AssertionUtil.assertUpdateQueryWithGeneratedKeysReturnValue(returns[0], 1, expectedGeneratedKeys);
     }
-
-
 
     @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
