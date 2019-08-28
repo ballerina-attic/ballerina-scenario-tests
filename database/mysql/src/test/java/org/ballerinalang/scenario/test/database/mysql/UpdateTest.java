@@ -1,19 +1,28 @@
 package org.ballerinalang.scenario.test.database.mysql;
 
 import org.ballerinalang.config.ConfigRegistry;
+import org.ballerinalang.model.values.BBoolean;
+import org.ballerinalang.model.values.BDecimal;
+import org.ballerinalang.model.values.BFloat;
+import org.ballerinalang.model.values.BInteger;
+import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.model.values.BValueArray;
 import org.ballerinalang.test.util.BCompileUtil;
 import org.ballerinalang.test.util.BRunUtil;
 import org.ballerinalang.test.util.CompileResult;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.database.DatabaseUtil;
 import org.ballerinalang.scenario.test.database.util.AssertionUtil;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -51,6 +60,25 @@ public class UpdateTest extends ScenarioTestBase {
     public void testUpdateNumericTypesWithValues() {
         BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateNumericTypesWithValues");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap numericTypeRecord = (BMap) returns[1];
+        Assert.assertTrue(((BBoolean) numericTypeRecord.get(Constants.BIT_VAL_FIELD)).booleanValue(),
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.BIT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.TINYINT_VAL_FIELD), 126,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.TINYINT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.SMALLINT_VAL_FIELD), 32765,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLINT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.MEDIUMINT_VAL_FIELD), 8388603,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.MEDIUMINT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.INT_VAL_FIELD), 2147483644,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.INT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.BIGINT_VAL_FIELD), 2147483649L,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.BIGINT_VAL_FIELD));
+        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.DECIMAL_VAL_FIELD).floatValue(), 143.78f,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.DECIMAL_VAL_FIELD));
+        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.NUMERIC_VAL_FIELD).floatValue(),
+                1034.789f, AssertionUtil.getIncorrectColumnValueMessage(Constants.NUMERIC_VAL_FIELD));
     }
 
     @Test(description = "Test update numeric types with params")
@@ -71,16 +99,33 @@ public class UpdateTest extends ScenarioTestBase {
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 
-    @Test(description = "Test update complex types")
-    public void testUpdateComplexTypesWithValues() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateComplexTypesWithValues");
-        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
-    }
-
     @Test(description = "Test update complex types with params")
     public void testUpdateComplexTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateComplexTypesWithParams");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+
+        Assert.assertTrue(returns[1] instanceof BMap);
+        BMap complexTypeRecord = (BMap) returns[1];
+        String[] expectedValues = {
+                "Binary Column", "varbinary Column", "TinyBlob Column", "Blob Column", "MediumBlob Column",
+                "LongBlob Column"
+        };
+        String[] fields = {
+                Constants.BINARY_FIELD, Constants.VARBINARY_FIELD, Constants.TINYBLOB_FIELD, Constants.BLOB_FIELD,
+                Constants.MEDIUMBLOB_FIELD, Constants.LONGBLOB_FIELD
+        };
+
+        int i = 0;
+        for (String field : fields) {
+            String base64Value = new String(((BValueArray) (complexTypeRecord.get(field))).getBytes());
+            if (field.equals(Constants.BINARY_FIELD)) {
+                base64Value = base64Value.trim();
+            }
+            String actualValue = new String(base64Value.getBytes());
+            Assert.assertEquals(actualValue,
+                    expectedValues[i], AssertionUtil.getIncorrectColumnValueMessage(field));
+            i++;
+        }
     }
 
     @Test(description = "Test update datetime types with params")
@@ -101,6 +146,18 @@ public class UpdateTest extends ScenarioTestBase {
     public void testGeneratedKeyOnInsertEmptyResults() {
         BValue[] returns = BRunUtil.invoke(updateCompileResult, "testGeneratedKeyOnInsertEmptyResults");
         AssertionUtil.assertUpdateQueryWithGeneratedKeysReturnValue(returns[0], 1, new HashMap<>(0));
+    }
+
+    private long getIntValFromBMap(BMap bMap, String key) {
+        return ((BInteger) bMap.get(key)).intValue();
+    }
+
+    private Double getFloatValFromBMap(BMap bMap, String key) {
+        return ((BFloat) bMap.get(key)).floatValue();
+    }
+
+    private BigDecimal getDecimalValFromBMap(BMap bMap, String key) {
+        return ((BDecimal) bMap.get(key)).decimalValue();
     }
 
     @AfterClass(alwaysRun = true)
