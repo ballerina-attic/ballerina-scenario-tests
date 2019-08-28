@@ -59,8 +59,8 @@ public class SqlQueries {
                 + "    SELECT BIT_VAL INTO p_bitVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n"
                 + "    SELECT TINYINT_VAL INTO p_tinyIntVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n"
                 + "    SELECT SMALLINT_VAL INTO p_smallIntVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n"
-                + "    SELECT MEDIUMINT_VAL INTO p_mediumIntVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n"
-                + "    SELECT INTEGER_VAL INTO p_intVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n" + ""
+                + "    SELECT MEDIUMINT_VAL INTO p_mediumIntVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;"
+                + "    \nSELECT INTEGER_VAL INTO p_intVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n"
                 + "    SELECT BIGINT_VAL INTO p_bigIntVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n"
                 + "    SELECT DECIMAL_VAL INTO p_decimalVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n"
                 + "    SELECT NUMERIC_VAL INTO p_numericVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id;\n"
@@ -84,8 +84,8 @@ public class SqlQueries {
                 + "    SELECT BIGINT_VAL INTO p_bigIntVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id_out;\n"
                 + "    SELECT DECIMAL_VAL INTO p_decimalVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = "
                 + "p_id_out;\n"
-                + "    SELECT NUMERIC_VAL INTO p_numericVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id_out;\n"
-                + "END";
+                + "    SELECT NUMERIC_VAL INTO p_numericVal FROM SELECT_UPDATE_TEST_NUMERIC_TYPES WHERE ID = p_id_out;"
+                + "\nEND";
 
         public static final String CALL_TEST_OUT_STRING_TYPES = "CREATE PROCEDURE CALL_TEST_OUT_STRING_TYPES "
                 + "(IN p_id INTEGER, OUT p_charVal CHAR(20), OUT p_varcharVal VARCHAR(20),"
@@ -128,8 +128,8 @@ public class SqlQueries {
                 + "    SELECT DATE_VAL INTO p_dateInt FROM SELECT_UPDATE_TEST_DATETIME_TYPES WHERE ID = p_id;\n"
                 + "    SELECT TIME_VAL INTO P_timeInt FROM SELECT_UPDATE_TEST_DATETIME_TYPES WHERE ID = p_id;\n"
                 + "    SELECT DATETIME_VAL INTO p_dateTimeInt FROM SELECT_UPDATE_TEST_DATETIME_TYPES WHERE ID = p_id;\n"
-                + "    SELECT TIMESTAMP_VAL INTO p_timestampInt FROM SELECT_UPDATE_TEST_DATETIME_TYPES WHERE ID = p_id;\n"
-                + "END";
+                + "    SELECT TIMESTAMP_VAL INTO p_timestampInt FROM SELECT_UPDATE_TEST_DATETIME_TYPES WHERE ID = p_id;"
+                + "\nEND";
 
         public static final String CALL_TEST_INOUT_DATETIME_TYPES = "CREATE PROCEDURE CALL_TEST_INOUT_DATETIME_TYPES "
                 + "(IN p_id_in INTEGER, IN p_id_out INTEGER, INOUT p_dateInt DATE, INOUT P_timeInt TIME,"
