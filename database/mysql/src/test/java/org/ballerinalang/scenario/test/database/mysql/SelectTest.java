@@ -18,9 +18,6 @@
 package org.ballerinalang.scenario.test.database.mysql;
 
 import org.ballerinalang.config.ConfigRegistry;
-import org.ballerinalang.test.util.BCompileUtil;
-import org.ballerinalang.test.util.BRunUtil;
-import org.ballerinalang.test.util.CompileResult;
 import org.ballerinalang.model.values.BBoolean;
 import org.ballerinalang.model.values.BDecimal;
 import org.ballerinalang.model.values.BFloat;
@@ -31,6 +28,9 @@ import org.ballerinalang.model.values.BValueArray;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.database.DatabaseUtil;
 import org.ballerinalang.scenario.test.database.util.AssertionUtil;
+import org.ballerinalang.test.util.BCompileUtil;
+import org.ballerinalang.test.util.BRunUtil;
+import org.ballerinalang.test.util.CompileResult;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -68,7 +68,8 @@ public class SelectTest extends ScenarioTestBase {
         String password = deploymentProperties.getProperty(Constants.MYSQL_JDBC_PASSWORD_KEY);
         resourcePath = Paths.get("src", "test", "resources").toAbsolutePath();
 
-        DatabaseUtil.executeSqlFile(jdbcUrl, userName, password, Paths.get(resourcePath.toString(), "sql-src", "db-init.sql"));
+        DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
+                Paths.get(resourcePath.toString(), "sql-src", "db-init.sql"));
     }
 
     @BeforeClass
