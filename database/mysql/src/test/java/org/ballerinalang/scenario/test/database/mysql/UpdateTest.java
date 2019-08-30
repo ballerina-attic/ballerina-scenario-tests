@@ -74,33 +74,48 @@ public class UpdateTest extends ScenarioTestBase {
     }
 
     @Test(description = "Test update numeric types with values")
-    public void testUpdateNumericTypesWithValues() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateNumericTypesWithValues");
+    public void testUpdateIntegerTypesWithValues() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateIntegerTypesWithValues");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap integerTypeRecord = (BMap) returns[1];
+        Assert.assertTrue(((BBoolean) integerTypeRecord.get(Constants.BIT_VAL_FIELD)).booleanValue(),
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.BIT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.TINYINT_VAL_FIELD), 126,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.TINYINT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.SMALLINT_VAL_FIELD), 32765,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLINT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.MEDIUMINT_VAL_FIELD), 8388603,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.MEDIUMINT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.INT_VAL_FIELD), 2147483644,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.INT_VAL_FIELD));
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.BIGINT_VAL_FIELD), 2147483649L,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.BIGINT_VAL_FIELD));
+    }
+
+    @Test(description = "Test update numeric types with params")
+    public void testUpdateIntegerTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateIntegerTypesWithParams");
+        AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
+    }
+
+    @Test(description = "Test update fixed point types with values")
+    public void testUpdateFixedPointTypesWithValues() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFixedPointTypesWithValues");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
 
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap numericTypeRecord = (BMap) returns[1];
-        Assert.assertTrue(((BBoolean) numericTypeRecord.get(Constants.BIT_VAL_FIELD)).booleanValue(),
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.BIT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.TINYINT_VAL_FIELD), 126,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.TINYINT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.SMALLINT_VAL_FIELD), 32765,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLINT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.MEDIUMINT_VAL_FIELD), 8388603,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.MEDIUMINT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.INT_VAL_FIELD), 2147483644,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.INT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.BIGINT_VAL_FIELD), 2147483649L,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.BIGINT_VAL_FIELD));
         Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.DECIMAL_VAL_FIELD).floatValue(), 143.78f,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.DECIMAL_VAL_FIELD));
         Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.NUMERIC_VAL_FIELD).floatValue(),
                 1034.789f, AssertionUtil.getIncorrectColumnValueMessage(Constants.NUMERIC_VAL_FIELD));
     }
 
-    @Test(description = "Test update numeric types with params")
-    public void testUpdateNumericTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateNumericTypesWithParams");
+    @Test(description = "Test update fixed point types with params")
+    public void testUpdateFixedPointTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFixedPointTypesWithParams");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
     }
 

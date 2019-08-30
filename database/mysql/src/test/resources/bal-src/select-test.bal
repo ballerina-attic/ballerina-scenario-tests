@@ -19,7 +19,7 @@ import ballerina/io;
 import ballerina/time;
 import ballerinax/java.jdbc;
 
-type NumericType record {
+type IntegerType record {
     int id;
     boolean? bitVal;
     int? tinyIntVal;
@@ -27,6 +27,10 @@ type NumericType record {
     int? mediumIntVal;
     int? intVal;
     int? bigIntVal;
+};
+
+type FixedPointType record {
+    int id;
     decimal? decimalVal;
     decimal? numericVal;
 };
@@ -94,12 +98,20 @@ const string DATETIME_VAL = "DATETIME_VAL";
 const string TIMESTAMP_VAL = "TIMESTAMP_VAL";
 const string YEAR_VAL = "YEAR_VAL";
 
-function testSelectNumericTypes() returns @tainted record{} | error {
-    return runSelectAllQuery("SELECT_UPDATE_TEST_NUMERIC_TYPES", "1", NumericType);
+function testSelectIntegerTypes() returns @tainted record{} | error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", "1", IntegerType);
 }
 
-function testSelectNumericTypesNil() returns @tainted record{} | error {
-    return runSelectAllQuery("SELECT_UPDATE_TEST_NUMERIC_TYPES", "2", NumericType);
+function testSelectIntegerTypesNil() returns @tainted record{} | error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", "2", IntegerType);
+}
+
+function testSelectFixedPointTypes() returns @tainted record{} | error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", "1", FixedPointType);
+}
+
+function testSelectFixedPointTypesNil() returns @tainted record{} | error {
+    return runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", "2", FixedPointType);
 }
 
 function testSelectFloatTypes() returns @tainted record{} | error {

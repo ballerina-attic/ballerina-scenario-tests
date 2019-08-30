@@ -96,35 +96,46 @@ public class SelectTest extends ScenarioTestBase {
         setupDateTimeData();
     }
 
-    @Test(description = "Test numeric type selection query.")
-    public void testSelectNumericTypes() {
-        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectNumericTypes");
+    @Test(description = "Test integer type selection query.")
+    public void testSelectIntegerTypes() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectIntegerTypes");
         Assert.assertTrue(returns[0] instanceof BMap);
-        BMap numericTypeRecord = (BMap) returns[0];
-        Assert.assertTrue(((BBoolean) numericTypeRecord.get(Constants.BIT_VAL_FIELD)).booleanValue(),
+        BMap integerTypeRecord = (BMap) returns[0];
+        Assert.assertTrue(((BBoolean) integerTypeRecord.get(Constants.BIT_VAL_FIELD)).booleanValue(),
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.BIT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.TINYINT_VAL_FIELD), 126,
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.TINYINT_VAL_FIELD), 126,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.TINYINT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.SMALLINT_VAL_FIELD), 32765,
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.SMALLINT_VAL_FIELD), 32765,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.SMALLINT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.MEDIUMINT_VAL_FIELD), 8388603,
+        Assert.assertEquals(getIntValFromBMap(integerTypeRecord, Constants.MEDIUMINT_VAL_FIELD), 8388603,
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.MEDIUMINT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.INT_VAL_FIELD), 2147483644,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.INT_VAL_FIELD));
-        Assert.assertEquals(getIntValFromBMap(numericTypeRecord, Constants.BIGINT_VAL_FIELD), 2147483649L,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.BIGINT_VAL_FIELD));
-        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.DECIMAL_VAL_FIELD).floatValue(), 143.78f,
-                AssertionUtil.getIncorrectColumnValueMessage(Constants.DECIMAL_VAL_FIELD));
-        Assert.assertEquals(getDecimalValFromBMap(numericTypeRecord, Constants.NUMERIC_VAL_FIELD).floatValue(),
-                1034.789f, AssertionUtil.getIncorrectColumnValueMessage(Constants.NUMERIC_VAL_FIELD));
     }
 
     @Test(description = "Test nil numeric type selection query.")
-    public void testSelectNumericTypesNil() {
-        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectNumericTypesNil");
+    public void testSelectIntegerTypesNil() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectIntegerTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap numericTypeRecord = (BMap) returns[0];
-        AssertionUtil.assertNullValues(numericTypeRecord, 9, "id");
+        AssertionUtil.assertNullValues(numericTypeRecord, 7, "id");
+    }
+
+    @Test(description = "Test fixed point type selection query.")
+    public void testSelectFixedPointTypes() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectFixedPointTypes");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap fixedPointRecord = (BMap) returns[0];
+        Assert.assertEquals(getDecimalValFromBMap(fixedPointRecord, Constants.DECIMAL_VAL_FIELD).floatValue(), 143.78f,
+                AssertionUtil.getIncorrectColumnValueMessage(Constants.DECIMAL_VAL_FIELD));
+        Assert.assertEquals(getDecimalValFromBMap(fixedPointRecord, Constants.NUMERIC_VAL_FIELD).floatValue(),
+                1034.789f, AssertionUtil.getIncorrectColumnValueMessage(Constants.NUMERIC_VAL_FIELD));
+    }
+
+    @Test(description = "Test nil fixed point type selection query.")
+    public void testSelectFixedPointTypesNil() {
+        BValue[] returns = BRunUtil.invoke(selectCompileResult, "testSelectFixedPointTypesNil");
+        Assert.assertTrue(returns[0] instanceof BMap);
+        BMap fixedPointRecord = (BMap) returns[0];
+        AssertionUtil.assertNullValues(fixedPointRecord, 3, "id");
     }
 
     @Test(description = "Test float type selection query.")

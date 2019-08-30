@@ -44,7 +44,7 @@ jdbc:Client testDB = new({
 //    }
 //}
 
-function testCallOutParamNumericTypes() returns @tainted [table<record{}>[]|error?, any[]] {
+function testCallOutParamIntegerTypes() returns @tainted [table<record{}>[]|error?, any[]] {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, direction: jdbc:DIRECTION_OUT };
     jdbc:Parameter tinyIntVal = { sqlType: jdbc:TYPE_TINYINT, direction: jdbc:DIRECTION_OUT  };
@@ -52,16 +52,14 @@ function testCallOutParamNumericTypes() returns @tainted [table<record{}>[]|erro
     jdbc:Parameter mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, direction: jdbc:DIRECTION_OUT  };
     jdbc:Parameter intVal = { sqlType: jdbc:TYPE_INTEGER, direction: jdbc:DIRECTION_OUT  };
     jdbc:Parameter bigIntVal = { sqlType: jdbc:TYPE_BIGINT, direction: jdbc:DIRECTION_OUT  };
-    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, direction: jdbc:DIRECTION_OUT  };
-    jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, direction: jdbc:DIRECTION_OUT  };
 
-    var ret = testDB->call("CALL CALL_TEST_OUT_NUMERIC_TYPES(?, ?, ?, ?, ?, ?, ?, ?, ?)", (), id, bitVal, tinyIntVal, smallIntVal, mediumIntVal,
-        intVal, bigIntVal, decimalVal, numericVal);
-    any[] outparamValues = [ bitVal.value, tinyIntVal.value, smallIntVal.value, mediumIntVal.value, intVal.value, bigIntVal.value, decimalVal.value, numericVal.value ];
+    var ret = testDB->call("CALL CALL_TEST_OUT_INTEGER_TYPES(?, ?, ?, ?, ?, ?, ?)", (), id, bitVal, tinyIntVal, smallIntVal, mediumIntVal,
+        intVal, bigIntVal);
+    any[] outparamValues = [ bitVal.value, tinyIntVal.value, smallIntVal.value, mediumIntVal.value, intVal.value, bigIntVal.value ];
     return [ret, outparamValues];
 }
 
-function testCallInOutParamNumericTypes() returns @tainted [table<record{}>[]|error?, any[]] {
+function testCallInOutParamIntegerTypes() returns @tainted [table<record{}>[]|error?, any[]] {
     jdbc:Parameter id_in = { sqlType: jdbc:TYPE_INTEGER, value: 2, direction: jdbc:DIRECTION_IN };
     jdbc:Parameter id_out = { sqlType: jdbc:TYPE_INTEGER, value: 1, direction: jdbc:DIRECTION_IN };
     jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: true, direction: jdbc:DIRECTION_INOUT };
@@ -70,12 +68,31 @@ function testCallInOutParamNumericTypes() returns @tainted [table<record{}>[]|er
     jdbc:Parameter mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32745, direction: jdbc:DIRECTION_INOUT };
     jdbc:Parameter intVal = { sqlType: jdbc:TYPE_INTEGER, value: 8388903, direction: jdbc:DIRECTION_INOUT };
     jdbc:Parameter bigIntVal = { sqlType: jdbc:TYPE_BIGINT, value: 2147383644, direction: jdbc:DIRECTION_INOUT };
+
+    var ret = testDB->call("CALL CALL_TEST_INOUT_INTEGER_TYPES(?, ?, ?, ?, ?, ?, ?, ?)", (), id_in, id_out, bitVal, tinyIntVal, smallIntVal, mediumIntVal,
+        intVal, bigIntVal);
+    any[] outparamValues = [ bitVal.value, tinyIntVal.value, smallIntVal.value, mediumIntVal.value, intVal.value, bigIntVal.value ];
+    return [ret, outparamValues];
+}
+
+function testCallOutParamFixedPointTypes() returns @tainted [table<record{}>[]|error?, any[]] {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
+    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, direction: jdbc:DIRECTION_OUT  };
+    jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, direction: jdbc:DIRECTION_OUT  };
+
+    var ret = testDB->call("CALL CALL_TEST_OUT_FIXED_POINT_TYPES(?, ?, ?)", (), id, decimalVal, numericVal);
+    any[] outparamValues = [ decimalVal.value, numericVal.value ];
+    return [ret, outparamValues];
+}
+
+function testCallInOutParamFixedPointTypes() returns @tainted [table<record{}>[]|error?, any[]] {
+    jdbc:Parameter id_in = { sqlType: jdbc:TYPE_INTEGER, value: 2, direction: jdbc:DIRECTION_IN };
+    jdbc:Parameter id_out = { sqlType: jdbc:TYPE_INTEGER, value: 1, direction: jdbc:DIRECTION_IN };
     jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 123.78, direction: jdbc:DIRECTION_INOUT };
     jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 1054.769, direction: jdbc:DIRECTION_INOUT };
 
-    var ret = testDB->call("CALL CALL_TEST_INOUT_NUMERIC_TYPES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (), id_in, id_out, bitVal, tinyIntVal, smallIntVal, mediumIntVal,
-        intVal, bigIntVal, decimalVal, numericVal);
-    any[] outparamValues = [ bitVal.value, tinyIntVal.value, smallIntVal.value, mediumIntVal.value, intVal.value, bigIntVal.value, decimalVal.value, numericVal.value ];
+    var ret = testDB->call("CALL CALL_TEST_INOUT_FIXED_POINT_TYPES(?, ?, ?, ?)", (), id_in, id_out, decimalVal, numericVal);
+    any[] outparamValues = [ decimalVal.value, numericVal.value ];
     return [ret, outparamValues];
 }
 
