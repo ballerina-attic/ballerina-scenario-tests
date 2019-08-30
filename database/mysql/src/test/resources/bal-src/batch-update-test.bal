@@ -7,7 +7,7 @@ jdbc:Client testDB =  new jdbc:Client({
         password: config:getAsString("database.mysql.test.jdbc.password")
     });
 
-function testBatchUpdateNumericTypesWithParams() returns int[] | error {
+function testBatchUpdateIntgerTypesWithParams() returns int[] | error {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: true };
     jdbc:Parameter tinyIntVal = { sqlType: jdbc:TYPE_TINYINT, value: 126 };
@@ -15,10 +15,8 @@ function testBatchUpdateNumericTypesWithParams() returns int[] | error {
     jdbc:Parameter mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32765 };
     jdbc:Parameter intVal = { sqlType: jdbc:TYPE_INTEGER, value: 8388603 };
     jdbc:Parameter bigIntVal = { sqlType: jdbc:TYPE_BIGINT, value: 2147483644 };
-    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 143.78 };
-    jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 1034.789 };
 
-    jdbc:Parameter?[] paramBatch1 = [id, bitVal, tinyIntVal, smallIntVal, mediumIntVal, intVal, bigIntVal, decimalVal, numericVal];
+    jdbc:Parameter?[] paramBatch1 = [id, bitVal, tinyIntVal, smallIntVal, mediumIntVal, intVal, bigIntVal];
 
     id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     bitVal = { sqlType: jdbc:TYPE_BIT, value: true };
@@ -27,12 +25,26 @@ function testBatchUpdateNumericTypesWithParams() returns int[] | error {
     mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32765 };
     intVal = { sqlType: jdbc:TYPE_INTEGER, value: 8389603 };
     bigIntVal = { sqlType: jdbc:TYPE_BIGINT, value: 2147489144 };
+
+    jdbc:Parameter?[] paramBatch2 = [id, bitVal, tinyIntVal, smallIntVal, mediumIntVal, intVal, bigIntVal];
+
+    return runInsertQueryWithParams("SELECT_UPDATE_TEST_INTEGER_TYPES", 7, paramBatch1, paramBatch2);
+}
+
+function testBatchUpdateFixedPointTypesWithParams() returns int[] | error {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
+    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 143.78 };
+    jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 1034.789 };
+
+    jdbc:Parameter?[] paramBatch1 = [id, decimalVal, numericVal];
+
+    id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 243.58 };
     numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 1134.769 };
 
-    jdbc:Parameter?[] paramBatch2 = [id, bitVal, tinyIntVal, smallIntVal, mediumIntVal, intVal, bigIntVal, decimalVal, numericVal];
+    jdbc:Parameter?[] paramBatch2 = [id, decimalVal, numericVal];
 
-    return runInsertQueryWithParams("SELECT_UPDATE_TEST_NUMERIC_TYPES", 9, paramBatch1, paramBatch2);
+    return runInsertQueryWithParams("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 3, paramBatch1, paramBatch2);
 }
 
 function testBatchUpdateStringTypesWithParams() returns int[] | error {

@@ -64,13 +64,19 @@ public class BatchUpdateTest extends ScenarioTestBase {
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "batch-update-test.bal").toString());
     }
 
-    @Test(description = "Test update numeric types with params")
-    public void testBatchUpdateNumericTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateNumericTypesWithParams");
+    @Test(description = "Test update fixed point types with params")
+    public void testBatchUpdateFixedPointTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
-    
+
+    @Test(description = "Test update integer types with params")
+    public void testBatchUpdateIntgerTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateIntgerTypesWithParams");
+        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
+        AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
+    }
 
     @Test(description = "Test update string types with params")
     public void testBatchUpdateStringTypesWithParams() {

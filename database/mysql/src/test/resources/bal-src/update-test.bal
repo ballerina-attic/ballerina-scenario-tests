@@ -24,7 +24,7 @@ jdbc:Client testDB =  new jdbc:Client({
     password: config:getAsString("database.mysql.test.jdbc.password")
 });
 
-type NumericType record {
+type IntegerType record {
     int id;
     boolean? bitVal;
     int? tinyIntVal;
@@ -32,6 +32,10 @@ type NumericType record {
     int? mediumIntVal;
     int? intVal;
     int? bigIntVal;
+};
+
+type FixedPointType record {
+    int id;
     decimal? decimalVal;
     decimal? numericVal;
 };
@@ -87,14 +91,14 @@ type ComplexType record {
     byte[]|() longBlobVal;
 };
 
-function testUpdateNumericTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
-    var updateRet = runInsertQueryWithValues("SELECT_UPDATE_TEST_NUMERIC_TYPES", 1, 1, 126, 32765, 8388603, 2147483644, 2147483649, 143.78, 1034.789);
-    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_NUMERIC_TYPES", 1, NumericType);
+function testUpdateIntegerTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    var updateRet = runInsertQueryWithValues("SELECT_UPDATE_TEST_INTEGER_TYPES", 1, 1, 126, 32765, 8388603, 2147483644, 2147483649);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", 1, IntegerType);
 
     return [updateRet, selectRet];
 }
 
-function testUpdateNumericTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+function testUpdateIntegerTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
     jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: true };
     jdbc:Parameter tinyIntVal = { sqlType: jdbc:TYPE_TINYINT, value: 126 };
@@ -102,12 +106,28 @@ function testUpdateNumericTypesWithParams() returns @tainted [jdbc:UpdateResult|
     jdbc:Parameter mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32765 };
     jdbc:Parameter intVal = { sqlType: jdbc:TYPE_INTEGER, value: 8388603 };
     jdbc:Parameter bigIntVal = { sqlType: jdbc:TYPE_BIGINT, value: 2147483644 };
+
+    var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_INTEGER_TYPES", id, bitVal, tinyIntVal, smallIntVal,
+    mediumIntVal, intVal, bigIntVal);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", 2, IntegerType);
+
+    return [updateRet, selectRet];
+}
+
+function testUpdateFixedPointTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    var updateRet = runInsertQueryWithValues("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 1, 143.78, 1034.789);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 1, FixedPointType);
+
+    return [updateRet, selectRet];
+}
+
+function testUpdateFixedPointTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
     jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 143.78 };
     jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 1034.789 };
 
-    var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_NUMERIC_TYPES", id, bitVal, tinyIntVal, smallIntVal,
-    mediumIntVal, intVal, bigIntVal, decimalVal, numericVal);
-    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_NUMERIC_TYPES", 2, NumericType);
+    var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", id, decimalVal, numericVal);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 2, FixedPointType);
 
     return [updateRet, selectRet];
 }
@@ -115,7 +135,7 @@ function testUpdateNumericTypesWithParams() returns @tainted [jdbc:UpdateResult|
 function testUpdateStringTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
     var updateRet = runInsertQueryWithValues("SELECT_UPDATE_TEST_STRING_TYPES", 1, "Char Column", "Varchar column",
     "TinyText column", "Text column", "MediumText column", "LongText column", "A", "X");
-    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_NUMERIC_TYPES", 2, NumericType);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", 2, IntegerType);
 
     return [updateRet, selectRet];
 }
@@ -133,7 +153,7 @@ function testUpdateStringTypesWithParams() returns @tainted [jdbc:UpdateResult|e
 
     var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_STRING_TYPES", id, charVal, varcharVal, tinyTextVal,
     textVal, mediumTextVal, longTextVal, setVal, enumVal);
-    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_NUMERIC_TYPES", 2, NumericType);
+    var selectRet = runSelectAllQuery("SELECT_UPDATE_TEST_INTEGER_TYPES", 2, IntegerType);
     return [updateRet, selectRet];
 }
 
