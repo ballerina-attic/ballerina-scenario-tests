@@ -41,6 +41,22 @@ function testBatchUpdateFixedPointTypesWithParams() returns int[] | error {
     return runInsertQueryWithParams("SELECT_UPDATE_TEST_FIXED_POINT_TYPES", 3, paramBatch1, paramBatch2);
 }
 
+function testUpdateFloatingPointTypesWithParams() returns int[] | error {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
+    jdbc:Parameter realVal = { sqlType: jdbc:TYPE_NUMERIC, value: 999.12569 };
+    jdbc:Parameter doubleVal = { sqlType: jdbc:TYPE_DECIMAL, value: 109999.1234123789145 };
+
+    jdbc:Parameter?[] paramBatch1 = [id, realVal, doubleVal];
+
+    id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
+    realVal = { sqlType: jdbc:TYPE_NUMERIC, value: 999.12569 };
+    doubleVal = { sqlType: jdbc:TYPE_DECIMAL, value: 109999.1234123789145 };
+
+    jdbc:Parameter?[] paramBatch2 = [id, realVal, doubleVal];
+
+    return runInsertQueryWithParams("SELECT_UPDATE_TEST_FLOAT_TYPES", 3, paramBatch1, paramBatch1);
+}
+
 function testBatchUpdateStringTypesWithParams() returns int[] | error {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     jdbc:Parameter varcharVal = { sqlType: jdbc:TYPE_VARCHAR, value: "Varchar column" };

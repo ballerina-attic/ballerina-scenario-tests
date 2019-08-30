@@ -16,7 +16,7 @@
  *  under the License.
  */
 
-package org.ballerinalang.scenario.test.database.postgresql;
+package org.ballerinalang.scenario.test.database.oracle;
 
 import org.ballerinalang.config.ConfigRegistry;
 import org.ballerinalang.model.values.BValue;
@@ -35,7 +35,6 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
-@Test(groups = Constants.POSTGRES_TESTNG_GROUP)
 public class BatchUpdateTest extends ScenarioTestBase {
     private CompileResult batchUpdateCompileResult;
     private String jdbcUrl;
@@ -44,26 +43,24 @@ public class BatchUpdateTest extends ScenarioTestBase {
     private Path resourcePath;
 
     @BeforeClass
-    public void setup() throws Exception {
+    public void setUp() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
-        jdbcUrl = deploymentProperties
-                .getProperty(org.ballerinalang.scenario.test.database.postgresql.Constants.POSTGRES_JDBC_URL_KEY)
-                + "/testdb";
-        userName = deploymentProperties.getProperty(Constants.POSTGRES_JDBC_USERNAME_KEY);
-        password = deploymentProperties.getProperty(Constants.POSTGRES_JDBC_PASSWORD_KEY);
+        jdbcUrl = deploymentProperties.getProperty(Constants.ORACLE_JDBC_URL_KEY);
+        userName = deploymentProperties.getProperty(Constants.ORACLE_JDBC_USERNAME_KEY);
+        password = deploymentProperties.getProperty(Constants.ORACLE_JDBC_PASSWORD_KEY);
 
         ConfigRegistry registry = ConfigRegistry.getInstance();
         HashMap<String, String> configMap = new HashMap<>(3);
-        configMap.put(Constants.POSTGRES_JDBC_URL_KEY, jdbcUrl);
-        configMap.put(Constants.POSTGRES_JDBC_USERNAME_KEY, userName);
-        configMap.put(Constants.POSTGRES_JDBC_PASSWORD_KEY, password);
+        configMap.put(Constants.ORACLE_JDBC_URL_KEY, jdbcUrl);
+        configMap.put(Constants.ORACLE_JDBC_USERNAME_KEY, userName);
+        configMap.put(Constants.ORACLE_JDBC_PASSWORD_KEY, password);
         registry.initRegistry(configMap, null, null);
 
         resourcePath = Paths.get("src", "test", "resources").toAbsolutePath();
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
                 Paths.get(resourcePath.toString(), "sql-src", "ddl-select-update-test.sql"));
-        batchUpdateCompileResult = BCompileUtil.compile(
-                Paths.get(resourcePath.toString(), "bal-src", "batch-update-test.bal").toString());
+        batchUpdateCompileResult = BCompileUtil
+                .compile(Paths.get(resourcePath.toString(), "bal-src", "batch-update-test.bal").toString());
     }
 
     @Test(description = "Test update integer types with params")
@@ -73,16 +70,16 @@ public class BatchUpdateTest extends ScenarioTestBase {
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update fixed point types with params")
+    @Test(description = "Test update integer types with params")
     public void testBatchUpdateFixedPointTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update floating point types with params")
+    @Test(description = "Test update integer types with params")
     public void testUpdateFloatingPointTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testUpdateFloatingPointTypesWithParams");
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
@@ -112,6 +109,6 @@ public class BatchUpdateTest extends ScenarioTestBase {
     public void cleanup() throws Exception {
         BRunUtil.invoke(batchUpdateCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,
-                Paths.get(resourcePath.toString(), "sql-src", "cleanup-select-test.sql"));
+                Paths.get(resourcePath.toString(), "sql-src", "cleanup-select-update-test.sql"));
     }
 }
