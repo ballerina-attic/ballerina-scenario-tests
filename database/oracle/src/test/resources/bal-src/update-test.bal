@@ -103,10 +103,10 @@ function testUpdateFloatingPointTypesWithValues() returns @tainted [jdbc:UpdateR
 
 function testUpdateFloatingPointTypesWithParams() returns jdbc:UpdateResult | error {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
-    jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 999.125698 };
-    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 109999.123412378914545 };
+    jdbc:Parameter binaryFloat = { sqlType: jdbc:TYPE_FLOAT, value: 999.125698 };
+    jdbc:Parameter binaryDouble = { sqlType: jdbc:TYPE_DOUBLE, value: 109999.123412378914545 };
 
-    return runInsertQueryWithParams("SELECT_UPDATE_FLOAT_TYPES", id, numericVal, decimalVal);
+    return runInsertQueryWithParams("SELECT_UPDATE_FLOAT_TYPES", id, binaryFloat, binaryDouble);
 }
 
 function testUpdateFixedPointTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
@@ -127,7 +127,7 @@ function testUpdateFixedPointTypesWithParams() returns @tainted [jdbc:UpdateResu
     return [updateRet, selectRet];
 }
 
-function testUpdateStringTypesWithValues() @tainted [jdbc:UpdateResult|error, record{}|error] {
+function testUpdateStringTypesWithValues() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
     var updateRet = runInsertQueryWithValues("SELECT_UPDATE_STRING_TYPES", 1, "Char column", "යූනිකෝඩ් දත්ත",
     "Varchar column", "යූනිකෝඩ් දත්ත");
     var selectRet = runSelectAllQuery("SELECT_UPDATE_STRING_TYPES", 1, StringType);
@@ -135,7 +135,7 @@ function testUpdateStringTypesWithValues() @tainted [jdbc:UpdateResult|error, re
     return [updateRet, selectRet];
 }
 
-function testUpdateStringTypesWithParams() @tainted [jdbc:UpdateResult|error, record{}|error] {
+function testUpdateStringTypesWithParams() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     jdbc:Parameter charVal = { sqlType: jdbc:TYPE_CHAR, value: "Char Column" };
     jdbc:Parameter ncharVal = { sqlType: jdbc:TYPE_NCHAR, value: "යූනිකෝඩ් දත්ත" };

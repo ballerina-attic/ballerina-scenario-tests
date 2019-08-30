@@ -21,7 +21,6 @@ package org.ballerinalang.scenario.test.database.oracle;
 import org.ballerinalang.config.ConfigRegistry;
 import org.ballerinalang.model.values.BDecimal;
 import org.ballerinalang.model.values.BFloat;
-import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BMap;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.model.values.BValueArray;
@@ -105,7 +104,7 @@ public class UpdateTest extends ScenarioTestBase {
                 AssertionUtil.getIncorrectColumnValueMessage(Constants.BINARY_DOUBLE_VAL_FIELD));
     }
 
-    @Test(description = "Test update floating point types with params")
+    @Test(description = "Test update floating point types with params", enabled = false)
     public void testUpdateFloatingPointTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateFloatingPointTypesWithParams");
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
@@ -161,7 +160,7 @@ public class UpdateTest extends ScenarioTestBase {
         BMap stringTypeRecord = (BMap) returns[1];
         //  Since char/nchar types don't allow storing variable length strings, the string would include empty
         //  characters.
-        String[] fieldValues = { "Char column         ", "යූනිකෝඩ් දත්ත       ", "Varchar column", "යූනිකෝඩ් දත්ත" };
+        String[] fieldValues = { "Char Column         ", "යූනිකෝඩ් දත්ත       ", "Varchar column", "යූනිකෝඩ් දත්ත" };
         AssertionUtil.assertNonNullStringValues(stringTypeRecord, 5, fieldValues, "id");
     }
 
@@ -171,7 +170,7 @@ public class UpdateTest extends ScenarioTestBase {
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
 
         Assert.assertTrue(returns[1] instanceof BMap);
-        BMap complexTypeRecord = (BMap) returns[0];
+        BMap complexTypeRecord = (BMap) returns[1];
 
         String actualValue = (new String(((BValueArray) (complexTypeRecord.get(Constants.BLOB_FIELD))).getBytes())
                 .trim());
@@ -185,7 +184,7 @@ public class UpdateTest extends ScenarioTestBase {
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
 
         Assert.assertTrue(returns[1] instanceof BMap);
-        BMap complexTypeRecord = (BMap) returns[0];
+        BMap complexTypeRecord = (BMap) returns[1];
 
         String actualValue = (new String(((BValueArray) (complexTypeRecord.get(Constants.BLOB_FIELD))).getBytes())
                 .trim());
