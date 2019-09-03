@@ -66,42 +66,42 @@ public class BatchUpdateTest extends ScenarioTestBase {
     @Test(description = "Test update integer types with params")
     public void testBatchUpdateIntegerTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateIntegerTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
+        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update integer types with params")
     public void testBatchUpdateFixedPointTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
+        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update integer types with params")
     public void testUpdateFloatingPointTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
+        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update string types with params")
     public void testBatchUpdateStringTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateStringTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
+        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update complex types with params")
     public void testBatchUpdateComplexTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateComplexTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
+        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update datetime types with params")
     public void testBatchUpdateDateTimeWithValuesParam() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateDateTimeWithValuesParam");
-        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
+        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
