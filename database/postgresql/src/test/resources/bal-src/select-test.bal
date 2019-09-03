@@ -1,5 +1,4 @@
 import ballerina/config;
-import ballerina/io;
 import ballerina/time;
 import ballerinax/java.jdbc;
 

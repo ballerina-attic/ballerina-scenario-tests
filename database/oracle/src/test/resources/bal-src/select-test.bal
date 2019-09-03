@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 import ballerina/config;
-import ballerina/io;
 import ballerina/time;
 import ballerinax/java.jdbc;
 
