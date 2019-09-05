@@ -137,7 +137,7 @@ function testUpdateWithGeneratedKeysSelectFullIterate() returns @tainted [int, s
             firstUpdateRet = updateRet1.updatedRowCount;
         } else {
             error e = updateRet1;
-            io:println("=============================1", e.detail()["message"]);
+            io:println(e.detail()["message"]);
         }
         var selectRet1 = testDB->select("SELECT * FROM TRX_TEST_AUTO_GEN_KEY WHERE ID = ?", ResultAutoGen, 10);
         if (selectRet1 is table<record{}>) {
@@ -147,14 +147,14 @@ function testUpdateWithGeneratedKeysSelectFullIterate() returns @tainted [int, s
             }
         } else {
            error e = selectRet1;
-           io:println("=============================2", e.detail()["message"]);
+           io:println(e.detail()["message"]);
         }
         var updateRet2 = testDB->update("INSERT INTO TRX_TEST VALUES(?, ?)", 10, "Dummy");
         if (updateRet2 is jdbc:UpdateResult) {
             secondUpdateRet = updateRet2.updatedRowCount;
         } else {
             error e = updateRet2;
-            io:println("=============================3", e.detail()["message"]);
+            io:println(e.detail()["message"]);
         }
     } onretry {
         retryCount = retryCount + 1;
