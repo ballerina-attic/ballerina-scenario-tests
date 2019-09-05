@@ -38,10 +38,6 @@
         </dependency>
         <dependency>
             <groupId>org.ballerinalang</groupId>
-            <artifactId>ballerina-launcher</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.ballerinalang</groupId>
             <artifactId>ballerina-core</artifactId>
         </dependency>
         <dependency>
@@ -642,6 +638,52 @@
         <dependency>
             <groupId>org.ballerinalang</groupId>
             <artifactId>ballerina-io</artifactId>
+            <classifier>bir-jar</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-file</artifactId>
+            <type>zip</type>
+            <classifier>bir</classifier>
+            <version>${ballerina.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-file</artifactId>
+            <version>${ballerina.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-file</artifactId>
+            <type>zip</type>
+            <classifier>ballerina-binary-repo</classifier>
+            <version>${ballerina.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-file</artifactId>
+            <classifier>bir-jar</classifier>
+            <version>${ballerina.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-java</artifactId>
+            <type>zip</type>
+            <classifier>bir</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-java</artifactId>
+            <type>zip</type>
+            <classifier>ballerina-binary-repo</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-java</artifactId>
             <classifier>bir-jar</classifier>
         </dependency>
     </dependencies>

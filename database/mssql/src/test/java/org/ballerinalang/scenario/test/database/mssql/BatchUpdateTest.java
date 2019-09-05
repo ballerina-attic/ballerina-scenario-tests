@@ -15,8 +15,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.ballerinalang.scenario.test.database.oracle;
+package org.ballerinalang.scenario.test.database.mssql;
 
 import org.ballerinalang.config.ConfigRegistry;
 import org.ballerinalang.model.values.BValue;
@@ -43,17 +42,17 @@ public class BatchUpdateTest extends ScenarioTestBase {
     private Path resourcePath;
 
     @BeforeClass
-    public void setUp() throws Exception {
+    public void setup() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
-        jdbcUrl = deploymentProperties.getProperty(Constants.ORACLE_JDBC_URL_KEY);
-        userName = deploymentProperties.getProperty(Constants.ORACLE_JDBC_USERNAME_KEY);
-        password = deploymentProperties.getProperty(Constants.ORACLE_JDBC_PASSWORD_KEY);
+        jdbcUrl = deploymentProperties.getProperty(Constants.MSSQL_JDBC_URL_KEY) + ";databaseName=testdb";
+        userName = deploymentProperties.getProperty(Constants.MSSQL_JDBC_USERNAME_KEY);
+        password = deploymentProperties.getProperty(Constants.MSSQL_JDBC_PASSWORD_KEY);
 
         ConfigRegistry registry = ConfigRegistry.getInstance();
         HashMap<String, String> configMap = new HashMap<>(3);
-        configMap.put(Constants.ORACLE_JDBC_URL_KEY, jdbcUrl);
-        configMap.put(Constants.ORACLE_JDBC_USERNAME_KEY, userName);
-        configMap.put(Constants.ORACLE_JDBC_PASSWORD_KEY, password);
+        configMap.put(Constants.MSSQL_JDBC_URL_KEY, jdbcUrl);
+        configMap.put(Constants.MSSQL_JDBC_USERNAME_KEY, userName);
+        configMap.put(Constants.MSSQL_JDBC_PASSWORD_KEY, password);
         registry.initRegistry(configMap, null, null);
 
         resourcePath = Paths.get("src", "test", "resources").toAbsolutePath();
@@ -66,42 +65,35 @@ public class BatchUpdateTest extends ScenarioTestBase {
     @Test(description = "Test update integer types with params")
     public void testBatchUpdateIntegerTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateIntegerTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
+        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update integer types with params")
+    @Test(description = "Test update fixed point types with params")
     public void testBatchUpdateFixedPointTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
+        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update integer types with params")
-    public void testUpdateFloatingPointTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
+    @Test(description = "Test update floating point types with params")
+    public void testBatchUpdateFloatingPointTypesWithParams() {
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFloatingPointTypesWithParams");
+        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update string types with params")
-    public void testBatchUpdateStringTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateStringTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
+    public void testBatchUpdateStringTypes() {
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateStringTypes");
+        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
     @Test(description = "Test update complex types with params")
-    public void testBatchUpdateComplexTypesWithParams() {
-        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateComplexTypesWithParams");
-        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
-        AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
-    }
-
-    @Test(description = "Test update datetime types with params")
-    public void testBatchUpdateDateTimeWithValuesParam() {
-        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateDateTimeWithValuesParam");
-        int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
+    public void testBatchUpdateComplexTypes() {
+        BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateComplexTypes");
+        int[] expectedArrayOfUpdatedRowCount = { 1, 1 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 

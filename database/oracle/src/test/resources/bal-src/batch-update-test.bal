@@ -24,13 +24,13 @@ function testBatchUpdateIntegerTypesWithParams() returns int[] | error {
 function testBatchUpdateFixedPointTypesWithParams() returns int[] | error {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 999.125698 };
-    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 109999.123412378914545 };
+    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 10999.1234123 };
 
     jdbc:Parameter?[] paramBatch1 = [id, numericVal, decimalVal];
 
     id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
     numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 969.124698 };
-    decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 145699.123412978914545 };
+    decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 14569.1234129 };
 
     jdbc:Parameter?[] paramBatch2 = [id, numericVal, decimalVal];
 
