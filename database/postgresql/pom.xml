@@ -632,6 +632,27 @@
             <artifactId>ballerina-file</artifactId>
             <classifier>bir-jar</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-java</artifactId>
+            <type>zip</type>
+            <classifier>bir</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-java</artifactId>
+            <type>zip</type>
+            <classifier>ballerina-binary-repo</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.ballerinalang</groupId>
+            <artifactId>ballerina-java</artifactId>
+            <classifier>bir-jar</classifier>
+        </dependency>
     </dependencies>
 
     <build>
