@@ -26,7 +26,7 @@ infrastructureConfig:
   provisioners:
     - name: ballerina-deployment
       remoteRepository: "https://github.com/Manuri/ballerina-scenario-tests.git"
-      remoteBranch: "scenario-tests-database"
+      remoteBranch: " scenario-tests-database-jballerina"
       description: creates infrastructure for ballerina scenario tests
       scripts:
         - name: ballerina-deployment
@@ -41,7 +41,7 @@ infrastructureConfig:
 scenarioConfigs:
   - testType: TESTNG
     remoteRepository: "https://github.com/Manuri/ballerina-scenario-tests.git"
-    remoteBranch: "scenario-tests-database"
+    remoteBranch: " scenario-tests-database-jballerina"
     name: "ballerinaScenarios"
     description: "ballerina-scenarios"
     file: test-grid-scripts/database/test-runner.sh
