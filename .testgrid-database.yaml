@@ -21,8 +21,9 @@ infrastructureConfig:
   infrastructureProvider: SHELL
   containerOrchestrationEngine: K8S
   includes:
-    - Postgres-10.5
-    - MySQL-5.7
+    #- Postgres-10.5
+    #- MySQL-5.7
+    - SQLServer-SE-13.00
   provisioners:
     - name: ballerina-deployment
       remoteRepository: "https://github.com/Manuri/ballerina-scenario-tests.git"
