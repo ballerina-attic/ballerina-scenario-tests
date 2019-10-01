@@ -82,8 +82,8 @@ elif [ ${database_type} = "SQLServer-SE" ]; then
     echo "DB Host: ${database_host}"
     jdbc_url="jdbc:sqlserver://${database_host}:1433"
     echo "database.mssql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
-    echo "database.mssql.test.jdbc.username=masteruser" >> ${output_dir}/infrastructure.properties
+    echo "database.mssql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
     echo "database.mssql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
-    echo "TestGroup=mssqlserver" >> ${output_dir}/infrastructure.properties
+    echo "TestGroup=mssql" >> ${output_dir}/infrastructure.properties
     echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
 fi

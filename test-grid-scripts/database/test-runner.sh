@@ -45,6 +45,8 @@ run_provided_test() {
         run_database_module mysql
     elif [ "${test_group_to_run}" = "postgresql" ]; then
         run_database_module postgresql
+    elif [ "${test_group_to_run}" = "mssql" ]; then
+        run_database_module mssql
     fi
 }
 
