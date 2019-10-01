@@ -24,7 +24,6 @@
         <listener class-name="org.ballerinalang.scenario.test.common.testng.listeners.TestLoggingListener"/>
     </listeners>
 
-    <!-- Below tests should run sequentially since it will use same port in each test -->
     <test name="ballerina-http-scenario-tests" parallel="false">
         <groups>
             <run>
@@ -33,7 +32,7 @@
         </groups>
 
         <classes>
-            <class name="org.ballerinalang.scenario.test.http.HttpCircuitBreakerScenarioTest" />
+            <class name="org.ballerinalang.scenario.test.resiliency.CircuitBreakerWithRetryTest" />
         </classes>
     </test>
 </suite>
