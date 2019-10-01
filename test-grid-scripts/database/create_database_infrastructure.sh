@@ -55,7 +55,7 @@ echo "Creating database..."
 echo "Database details: DB_TYPE: ${database_type} | DB_VERSION:${database_version} | DB_NAME: ${database_name}"
 
 if [ ${database_type} = "MySQL" ]; then
-    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" database_host
+    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 10 database_host
     echo "DB Host: ${database_host}"
     #mysql -h "${database_host}" -P 3306 -u 'masterawsuser' -p'masteruserpassword' <${database_parent_path}/db_init.sql
     jdbc_url="jdbc:mysql://${database_host}:3306"
@@ -65,7 +65,7 @@ if [ ${database_type} = "MySQL" ]; then
     echo "TestGroup=mysql" >> ${output_dir}/infrastructure.properties
     echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
 elif [ ${database_type} = "Postgres" ]; then
-    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" database_host
+    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 10 database_host
     echo "DB Host: ${database_host}"
     #sudo apt-get install -y postgresql-client
     #PGPASSWORD=masteruserpassword psql -h "${database_host}" -p 5432 --username 'masterawsuser' -d postgres < ${database_parent_path}/db_init.sql
@@ -78,7 +78,7 @@ elif [ ${database_type} = "Postgres" ]; then
 elif [ ${database_type} = "SQLServer-SE" ]; then
     # Temp fix until XE is added to testgrid
     database_type="SQLServer-EX"
-    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" database_host
+    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 20 database_host
     echo "DB Host: ${database_host}"
     jdbc_url="jdbc:sqlserver://${database_host}:1433"
     echo "database.mssql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
