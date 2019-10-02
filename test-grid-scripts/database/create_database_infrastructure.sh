@@ -35,7 +35,15 @@ db_engine=${db_details["DBEngine"]}
 
 read database_type database_version <<<$(IFS="-"; echo ${db_engine})
 
-read database_edition database_version <<<$(IFS="-"; echo ${database_version})
+read first_part second_part <<<$(IFS=" "; echo ${database_version})
+
+if [ ${second_part:-""} = "" ]; then
+    database_version=${first_part}
+else
+    database_edition=${first_part}
+    database_version=${second_part}
+    database_type="${database_type}-${database_edition}"
+fi
 
 if [ ${database_type:-""} = "" ]; then
     echo "Database not provided!"
@@ -46,8 +54,6 @@ if [ ${database_version:-""} = "" ]; then
     echo "Database version not provided!"
     exit 1
 fi
-
-database_type=${database_type}-${database_edition}
 
 database_name=$(generate_random_db_name)
 
@@ -65,7 +71,7 @@ if [ ${database_type} = "MySQL" ]; then
     echo "TestGroup=mysql" >> ${output_dir}/infrastructure.properties
     echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
 elif [ ${database_type} = "Postgres" ]; then
-    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 10 "general-public-license" database_host
+    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 10 "postgresql-license" database_host
     echo "DB Host: ${database_host}"
     #sudo apt-get install -y postgresql-client
     #PGPASSWORD=masteruserpassword psql -h "${database_host}" -p 5432 --username 'masterawsuser' -d postgres < ${database_parent_path}/db_init.sql
@@ -89,7 +95,7 @@ elif [ ${database_type} = "SQLServer-SE" ]; then
 elif [ ${database_type} = "Oracle-SE1" ]; then
     create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 20 "bring-your-own-license" database_host
     echo "DB Host: ${database_host}"
-    jdbc_url="jdbc:oracle:thin@${database_host}:1521"
+    jdbc_url="jdbc:oracle:thin:@${database_host}:1521:ORCL"
     echo "database.oracle.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
     echo "database.oracle.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
     echo "database.oracle.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
