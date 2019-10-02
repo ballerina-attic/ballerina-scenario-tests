@@ -86,4 +86,13 @@ elif [ ${database_type} = "SQLServer-SE" ]; then
     echo "database.mssql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
     echo "TestGroup=mssql" >> ${output_dir}/infrastructure.properties
     echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
+elif [ ${database_type} = "Oracle-SE1" ]; then
+    create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 20 database_host
+    echo "DB Host: ${database_host}"
+    jdbc_url="jdbc:oracle:thin//${database_host}:1521"
+    echo "database.oracle.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
+    echo "database.oracle.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
+    echo "database.oracle.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
+    echo "TestGroup=oracle" >> ${output_dir}/infrastructure.properties
+    echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
 fi

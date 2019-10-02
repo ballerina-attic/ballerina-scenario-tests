@@ -23,7 +23,8 @@ infrastructureConfig:
   includes:
     #- Postgres-10.5
     #- MySQL-5.7
-    - SQLServer-SE-13.00
+    #- SQLServer-SE-13.00
+    - Oracle-SE1-11.2
   provisioners:
     - name: ballerina-deployment
       remoteRepository: "https://github.com/Manuri/ballerina-scenario-tests.git"
