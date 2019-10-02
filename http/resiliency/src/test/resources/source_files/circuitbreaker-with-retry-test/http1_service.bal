@@ -1,4 +1,5 @@
 import ballerina/http;
+import ballerina/kubernetes;
 import ballerina/log;
 import ballerina/runtime;
 
@@ -6,11 +7,21 @@ import ballerina/runtime;
 //                  BACKEND SERVICE                   *
 // ****************************************************
 
+@kubernetes:Service {
+    serviceType: "NodePort"
+}
+@kubernetes:Ingress {
+	hostname: "resiliency.backend"
+}
 listener http:Listener http1Listener= new(10300);
 
 int count = 0;
 string servicePrefix = "[Http1Service] ";
 
+@kubernetes:Deployment {
+    image: "cb_with_retry_backend:v1.0",
+    imagePullPolicy: "Always"
+}
 @http:ServiceConfig {
     basePath: "/"
 }

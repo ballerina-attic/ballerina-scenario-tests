@@ -1,5 +1,6 @@
 import ballerina/http;
 import ballerina/io;
+import ballerina/kubernetes;
 import ballerina/log;
 
 // ****************************************************
@@ -17,11 +18,21 @@ http:Client backendClientEP = new("http://localhost:10200", {
     timeoutInMillis: 2000
 });
 
+@kubernetes:Service {
+    serviceType: "NodePort"
+}
+@kubernetes:Ingress {
+	hostname: "resiliency.retry"
+}
 listener http:Listener retryListener = new(10100);
 
 string servicePrefix = "[RetryService] ";
 int count = 0;
 
+@kubernetes:Deployment {
+    image: "cb_with_retry_retry_service:v1.0",
+    imagePullPolicy: "Always"
+}
 @http:ServiceConfig {
     basePath: "/"
 }

@@ -1,5 +1,6 @@
 import ballerina/http;
 import ballerina/io;
+import ballerina/kubernetes;
 import ballerina/log;
 
 // ****************************************************
@@ -26,12 +27,22 @@ http:ClientConfiguration clientConfig = {
 
 http:Client backendClient = new("http://localhost:10300", clientConfig);
 
+@kubernetes:Service {
+    serviceType: "NodePort"
+}
+@kubernetes:Ingress {
+	hostname: "resiliency.circuitbreaker"
+}
 listener http:Listener circuitBreakerListener = new(10200);
 
 string servicePrefix = "[Http1CircuitBreakerService] ";
 
 int count = 0;
 
+@kubernetes:Deployment {
+    image: "cb_with_retry_cb_service:v1.0",
+    imagePullPolicy: "Always"
+}
 @http:ServiceConfig {
     basePath: "/"
 }
