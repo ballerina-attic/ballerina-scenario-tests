@@ -38,6 +38,13 @@ run_database_module() {
     cp -r ${test_database_great_grand_parent_path}/database/${module}/target ${output_dir}/scenarios/${module}/
 }
 
+download_and_install_oracle_driver() {
+    wget https://testgrid-resources.s3.amazonaws.com/packer/Unix/ojdbc6.jar
+    # The Apache Maven site states that 3.0.0-M1 is the current stable version of maven install plugin. Hence using the milestone.
+    mvn org.apache.maven.plugins:maven-install-plugin:3.0.0-M1:install-file -Dfile=./ojdbc6.jar -DgroupId=oracle -DartifactId=ojdbc6 -Dversion=1.0.0 -Dpackaging=jar
+    rm ./ojdbc6.jar
+}
+
 run_provided_test() {
     local test_group_to_run=${deployment_config["TestGroup"]}
 
@@ -48,6 +55,7 @@ run_provided_test() {
     elif [ "${test_group_to_run}" = "mssql" ]; then
         run_database_module mssql
     elif [ "${test_group_to_run}" = "oracle" ]; then
+        download_and_install_oracle_driver
         run_database_module oracle
     fi
 }
