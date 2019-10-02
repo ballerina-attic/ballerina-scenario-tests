@@ -40,7 +40,8 @@ function create_database() {
     local database_name=$3
     local instance_type=$4
     local allocated_storage=$5
-    local __db_host=$6
+    local license_model=$6
+    local __db_host=$7
 
     aws rds create-db-instance --db-instance-identifier ${database_name} \
         --db-instance-class ${instance_type} \
@@ -49,7 +50,8 @@ function create_database() {
         --master-username masterawsuser \
         --master-user-password masteruserpassword \
         --backup-retention-period 0\
-        --engine-version ${db_version}
+        --engine-version ${db_version} \
+        --license-model ${license_model}
 
     aws rds wait  db-instance-available  --db-instance-identifier "$database_name"
 
