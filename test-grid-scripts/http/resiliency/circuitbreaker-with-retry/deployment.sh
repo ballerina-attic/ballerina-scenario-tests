@@ -18,14 +18,15 @@
 readonly deployment_cb_with_retry_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 readonly deployment_cb_with_retry_grand_parent_path=$(dirname ${deployment_cb_with_retry_parent_path})
 readonly deployment_cb_with_retry_great_grand_parent_path=$(dirname ${deployment_cb_with_retry_grand_parent_path})
+readonly deployment_cb_with_retry_great_great_grand_parent_path=$(dirname ${deployment_cb_with_retry_great_grand_parent_path})
 
-. ${deployment_cb_with_retry_grand_parent_path}/common/usage.sh
-. ${deployment_cb_with_retry_grand_parent_path}/setup/setup_deployment_env.sh
+. ${deployment_cb_with_retry_great_great_grand_parent_path}/common/usage.sh
+. ${deployment_cb_with_retry_great_great_grand_parent_path}/setup/setup_deployment_env.sh
 
 function setup_deployment() {
     clone_repo_and_set_bal_path
     replace_variables_in_bal_files
-    build_and_deploy_artemis_resources
+    build_and_deploy_resources
     wait_for_pod_readiness
     retrieve_and_write_properties_to_data_bucket
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
@@ -34,13 +35,17 @@ function setup_deployment() {
     fi
 }
 
+readonly REPO_NAME="ballerina-scenario-tests"
+readonly DIRECTORY_NAME="http/resiliency/src/test/resources/source_files/circuitbreaker-with-retry-test"
+
 ## Functions
 
 function clone_repo_and_set_bal_path() {
-    git clone https://github.com/ballerina-platform/ballerina-scenario-tests.git
-    backend_bal_path=http/resiliency/src/test/resources/source_files/circuitbreaker-with-retry-test/http1_service.bal
-    cb_bal_path=http/resiliency/src/test/resources/source_files/circuitbreaker-with-retry-test/http1_circuit_breaker.bal
-    retry_bal_path=http/resiliency/src/test/resources/source_files/circuitbreaker-with-retry-test/http1_retry.bal
+    git clone https://github.com/ballerina-platform/${REPO_NAME}.git
+
+    backend_bal_path=${REPO_NAME}/${DIRECTORY_NAME}/src/backend_service/http1_backend_service.bal
+    cb_bal_path=${REPO_NAME}/${DIRECTORY_NAME}/src/circuit_breaker_service/http1_circuit_breaker.bal
+    retry_bal_path=${REPO_NAME}/${DIRECTORY_NAME}/src/retry_service/http1_retry.bal
 }
 
 function print_kubernetes_debug_info() {
@@ -58,18 +63,14 @@ function replace_variables_in_bal_file() {
     local bal_path=$1
     sed -i "s:<USERNAME>:${docker_user}:g" ${bal_path}
     sed -i "s:<PASSWORD>:${docker_password}:g" ${bal_path}
-    sed -i "s:resiliency.ballerina.io:${docker_user}:g" ${bal_path}
+    sed -i "s:cb-with-retry.ballerina.io:${docker_user}:g" ${bal_path}
 }
 
-## ***************************** TODO: Fix these **************************
-function build_and_deploy_artemis_resources() {
-    cd connectors/artemis/src/test/resources/dual-channel-scenario
-    ${ballerina_home}/bin/ballerina init
-    ${ballerina_home}/bin/ballerina build
-    cd ../../../../../..
-    kubectl apply -f ${work_dir}/connectors/artemis/src/test/resources/dual-channel-scenario/target/kubernetes/consumer --namespace=${cluster_namespace}
-    kubectl apply -f ${work_dir}/connectors/artemis/src/test/resources/dual-channel-scenario/target/kubernetes/remote --namespace=${cluster_namespace}
-    kubectl apply -f ${work_dir}/connectors/artemis/src/test/resources/dual-channel-scenario/target/kubernetes/sender --namespace=${cluster_namespace}
+function build_and_deploy_resources() {
+    cd ${REPO_NAME}/${DIRECTORY_NAME}
+    ${ballerina_home}/bin/ballerina build --all
+    cd ../../../../../../..
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/ --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
