@@ -8,15 +8,15 @@ import ballerina/log;
 // ****************************************************
 
 http:RollingWindow rollingWindowConfig = {
-    requestVolumeThreshold: 1, // At least 2 requests should fail before the circuit trips
-	timeWindowInMillis: 10000,
-	bucketSizeInMillis: 2000 // 5 Buckets
+    requestVolumeThreshold: 1,
+    timeWindowInMillis: 10000,
+    bucketSizeInMillis: 2000// 5 Buckets
 };
 
 http:CircuitBreakerConfig circuitBreakerConfig = {
     rollingWindow: rollingWindowConfig,
     resetTimeInMillis: 10000,
-    failureThreshold: 0.3, // If more than 3 requests failed among 10 requests, circuit trips.
+    failureThreshold: 0.3,    // If more than 3 requests failed among 10 requests, circuit trips.
     statusCodes: [400, 401, 402, 403, 404, 500, 501, 502, 503]
 };
 
@@ -25,22 +25,31 @@ http:ClientConfiguration clientConfig = {
     timeoutInMillis: 2000
 };
 
-http:Client backendClient = new("http://localhost:10300", clientConfig);
+http:Client backendClient = new ("http://http1-backend:10100", clientConfig);
 
 @kubernetes:Service {
-    serviceType: "NodePort"
+    serviceType: "NodePort",
+    name: "http1-circuit-breaker",
+    port: 10101,
+    targetPort: 10101
 }
 @kubernetes:Ingress {
-	hostname: "resiliency.circuitbreaker"
+    hostname: "cb-with-retry.ballerina.io",
+    name: "http1-circuit-breaker",
+    path: "/"
 }
-listener http:Listener circuitBreakerListener = new(10200);
+listener http:Listener circuitBreakerListener = new (10101);
 
 string servicePrefix = "[Http1CircuitBreakerService] ";
 
 int count = 0;
 
 @kubernetes:Deployment {
-    image: "cb_with_retry_cb_service:v1.0",
+    image: "cb-with-retry.ballerina.io/http1-circuit-breaker:v1.0",
+    name: "http1-circuit-breaker",
+    username: "<USERNAME>",
+    password: "<PASSWORD>",
+    push: true,
     imagePullPolicy: "Always"
 }
 @http:ServiceConfig {
@@ -49,7 +58,7 @@ int count = 0;
 service CallBackendService on circuitBreakerListener {
     @http:ResourceConfig {
         methods: ["GET"]
-	}
+    }
     resource function getResponse(http:Caller caller, http:Request request) {
         count += 1;
         http:Response response = new;
@@ -60,14 +69,14 @@ service CallBackendService on circuitBreakerListener {
             response.setTextPayload(backendResponse.toString());
         } else {
             response.statusCode = backendResponse.statusCode;
-            string responseText = <@untainted string> backendResponse.getTextPayload() +
-                                    " Circuit breaker request count: " + count.toString();
+            string responseText = <@untainted string>backendResponse.getTextPayload() +
+            " Circuit breaker request count: " + count.toString();
             io:println("Response Text: " + responseText);
             response.setTextPayload(responseText);
         }
         var result = caller->respond(response);
         handleResult(result);
-	}
+    }
 }
 
 public function handleResult(error? result) {

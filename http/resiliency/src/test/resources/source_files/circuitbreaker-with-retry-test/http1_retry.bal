@@ -7,7 +7,7 @@ import ballerina/log;
 //                RETRY CLIENT SERVICE                *
 // ****************************************************
 
-http:Client backendClientEP = new("http://localhost:10200", {
+http:Client backendClientEP = new("http://http1-circuit-breaker:10101", {
     retryConfig: {
         intervalInMillis: 3000,
         count: 10,
@@ -19,18 +19,27 @@ http:Client backendClientEP = new("http://localhost:10200", {
 });
 
 @kubernetes:Service {
-    serviceType: "NodePort"
+    serviceType: "NodePort",
+    name: "http1-retry",
+    port: 10102,
+    targetPort: 10102
 }
 @kubernetes:Ingress {
-	hostname: "resiliency.retry"
+    hostname: "cb-with-retry.ballerina.io",
+    name: "http1-retry",
+    path: "/"
 }
-listener http:Listener retryListener = new(10100);
+listener http:Listener retryListener = new(10102);
 
 string servicePrefix = "[RetryService] ";
 int count = 0;
 
 @kubernetes:Deployment {
-    image: "cb_with_retry_retry_service:v1.0",
+    image: "cb-with-retry.ballerina.io/http1-retry:v1.0",
+    name: "http1-retry",
+    username: "<USERNAME>",
+    password: "<PASSWORD>",
+    push: true,
     imagePullPolicy: "Always"
 }
 @http:ServiceConfig {

@@ -8,19 +8,28 @@ import ballerina/runtime;
 // ****************************************************
 
 @kubernetes:Service {
-    serviceType: "NodePort"
+    serviceType: "NodePort",
+    name: "http1-backend",
+    port: 10100,
+    targetPort: 10100
 }
 @kubernetes:Ingress {
-	hostname: "resiliency.backend"
+	hostname: "cb-with-retry.ballerina.io",
+	name: "http1-backend",
+	path: "/"
 }
-listener http:Listener http1Listener= new(10300);
+listener http:Listener http1Listener= new(10100);
 
 int count = 0;
 string servicePrefix = "[Http1Service] ";
 
 @kubernetes:Deployment {
-    image: "cb_with_retry_backend:v1.0",
-    imagePullPolicy: "Always"
+    image:"cb-with-retry.ballerina.io/http1-backend:v1.0",
+    name:"http1-backend",
+    username:"<USERNAME>",
+    password:"<PASSWORD>",
+    push:true,
+    imagePullPolicy:"Always"
 }
 @http:ServiceConfig {
     basePath: "/"
