@@ -16,7 +16,8 @@
   ~ under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <groupId>org.ballerinalang</groupId>
     <version>0.990.4-SNAPSHOT</version>
@@ -75,6 +76,12 @@
                 <artifactId>ballerina-scenario-test-commons</artifactId>
                 <scope>test</scope>
                 <version>${ballerina.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitality</groupId>
+                <artifactId>awaitality</artifactId>
+                <version>${awaitality.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -152,6 +159,7 @@
         <os.maven.plugin.version>1.5.0.Final</os.maven.plugin.version>
         <maven.jacoco.plugin.version>0.8.3</maven.jacoco.plugin.version>
         <netty.version>4.1.19.Final</netty.version>
+        <awaitality.version>3.0.0</awaitality.version>
     </properties>
 
 </project>
