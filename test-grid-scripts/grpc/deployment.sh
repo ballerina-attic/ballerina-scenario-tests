@@ -68,7 +68,7 @@ function replace_variables_in_bal_file() {
 function build_and_deploy_grpc_client_resources() {
     cd grpc/src/test/resources/grpc-scenarios
     ${ballerina_home}/bin/ballerina build unsecured_unary_client
-    kubectl apply -f ${work_dir}/target/kubernetes/unsecured_unary_client --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/grpc/src/test/resources/grpc-scenarios/target/kubernetes/unsecured_unary_client --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
