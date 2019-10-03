@@ -16,7 +16,7 @@
 # under the License.
 
 readonly test_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly test_grand_parent_path=$(dirname ${test_artemis_parent_path})
+readonly test_grand_parent_path=$(dirname ${test_parent_path})
 
 . ${test_grand_parent_path}/common/usage.sh
 . ${test_grand_parent_path}/setup/setup_test_env.sh
