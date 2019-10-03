@@ -1,0 +1,23 @@
+# Unsecured Unary Client Scenario
+
+Ballerina gRPC client for Product Management Service. Service definition is as follows,
+
+```proto
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+package ecommerce;
+
+service ProductInfo {
+    rpc addProduct(Product) returns (google.protobuf.StringValue);
+    rpc getProduct(google.protobuf.StringValue) returns (Product);
+}
+
+message Product {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    float price = 4;
+}
+```

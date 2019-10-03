@@ -93,6 +93,7 @@
                 <module>bbg/bbg-integration-patterns</module>
                 <module>connectors/soap</module>
                 <module>connectors/artemis</module>
+                <module>grpc</module>
             </modules>
         </profile>
         <profile>
@@ -132,6 +133,13 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>grpc</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>grpc</module>
+            </modules>
         </profile>
     </profiles>
 
