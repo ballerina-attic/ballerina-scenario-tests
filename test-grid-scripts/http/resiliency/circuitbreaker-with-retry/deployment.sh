@@ -43,9 +43,9 @@ readonly DIRECTORY_NAME="http/resiliency/src/test/resources/source_files/circuit
 function clone_repo_and_set_bal_path() {
     git clone https://github.com/ballerina-platform/${REPO_NAME}.git
 
-    backend_bal_path=${REPO_NAME}/${DIRECTORY_NAME}/src/backend_service/http1_backend_service.bal
-    cb_bal_path=${REPO_NAME}/${DIRECTORY_NAME}/src/circuit_breaker_service/http1_circuit_breaker.bal
-    retry_bal_path=${REPO_NAME}/${DIRECTORY_NAME}/src/retry_service/http1_retry.bal
+    backend_bal_path=${DIRECTORY_NAME}/src/backend_service/http1_backend_service.bal
+    cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/http1_circuit_breaker.bal
+    retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http1_retry.bal
 }
 
 function print_kubernetes_debug_info() {
@@ -67,10 +67,14 @@ function replace_variables_in_bal_file() {
 }
 
 function build_and_deploy_resources() {
-    cd ${REPO_NAME}/${DIRECTORY_NAME}
+    cd ${DIRECTORY_NAME}
     ${ballerina_home}/bin/ballerina build --all
     cd ../../../../../../..
-    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/ --namespace=${cluster_namespace}
+    echo $PWD
+    echo ${work_dir}/${DIRECTORY_NAME}/target/kubernetes
+    set -x
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes --namespace=${cluster_namespace}
+    set +x
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
