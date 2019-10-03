@@ -18,13 +18,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="Ballerina-Scenario-Test-Suite">
-    <listeners>
-        <listener class-name="org.ballerinalang.test.listener.TestExecutionListener"/>
-        <!-- TestLoggingListener : Test listener to log test execution events -->
-        <listener class-name="org.ballerinalang.scenario.test.common.testng.listeners.TestLoggingListener"/>
-    </listeners>
-
-    <test name="ballerina-http-scenario-tests" parallel="false">
+    <test name="ballerina-http-resiliency-scenario-tests" parallel="false">
         <groups>
             <run>
                 <exclude name="broken"/>
@@ -32,7 +26,7 @@
         </groups>
 
         <classes>
-            <class name="org.ballerinalang.scenario.test.resiliency.CircuitBreakerWithRetryTest" />
+            <class name="org.ballerinalang.scenario.test.http.resiliency.CircuitBreakerWithRetryTest" />
         </classes>
     </test>
 </suite>

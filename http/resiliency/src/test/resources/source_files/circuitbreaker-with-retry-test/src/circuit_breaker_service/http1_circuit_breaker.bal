@@ -1,5 +1,4 @@
 import ballerina/http;
-import ballerina/io;
 import ballerina/kubernetes;
 import ballerina/log;
 
@@ -64,14 +63,12 @@ service CallBackendService on circuitBreakerListener {
         http:Response response = new;
         var backendResponse = backendClient->forward("/getResponse", request);
         if (backendResponse is http:ClientError) {
-            io:println("Error: " + backendResponse.toString());
             response.statusCode = 503;
             response.setTextPayload(backendResponse.toString());
         } else {
             response.statusCode = backendResponse.statusCode;
             string responseText = <@untainted string>backendResponse.getTextPayload() +
             " Circuit breaker request count: " + count.toString();
-            io:println("Response Text: " + responseText);
             response.setTextPayload(responseText);
         }
         var result = caller->respond(response);
@@ -82,7 +79,5 @@ service CallBackendService on circuitBreakerListener {
 public function handleResult(error? result) {
     if (result is error) {
         log:printError(servicePrefix + "Error occurred while sending the response", result);
-    } else {
-        log:printInfo(servicePrefix + "Response sent successfully\n");
     }
 }

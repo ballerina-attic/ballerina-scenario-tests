@@ -40,7 +40,6 @@ service Http1Service on http1Listener {
 	}
     resource function getResponse(http:Caller caller, http:Request req) {
         count += 1;
-        log:printInfo(servicePrefix + "Request received. Request count: " + count.toString());
         http:Response response = new;
         int decider = count % 4;
         if (decider == 1) {
@@ -73,7 +72,5 @@ function sendErrorResponse(http:Caller caller, http:Response response, string pr
 public function handleResult(error? result) {
     if (result is error) {
         log:printError(servicePrefix + "Error occurred while sending the response", result);
-    } else {
-        log:printInfo(servicePrefix + "Response sent successfully\n");
     }
 }
