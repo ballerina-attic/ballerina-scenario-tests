@@ -47,9 +47,7 @@ public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
         String message = "[Http1Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
                 "Retry request count: 1";
         String url = "http://" + host + ":" + port + "/getResponse";
-        System.out.println("[INFO] *********************************\n[INFO] URL: " + url +
-                "\n[INFO]*************************************");
-        HttpResponse httpResponse = HttpClientRequest.doGet(url);
+        HttpResponse httpResponse = HttpClientRequest.doGet(url, 60000);
         await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
         verifyResponse(httpResponse, message, 200);
     }
