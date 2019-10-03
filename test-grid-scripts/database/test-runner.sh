@@ -55,6 +55,9 @@ run_provided_test() {
     elif [ "${test_group_to_run}" = "oracle" ]; then
         download_and_install_oracle_driver
         run_database_module oracle
+    else
+        echo "Unsupported test group: ${test_group_to_run}"
+        exit 1
     fi
 }
 
