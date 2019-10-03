@@ -60,6 +60,6 @@ scenarioConfigs:
   remoteBranch: "resiliency-scenarios"
   name: "ballerinaScenarios"
   description: "ballerina-scenarios"
-  file: test-grid-scripts/htttp/resiliency/circuitbreaker-with-retry/test-runner.sh
+  file: test-grid-scripts/http/resiliency/circuitbreaker-with-retry/test-runner.sh
   inputParameters:
     isDebugEnabled: "true"

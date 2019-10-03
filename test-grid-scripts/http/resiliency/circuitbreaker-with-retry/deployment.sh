@@ -73,13 +73,15 @@ function build_and_deploy_resources() {
     echo $PWD
     echo ${work_dir}/${DIRECTORY_NAME}/target/kubernetes
     set -x
-    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/backend_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/circuit_breaker_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/retry_service --namespace=${cluster_namespace}
     set +x
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
     local external_ip=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-    local node_port=$(kubectl get svc artemis-sender -o=jsonpath='{.spec.ports[0].nodePort}')
+    local node_port=$(kubectl get svc http1-retry -o=jsonpath='{.spec.ports[0].nodePort}')
     declare -A deployment_props
     deployment_props["ExternalIP"]=${external_ip}
     deployment_props["NodePort"]=${node_port}

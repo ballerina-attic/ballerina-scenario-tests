@@ -20,8 +20,8 @@ readonly test_cb_with_retry_grand_parent_path=$(dirname ${test_cb_with_retry_par
 readonly test_cb_with_retry_great_grand_parent_path=$(dirname ${test_cb_with_retry_grand_parent_path})
 readonly test_cb_with_retry_great_great_grand_parent_path=$(dirname ${test_cb_with_retry_great_grand_parent_path})
 
-. ${test_cb_with_retry_great_grand_parent_path}/common/usage.sh
-. ${test_cb_with_retry_great_grand_parent_path}/setup/setup_test_env.sh
+. ${test_cb_with_retry_great_great_grand_parent_path}/common/usage.sh
+. ${test_cb_with_retry_great_great_grand_parent_path}/setup/setup_test_env.sh
 
 run_provided_test() {
     local test_group_to_run=${deployment_config["TestGroup"]}
