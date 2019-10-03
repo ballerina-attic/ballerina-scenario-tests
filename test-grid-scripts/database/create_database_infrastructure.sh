@@ -22,8 +22,6 @@ database_grand_parent_path=$(dirname ${database_parent_path})
 . ${database_grand_parent_path}/util/infra_utils.sh
 . ${database_grand_parent_path}/util/database_utils.sh
 
-set -o xtrace
-
 create_db_infrastructure() {
     echo "Reading database details from testplan-props.properties"
     declare -A db_details

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -o xtrace
-
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 grand_parent_path=$(dirname ${parent_path})
 

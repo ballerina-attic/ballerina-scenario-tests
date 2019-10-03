@@ -23,8 +23,6 @@ readonly test_database_great_grand_parent_path=$(dirname ${test_database_grand_p
 . ${test_database_grand_parent_path}/common/usage.sh
 . ${test_database_grand_parent_path}/setup/setup_test_env.sh
 
-set -o xtrace
-
 # Builds run tests of the provided database and copies the surefire reports to teh output directory
 #
 # $1 - database module to be run
