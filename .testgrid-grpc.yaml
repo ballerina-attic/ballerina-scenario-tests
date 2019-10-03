@@ -40,7 +40,7 @@ infrastructureConfig:
         phase: DESTROY
 deploymentConfig:
   deploymentPatterns:
-    - name: 'messaging-with-soap'
+    - name: 'grpc-go-integration'
       description: 'grpc-scenario-tests'
       remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
       remoteBranch: "master"
@@ -48,7 +48,7 @@ deploymentConfig:
       scripts:
         - name: 'default'
           type: SHELL
-          file: test-grid-scripts/connectors/grpc/deployment.sh
+          file: test-grid-scripts/grpc/deployment.sh
           inputParameters:
             BallerinaVersion: "1.0.1"
             isDebugEnabled: "true"
@@ -59,7 +59,7 @@ scenarioConfigs:
   remoteBranch: "master"
   name: "ballerinaScenarios"
   description: "grpc-scenario-tests"
-  file: test-grid-scripts/connectors/grpc/test-runner.sh
+  file: test-grid-scripts/grpc/test-runner.sh
   inputParameters:
     BallerinaVersion: "1.0.1"
     isDebugEnabled: "true"
