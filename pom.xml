@@ -134,7 +134,7 @@
             </activation>
         </profile>
         <profile>
-            <id>http-resiliency-circuit-breaker-with-retry</id>
+            <id>http-resiliency</id>
             <modules>
                 <module>scenarios-commons</module>
                 <module>http/resiliency</module>
