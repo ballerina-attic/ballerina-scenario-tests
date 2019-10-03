@@ -24,18 +24,18 @@ ProductInfoBlockingClient blockingEp = new("http://localhost:50051");
 
 @kubernetes:Ingress {
     hostname:"<USERNAME>",
-    name:"ballerina-grpc-unary-client-proxy",
+    name:"ballerina-grpc-client-proxy",
     path:"/"
 }
 
 @kubernetes:Service {
      serviceType:"NodePort",
-     name:"ballerina-grpc-unary-client-proxy"
+     name:"ballerina-grpc-client-proxy"
  }
 
  @kubernetes:Deployment {
      image:"<USERNAME>/ballerina-grpc-client-proxy:v1.0",
-     name:"ballerina-grpc-unary-client-proxy",
+     name:"ballerina-grpc-client-proxy",
      username:"<USERNAME>",
      password:"<PASSWORD>",
      push:true,
