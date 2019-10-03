@@ -20,7 +20,7 @@ import ballerina/log;
 
 import ballerina/kubernetes;
 
-ProductInfoBlockingClient blockingEp = new("http://localhost:50051");
+ProductInfoBlockingClient blockingEp = new("http://go-grpc-server:50051");
 
 @kubernetes:Ingress {
     hostname:"<USERNAME>",

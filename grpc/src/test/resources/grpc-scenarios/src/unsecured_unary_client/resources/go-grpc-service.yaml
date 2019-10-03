@@ -17,7 +17,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: productinfo-service-deployment
+  name: go-grpc-server
   labels:
     app: productinfo
 spec:
@@ -41,7 +41,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-unary-server
+  name: go-grpc-server
 spec:
   selector:
     app: productinfo
