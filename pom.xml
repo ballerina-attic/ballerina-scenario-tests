@@ -1241,6 +1241,7 @@
                 <module>database/postgresql</module>
                 <module>database/oracle</module>
                 <module>database/util</module>
+                <module>connectors/artemis</module>
             </modules>
         </profile>
         <profile>
@@ -1262,6 +1263,13 @@
             <modules>
                 <module>scenarios-commons</module>
                 <module>connectors/soap</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>messaging-artemis</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>connectors/artemis</module>
             </modules>
         </profile>
         <profile>
