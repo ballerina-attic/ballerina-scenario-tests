@@ -35,16 +35,16 @@ spec:
           image: daneshk/go-grpc-unary-server:firsttry
           imagePullPolicy: IfNotPresent
           ports:
-            - name: go-grpc-unary-server
+            - name: go-server
               containerPort: 50051
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: go-grpc-unary-server
+  name: go-unary-server
 spec:
   selector:
     app: productinfo
   ports:
     - port: 50051
-      targetPort: go-grpc-unary-server
+      targetPort: go-server
