@@ -32,7 +32,7 @@ function run_tests() {
     sys_prop_array["resiliency.service.port"]=${node_port}
 
     # Builds and run tests of the given connector section and copies resulting surefire reports to output directory
-    run_connector_section_tests http-resiliency http/resiliency sys_prop_array ${input_dir} ${output_dir} "CircuitBreakerWithRetry"
+    run_scenario_tests http-resiliency http resiliency sys_prop_array ${input_dir} ${output_dir} "CircuitBreakerWithRetry"
 }
 
 run_tests
