@@ -48,20 +48,20 @@ deploymentConfig:
       scripts:
         - name: 'default'
           type: SHELL
-          file: test-grid-scripts/http/resiliency/test-runner.sh
+          file: test-grid-scripts/http/resiliency/circuitbreaker-with-retry/deployment.sh
           inputParameters:
             BallerinaVersionType: "LatestSnapshot" #LatestSnapshot/RC
             #BallerinaVersionType: "RC"
             #BallerinaVersion: "0.991.0"
             #RCLocation: "https://product-dist.ballerina.io/nightly/0.992.0-m2-SNAPSHOT/ballerina-0.992.0-m2-SNAPSHOT.zip"
             isDebugEnabled: "true"
-            TestGroup: "DataBackedService"
+            TestGroup: "CircuitBreakerWithRetry"
 scenarioConfigs:
 - testType: TESTNG
   remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
   remoteBranch: "master"
   name: "ballerinaScenarios"
   description: "ballerina-scenarios"
-  file: test-grid-scripts/htttp/resiliency//test-runner.sh
+  file: test-grid-scripts/htttp/resiliency/circuitbreaker-with-retry/test-runner.sh
   inputParameters:
     isDebugEnabled: "true"
