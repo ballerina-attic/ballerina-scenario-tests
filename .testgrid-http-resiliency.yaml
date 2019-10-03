@@ -50,9 +50,7 @@ deploymentConfig:
           type: SHELL
           file: test-grid-scripts/http/resiliency/circuitbreaker-with-retry/deployment.sh
           inputParameters:
-            BallerinaVersionType: "LatestSnapshot" #LatestSnapshot/RC
-            #BallerinaVersionType: "RC"
-            #BallerinaVersion: "0.991.0"
+            BallerinaVersion: "1.0.1"
             #RCLocation: "https://product-dist.ballerina.io/nightly/0.992.0-m2-SNAPSHOT/ballerina-0.992.0-m2-SNAPSHOT.zip"
             isDebugEnabled: "true"
             TestGroup: "CircuitBreakerWithRetry"
