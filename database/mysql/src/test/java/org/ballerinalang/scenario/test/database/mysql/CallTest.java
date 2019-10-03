@@ -80,11 +80,11 @@ public class CallTest extends ScenarioTestBase {
         setupDateTimeData();
     }
 
-//    @Test(description = "Test numeric type In params")
-//    public void testCallInParamNumericTypes() {
-//        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamNumericTypes");
-//        AssertionUtil.assertCallQueryReturnValue(returns[0]);
-//    }
+    @Test(description = "Test numeric type In params")
+    public void testCallInParamNumericTypes() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamNumericTypes");
+        AssertionUtil.assertCallQueryReturnValue(returns[0]);
+    }
 
     @Test(description = "Test numeric type OUT params")
     public void testCallOutParamIntegerTypes() {
