@@ -77,6 +77,20 @@ public class HttpClientRequest {
      * Sends an HTTP GET request to a url.
      *
      * @param requestUrl - The URL of the service. (Example: "http://www.yahoo.com/search?params=value")
+     * @param readTimeout - The read timeout of the request
+     * @return - HttpResponse from the end point
+     * @throws IOException If an error occurs while sending the GET request
+     */
+    public static HttpResponse doGet(String requestUrl, int readTimeout)
+            throws IOException {
+        return executeRequestWithoutRequestBody(TestConstant.HTTP_METHOD_GET, requestUrl, new HashMap<>(), readTimeout,
+                defaultResponseBuilder);
+    }
+
+    /**
+     * Sends an HTTP GET request to a url.
+     *
+     * @param requestUrl - The URL of the service. (Example: "http://www.yahoo.com/search?params=value")
      * @return - HttpResponse from the end point
      * @throws IOException If an error occurs while sending the GET request
      */
