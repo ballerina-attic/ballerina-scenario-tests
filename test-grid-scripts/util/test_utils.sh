@@ -22,11 +22,12 @@ readonly test_utils_great_grand_parent_path=$(dirname ${test_utils_grand_parent_
 # Builds run tests of the provided BBG section profile and copies the surefire reports to teh output directory
 #
 # $1 - Maven profile to be run
-# $2 - Test section (Eg.: "bbg/data" or "connectors/soap" or "http/resiliency")
-# $3 - Associative array of system property-value pairs
-# $4 - System properties associative array
-# $5 - Input directory
-# $6 - Output directory
+# $2 - Test section (Eg.: "bbg" or "connectors" or "http")
+# $3 - Test name (Eg.: "kafka" or, "artemis" or "resiliency")
+# $4 - Associative array of system property-value pairs
+# $5 - System properties associative array
+# $6 - Input directory
+# $7 - Output directory
 run_scenario_tests() {
     local maven_profile=$1
     local section=$2
