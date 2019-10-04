@@ -55,4 +55,3 @@ function testDropIndex() returns jdbc:UpdateResult | error {
 function stopDatabaseClient() {
     checkpanic testDB.stop();
 }
-
