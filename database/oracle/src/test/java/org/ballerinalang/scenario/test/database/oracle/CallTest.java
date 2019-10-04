@@ -39,6 +39,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains `call` remote function tests.
+ */
 public class CallTest extends ScenarioTestBase {
     private CompileResult callCompilerResult;
     private String jdbcUrl;

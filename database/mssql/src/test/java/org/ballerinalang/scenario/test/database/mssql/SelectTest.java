@@ -43,6 +43,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains `select` remote function tests.
+ */
 @Test(groups = Constants.MSSQL_TESTNG_GROUP)
 public class SelectTest extends ScenarioTestBase {
     private CompileResult selectCompileResult;

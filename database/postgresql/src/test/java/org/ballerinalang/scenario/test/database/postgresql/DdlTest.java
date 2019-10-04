@@ -35,6 +35,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains data definition language tests.
+ */
 @Test(groups = Constants.POSTGRES_TESTNG_GROUP)
 public class DdlTest extends ScenarioTestBase {
     private CompileResult ddlCompileResult;

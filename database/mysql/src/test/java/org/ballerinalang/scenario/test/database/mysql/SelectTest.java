@@ -44,6 +44,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains `select` remote function tests.
+ */
 @Test(groups = Constants.MYSQL_TESTNG_GROUP)
 public class SelectTest extends ScenarioTestBase {
     private CompileResult selectCompileResult;
