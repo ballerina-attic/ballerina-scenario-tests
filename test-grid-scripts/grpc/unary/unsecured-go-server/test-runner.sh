@@ -27,7 +27,7 @@ run_provided_test() {
     local test_group_to_run=${deployment_config["TestGroup"]}
 
     if [ "${test_group_to_run}" = "gRPCClientConnector" ]; then
-        . ${unsecured-go-server_dir_path}/test-client-connector.sh
+        . ${unsecured_go_server_dir_path}/test-client-connector.sh
     fi
 }
 
