@@ -18,6 +18,8 @@
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 . ${parent_path}/common_utils.sh
 
+set -o xtrace
+
 # Deletes all k8s resources in the used namespace. The relevant namespace is taken from
 # infrastructure-cleanup.properties.
 function cleanup_k8s_resources() {
