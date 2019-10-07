@@ -22,7 +22,7 @@ under the License.
 <suite name="ballerina-grpc-scenario-unary-test-suite">
     <test name="ballerina-grpc-unary-scenario-test" parallel="false">
         <packages>
-            <package name="org.ballerinalang.scenario.test.grpc.*"/>
+            <package name="org.ballerinalang.scenario.test.grpc.unary.*"/>
         </packages>
     </test>
 </suite>
