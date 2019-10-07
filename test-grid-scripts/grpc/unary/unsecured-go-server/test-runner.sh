@@ -31,4 +31,10 @@ run_provided_test() {
     fi
 }
 
-run_provided_test
+if run_provided_test; then
+  echo "Test were run successfully!" >&2
+else
+  ret=$?
+  echo "Test run failed with exit code $ret" >&2
+  exit $ret
+fi
