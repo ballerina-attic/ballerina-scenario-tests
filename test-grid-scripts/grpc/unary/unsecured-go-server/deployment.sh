@@ -36,6 +36,8 @@ function setup_deployment() {
     fi
 }
 
+readonly DIRECTORY_NAME="grpc/unary/src/test/resources/grpc-scenarios"
+
 ## Functions
 
 function clone_repo_and_set_bal_path() {
@@ -68,9 +70,14 @@ function replace_variables_in_bal_file() {
 }
 
 function build_and_deploy_grpc_client_resources() {
-    cd grpc/unary/src/test/resources/grpc-scenarios
+    cd ${DIRECTORY_NAME}
     ${ballerina_home}/bin/ballerina build unsecured_client
-    kubectl apply -f ${work_dir}/grpc/unary/src/test/resources/grpc-scenarios/target/kubernetes/unsecured_client --namespace=${cluster_namespace}
+    cd ../../../../../../..
+    echo $PWD
+    echo ${work_dir}/${DIRECTORY_NAME}/target/kubernetes
+    set -x
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/unsecured_client --namespace=${cluster_namespace}
+    set +x
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
