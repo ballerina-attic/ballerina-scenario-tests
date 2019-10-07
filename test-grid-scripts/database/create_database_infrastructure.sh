@@ -22,6 +22,8 @@ database_grand_parent_path=$(dirname ${database_parent_path})
 . ${database_grand_parent_path}/util/infra_utils.sh
 . ${database_grand_parent_path}/util/database_utils.sh
 
+set -o xtrace
+
 create_db_infrastructure() {
     echo "Reading database details from testplan-props.properties"
     declare -A db_details
@@ -81,7 +83,7 @@ create_db_infrastructure() {
         echo "TestGroup=postgresql" >> ${output_dir}/infrastructure.properties
         echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
     elif [ ${database_type} = "SQLServer-SE" ]; then
-        # Temp fix until XE is added to testgrid
+        # Temp fix until EX is added to testgrid
         database_type="SQLServer-EX"
         create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 20 " license-included" database_host
         echo "DB Host: ${database_host}"
@@ -92,7 +94,7 @@ create_db_infrastructure() {
         echo "TestGroup=mssql" >> ${output_dir}/infrastructure.properties
         echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
     elif [ ${database_type} = "Oracle-SE1" ]; then
-        create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 20 "bring-your-own-license" database_host
+        create_database ${database_type} ${database_version} ${database_name} "db.t3.micro" 20 "bring-your-own-license" database_host
         echo "DB Host: ${database_host}"
         jdbc_url="jdbc:oracle:thin:@${database_host}:1521:ORCL"
         echo "database.oracle.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties

@@ -20,6 +20,8 @@ grand_parent_path=$(dirname ${parent_path})
 
 . ${grand_parent_path}/util/infra_utils.sh
 
+set -o xtrace
+
 echo "Resource deletion script is being executed !"
 input_dir=${2}
 
