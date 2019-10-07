@@ -48,7 +48,7 @@ deploymentConfig:
       scripts:
         - name: 'default'
           type: SHELL
-          file: test-grid-scripts/grpc/deployment.sh
+          file: test-grid-scripts/grpc/unary/unsecured-go-server/deployment.sh
           inputParameters:
             BallerinaVersion: "1.0.1"
             isDebugEnabled: "true"
@@ -59,7 +59,7 @@ scenarioConfigs:
   remoteBranch: "master"
   name: "ballerinaScenarios"
   description: "grpc-scenario-tests"
-  file: test-grid-scripts/grpc/test-runner.sh
+  file: test-grid-scripts/grpc/unary/unsecured-go-server/test-runner.sh
   inputParameters:
     BallerinaVersion: "1.0.1"
     isDebugEnabled: "true"
