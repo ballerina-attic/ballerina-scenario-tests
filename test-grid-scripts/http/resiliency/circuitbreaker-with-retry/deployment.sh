@@ -27,7 +27,8 @@ function setup_deployment() {
     clone_repo_and_set_bal_path
     replace_variables_in_bal_files
     build_and_deploy_resources
-    wait_for_pod_readiness
+    bash ${deployment_cb_with_retry_great_great_grand_parent_path}/util/wait_for_pod_ready.sh 500 30
+    sleep 240s
     retrieve_and_write_properties_to_data_bucket
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
@@ -43,9 +44,9 @@ readonly DIRECTORY_NAME="http/resiliency/src/test/resources/source_files/circuit
 function clone_repo_and_set_bal_path() {
     git clone https://github.com/ballerina-platform/${REPO_NAME}.git
 
-    backend_bal_path=${DIRECTORY_NAME}/src/backend_service/http1_backend_service.bal
-    cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/http1_circuit_breaker.bal
-    retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http1_retry.bal
+    http1_backend_bal_path=${DIRECTORY_NAME}/src/backend_service/backend_service.bal
+    http1_cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/circuit_breaker_service.bal
+    http1_retry_bal_path=${DIRECTORY_NAME}/src/retry_service/retry_service.bal
 }
 
 function print_kubernetes_debug_info() {
@@ -54,9 +55,9 @@ function print_kubernetes_debug_info() {
 }
 
 function replace_variables_in_bal_files() {
-    replace_variables_in_bal_file ${backend_bal_path}
-    replace_variables_in_bal_file ${cb_bal_path}
-    replace_variables_in_bal_file ${retry_bal_path}
+    replace_variables_in_bal_file ${http1_backend_bal_path}
+    replace_variables_in_bal_file ${http1_cb_bal_path}
+    replace_variables_in_bal_file ${http1_retry_bal_path}
 }
 
 function replace_variables_in_bal_file() {
@@ -73,6 +74,7 @@ function build_and_deploy_resources() {
     echo $PWD
     echo ${work_dir}/${DIRECTORY_NAME}/target/kubernetes
     set -x
+    find ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/ -type d
     kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/backend_service --namespace=${cluster_namespace}
     kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/circuit_breaker_service --namespace=${cluster_namespace}
     kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/retry_service --namespace=${cluster_namespace}
@@ -81,15 +83,18 @@ function build_and_deploy_resources() {
 
 function retrieve_and_write_properties_to_data_bucket() {
     local external_ip=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-    local node_port=$(kubectl get svc http1-retry -o=jsonpath='{.spec.ports[0].nodePort}')
+    local node_port_http1=$(kubectl get svc http1-retry -o=jsonpath='{.spec.ports[0].nodePort}')
+    local node_port_http2=$(kubectl get svc http2-retry -o=jsonpath='{.spec.ports[0].nodePort}')
     declare -A deployment_props
     deployment_props["ExternalIP"]=${external_ip}
-    deployment_props["NodePort"]=${node_port}
+    deployment_props["NodePortHttp1"]=${node_port_http1}
+    deployment_props["NodePortHttp2"]=${node_port_http2}
     write_to_properties_file ${output_dir}/deployment.properties deployment_props
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
         echo "ExternalIP: ${external_ip}"
-        echo "NodePort: ${node_port}"
+        echo "NodePort [HTTP1]: ${node_port_http1}"
+        echo "NodePort [HTTP2]: ${node_port_http2}"
     fi
 }
 
