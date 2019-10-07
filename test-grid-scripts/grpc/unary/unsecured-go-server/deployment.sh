@@ -81,8 +81,8 @@ function build_and_deploy_grpc_client_resources() {
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
-    local external_ip=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-    local node_port=$(kubectl get svc ballerina-grpc-client-proxy -o=jsonpath='{.spec.ports[0].nodePort}')
+    local external_ip=$(kubectl get nodes --namespace=${cluster_namespace} -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+    local node_port=$(kubectl get svc ballerina-grpc-client-proxy --namespace=${cluster_namespace} -o=jsonpath='{.spec.ports[0].nodePort}')
     declare -A deployment_props
     deployment_props["ExternalIP"]=${external_ip}
     deployment_props["NodePort"]=${node_port}
