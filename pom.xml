@@ -1303,7 +1303,7 @@
                 <module>scenarios-commons</module>
                 <module>http/resiliency</module>
           </modules>
-        <profile>
+        </profile>
         <profile>
             <id>database-mysql</id>
             <modules>
