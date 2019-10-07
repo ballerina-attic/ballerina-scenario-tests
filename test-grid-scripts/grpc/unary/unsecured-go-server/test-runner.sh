@@ -15,8 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-readonly unsecured-go-server_dir_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly grpc_unary_dir_path=$(dirname ${unsecured-go-server_dir_path})
+readonly unsecured_go_server_dir_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+readonly grpc_unary_dir_path=$(dirname ${unsecured_go_server_dir_path})
 readonly grpc_dir_path=$(dirname ${grpc_unary_dir_path})
 readonly test_grid_scripts_dir_path=$(dirname ${grpc_dir_path})
 
