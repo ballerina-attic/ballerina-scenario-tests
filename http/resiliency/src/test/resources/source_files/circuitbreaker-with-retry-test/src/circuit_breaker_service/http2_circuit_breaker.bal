@@ -21,44 +21,41 @@ import ballerina/kubernetes;
 //              CIRCUIT BREAKER SERVICE               *
 // ****************************************************
 
-http:RollingWindow rollingWindowConfig = {
-    requestVolumeThreshold: 1,
-    timeWindowInMillis: 20000,
-    bucketSizeInMillis: 2000
-};
-
-http:CircuitBreakerConfig circuitBreakerConfig = {
-    rollingWindow: rollingWindowConfig,
-    resetTimeInMillis: 15000,
-    failureThreshold: 0.3,    // If more than 3 requests failed among 10 requests, circuit trips.
-    statusCodes: [400, 401, 402, 403, 404, 500, 501, 502, 503]
-};
-
-http:ClientConfiguration clientConfig = {
-    circuitBreaker: circuitBreakerConfig,
-    timeoutInMillis: 2000
-};
-
-http:Client backendClient = new ("http://http1-backend:10300", clientConfig);
+http:Client http2BackendClient = new ("http://http2-backend:10301", {
+    circuitBreaker: {
+        rollingWindow: {
+            requestVolumeThreshold: 1,
+            timeWindowInMillis: 20000,
+            bucketSizeInMillis: 2000
+        },
+        resetTimeInMillis: 15000,
+        failureThreshold: 0.3,    // If more than 3 requests failed among 10 requests, circuit trips.
+        statusCodes: [400, 401, 402, 403, 404, 500, 501, 502, 503]
+    },
+    timeoutInMillis: 2000,
+    httpVersion: "2.0"
+});
 
 @kubernetes:Service {
     serviceType: "NodePort",
-    name: "http1-circuit-breaker",
-    port: 10200,
-    targetPort: 10200
+    name: "http2-circuit-breaker",
+    port: 10201,
+    targetPort: 10201
 }
 @kubernetes:Ingress {
     hostname: "cb-with-retry.ballerina.io",
-    name: "http1-circuit-breaker",
+    name: "http2-circuit-breaker",
     path: "/"
 }
-listener http:Listener circuitBreakerListener = new (10200);
+listener http:Listener http2CircuitBreakerListener = new (10201, {
+    httpVersion: "2.0"
+});
 
-int count = 0;
+int count2 = 0;
 
 @kubernetes:Deployment {
-    image: "cb-with-retry.ballerina.io/http1-circuit-breaker:v1.0",
-    name: "http1-circuit-breaker",
+    image: "cb-with-retry.ballerina.io/http2-circuit-breaker:v1.0",
+    name: "http2-circuit-breaker",
     username: "<USERNAME>",
     password: "<PASSWORD>",
     push: true,
@@ -67,23 +64,24 @@ int count = 0;
 @http:ServiceConfig {
     basePath: "/"
 }
-service CallBackendService on circuitBreakerListener {
+service CallHttp2BackendService on circuitBreakerListener {
     @http:ResourceConfig {
         methods: ["GET"]
     }
     resource function getResponse(http:Caller caller, http:Request request) {
-        count += 1;
+        count2 += 1;
         http:Response response = new;
-        var backendResponse = backendClient->forward("/getResponse", request);
+        var backendResponse = http2BackendClient->forward("/getResponse", request);
         if (backendResponse is http:ClientError) {
             response.statusCode = 503;
             response.setTextPayload(backendResponse.toString());
         } else {
             response.statusCode = backendResponse.statusCode;
             string responseText = <@untainted string>backendResponse.getTextPayload() +
-            " Circuit breaker request count: " + count.toString();
+            " Circuit breaker request count: " + count2.toString();
             response.setTextPayload(responseText);
         }
         var result = caller->respond(response);
     }
 }
+

@@ -16,21 +16,14 @@
 
 import ballerina/http;
 
-function sendNormalResponse(http:Caller caller, http:Response response, string prefix) {
+function sendNormalResponse(http:Caller caller, http:Response response, string prefix, int count) {
     string message = prefix + "OK response. Backend request count: " + count.toString();
     response.setPayload(message);
     var result = caller->respond(response);
-    handleResult(result);
 }
 
-function sendErrorResponse(http:Caller caller, http:Response response, string prefix) {
+function sendErrorResponse(http:Caller caller, http:Response response, string prefix, int count) {
     response.statusCode = 501;
     response.setPayload(prefix + "Internal error occurred. Backend request count: " + count.toString());
     var result = caller->respond(response);
-}
-
-public function handleResult(error? result) {
-    if (result is error) {
-        log:printError(servicePrefix + "Error occurred while sending the response", result);
-    }
 }

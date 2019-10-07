@@ -24,23 +24,25 @@ import ballerina/runtime;
 
 @kubernetes:Service {
     serviceType: "NodePort",
-    name: "http1-backend",
-    port: 10300,
-    targetPort: 10300
+    name: "http2-backend",
+    port: 10301,
+    targetPort: 10301
 }
 @kubernetes:Ingress {
 	hostname: "cb-with-retry.ballerina.io",
-	name: "http1-backend",
+	name: "http2-backend",
 	path: "/"
 }
-listener http:Listener http1Listener= new(10300);
+listener http:Listener http2Listener= new(10301, {
+    httpVersion: "2.0"
+});
 
-int count1 = 0;
-string http1ServicePrefix = "[Http1Service] ";
+int count2 = 0;
+string http2ServicePrefix = "[Http2Service] ";
 
 @kubernetes:Deployment {
-    image:"cb-with-retry.ballerina.io/http1-backend:v1.0",
-    name:"http1-backend",
+    image:"cb-with-retry.ballerina.io/http2-backend:v1.0",
+    name:"http2-backend",
     username:"<USERNAME>",
     password:"<PASSWORD>",
     push:true,
@@ -49,24 +51,25 @@ string http1ServicePrefix = "[Http1Service] ";
 @http:ServiceConfig {
     basePath: "/"
 }
-service Http1Service on http1Listener {
+service Http2Service on http2Listener {
     @http:ResourceConfig {
         methods: ["GET"]
 	}
     resource function getResponse(http:Caller caller, http:Request req) {
-        count1 += 1;
+        count2 += 1;
         http:Response response = new;
-        int decider = count1 % 4;
+        int decider = count2 % 4;
         if (decider == 1) {
             // Imitate delayed response, so that the timeout occurs at the client
             runtime:sleep(5000);
-            sendErrorResponse(caller, response, http1ServicePrefix, count1);
+            sendErrorResponse(caller, response, http2ServicePrefix, count2);
         } else if (decider == 2) {
             // Sending "501_INTERNAL_SERVER_ERROR" to imitate server failures
-            sendErrorResponse(caller, response, http1ServicePrefix, count1);
+            sendErrorResponse(caller, response, http2ServicePrefix, count2);
         // We need two OK responses to switch back circuit-breaker client to closed-circuit state.
         } else if (decider == 3 || decider == 0) {
-            sendNormalResponse(caller, response, http1ServicePrefix, count1);
+            sendNormalResponse(caller, response, http2ServicePrefix, count2);
         }
     }
 }
+
