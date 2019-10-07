@@ -1,0 +1,5 @@
+[project]
+org-name= "ballerinalang"
+version= "1.0.0"
+
+[dependencies]

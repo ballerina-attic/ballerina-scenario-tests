@@ -22,6 +22,33 @@ readonly test_utils_great_grand_parent_path=$(dirname ${test_utils_grand_parent_
 # Builds run tests of the provided BBG section profile and copies the surefire reports to teh output directory
 #
 # $1 - Maven profile to be run
+# $2 - Test section (Eg.: "bbg" or "connectors" or "http")
+# $3 - Test name (Eg.: "kafka" or, "artemis" or "resiliency")
+# $4 - Associative array of system property-value pairs
+# $5 - System properties associative array
+# $6 - Input directory
+# $7 - Output directory
+run_scenario_tests() {
+    local maven_profile=$1
+    local section=$2
+    local test_name=$3
+    local -n properties_array=$4
+    local __input_dir=$5
+    local __output_dir=$6
+    local test_group=$7
+    local sys_prop_str=""
+    bash --version
+    for x in "${!properties_array[@]}"; do sys_prop_str+="-D$x=${properties_array[$x]} " ; done
+
+    mvn clean install -f ${test_utils_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
+
+    mkdir -p ${__output_dir}/scenarios/${test_name}
+    cp -r ${test_utils_great_grand_parent_path}/${section}/${test_name}/target ${__output_dir}/scenarios/${test_name}/
+}
+
+# Builds run tests of the provided BBG section profile and copies the surefire reports to teh output directory
+#
+# $1 - Maven profile to be run
 # $2 - Associative array of system property-value pairs
 # $3 - System properties associative array
 # $4 - Input directory
