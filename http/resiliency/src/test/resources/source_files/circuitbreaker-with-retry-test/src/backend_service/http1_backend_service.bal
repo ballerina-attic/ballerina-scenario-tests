@@ -16,7 +16,6 @@
 
 import ballerina/http;
 import ballerina/kubernetes;
-import ballerina/log;
 import ballerina/runtime;
 
 // ****************************************************
@@ -69,24 +68,5 @@ service Http1Service on http1Listener {
         } else if (decider == 3 || decider == 0) {
             sendNormalResponse(caller, response, servicePrefix);
         }
-    }
-}
-
-function sendNormalResponse(http:Caller caller, http:Response response, string prefix) {
-    string message = prefix + "OK response. Backend request count: " + count.toString();
-    response.setPayload(message);
-    var result = caller->respond(response);
-    handleResult(result);
-}
-
-function sendErrorResponse(http:Caller caller, http:Response response, string prefix) {
-    response.statusCode = 501;
-    response.setPayload(prefix + "Internal error occurred. Backend request count: " + count.toString());
-    var result = caller->respond(response);
-}
-
-public function handleResult(error? result) {
-    if (result is error) {
-        log:printError(servicePrefix + "Error occurred while sending the response", result);
     }
 }
