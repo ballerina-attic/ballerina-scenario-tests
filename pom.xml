@@ -1249,6 +1249,7 @@
                 <module>database/oracle</module>
                 <module>database/util</module>
                 <module>connectors/artemis</module>
+                <module>grpc/unary</module>
             </modules>
         </profile>
         <profile>
@@ -1288,6 +1289,13 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>grpc</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>grpc/unary</module>
+            </modules>
         </profile>
         <profile>
             <id>http-resiliency</id>
