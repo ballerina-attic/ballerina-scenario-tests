@@ -24,7 +24,7 @@ grand_parent_path=$(dirname ${parent_path})
 
 destroy_resources() {
     echo "Resource deletion script is being executed !"
-    input_dir=${2}
+    input_dir=${1}
 
     # Read infrastucture cleanup properties to a associative array
     declare -A infra_cleanup_config
@@ -34,7 +34,7 @@ destroy_resources() {
     delete_database ${db_identifier}
 }
 
-if destroy_resources; then
+if (destroy_resources ${2}); then
   echo "Resource cleanup successful!" >&2
 else
   ret=$?
