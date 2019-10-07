@@ -32,7 +32,7 @@ function run_tests() {
     sys_prop_array["grpc.proxy.service.port"]=${node_port}
 
     # Builds and run tests of the given connector section and copies resulting surefire reports to output directory
-    run_connector_section_tests grpc grpc sys_prop_array ${input_dir} ${output_dir} "ballerina-grpc-scenario-test"
+    run_scenario_tests grpc grpc unary sys_prop_array ${input_dir} ${output_dir} "ballerina-grpc-unary-scenario-test"
 }
 
 run_tests

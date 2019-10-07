@@ -19,8 +19,8 @@ under the License.
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
-<suite name="ballerina-grpc-scenario-test-suite">
-    <test name="ballerina-grpc-scenario-test" parallel="false">
+<suite name="ballerina-grpc-scenario-unary-test-suite">
+    <test name="ballerina-grpc-unary-scenario-test" parallel="false">
         <packages>
             <package name="org.ballerinalang.scenario.test.grpc.*"/>
         </packages>

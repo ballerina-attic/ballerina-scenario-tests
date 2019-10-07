@@ -24,12 +24,12 @@
     <groupId>org.ballerinalang</groupId>
     <artifactId>ballerina-scenario-test</artifactId>
     <version>0.990.4-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>ballerina-scenario-test-grpc</artifactId>
   <version>0.990.4-SNAPSHOT</version>
-  <name>Ballerina - Scenario gRPC Tests</name>
+  <name>Ballerina - gRPC Unary Scenario Tests</name>
 
   <dependencies>
     <dependency>

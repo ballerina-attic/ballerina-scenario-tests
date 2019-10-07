@@ -23,7 +23,7 @@ readonly deployment_grand_parent_path=$(dirname ${deployment_parent_path})
 
 function setup_deployment() {
     clone_repo_and_set_bal_path
-    deploy_unary_go_service
+    deploy_unary_go_server
     replace_variables_in_bal_files
     build_and_deploy_grpc_client_resources
     wait_for_pod_readiness
@@ -38,13 +38,13 @@ function setup_deployment() {
 
 function clone_repo_and_set_bal_path() {
     git clone https://github.com/ballerina-platform/ballerina-scenario-tests.git
-    product_Info_client_bal_path=grpc/src/test/resources/grpc-scenarios/src/unsecured_unary_client/product_Info_client.bal
+    product_Info_client_bal_path=grpc/src/test/resources/grpc-scenarios/src/unsecured_client/product_Info_client.bal
 }
 
-function deploy_unary_go_service() {
+function deploy_unary_go_server() {
     docker login --username=${docker_user} --password=${docker_password}
 
-    kubectl create -f grpc/src/test/resources/grpc-scenarios/src/unsecured_unary_client/resources/go-grpc-service.yaml
+    kubectl create -f grpc/src/test/resources/grpc-scenarios/src/unsecured_client/resources/go-grpc-service.yaml
     wait_for_pod_readiness
     kubectl get svc
 }
@@ -68,7 +68,7 @@ function replace_variables_in_bal_file() {
 function build_and_deploy_grpc_client_resources() {
     cd grpc/src/test/resources/grpc-scenarios
     ${ballerina_home}/bin/ballerina build unsecured_unary_client
-    kubectl apply -f ${work_dir}/grpc/src/test/resources/grpc-scenarios/target/kubernetes/unsecured_unary_client --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/grpc/src/test/resources/grpc-scenarios/target/kubernetes/unsecured_client --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {

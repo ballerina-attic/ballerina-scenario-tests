@@ -16,7 +16,7 @@
  *  under the License.
  */
 
-package org.ballerinalang.scenario.test.grpc;
+package org.ballerinalang.scenario.test.grpc.unary;
 
 import io.netty.handler.codec.http.HttpHeaderNames;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
@@ -35,7 +35,7 @@ import java.util.Properties;
 /**
  * Unit test for simple App.
  */
-public class UnaryRPCClientTest extends ScenarioTestBase {
+public class UnsecuredClientWithGoServerTest extends ScenarioTestBase {
 
     private static final String REQUEST_PAYLOAD_STRING = "{\"name\":\"Apple\", \"description\":\"iphone7\", \"price\":699}";
     private static final String SERVICE_CONTEXT_PATH = "v1/product";

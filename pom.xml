@@ -1249,7 +1249,7 @@
                 <module>database/oracle</module>
                 <module>database/util</module>
                 <module>connectors/artemis</module>
-                <module>grpc</module>
+                <module>grpc/unary</module>
             </modules>
         </profile>
         <profile>
@@ -1294,7 +1294,7 @@
             <id>grpc</id>
             <modules>
                 <module>scenarios-commons</module>
-                <module>grpc</module>
+                <module>grpc/unary</module>
             </modules>
         </profile>
         <profile>
