@@ -15,17 +15,19 @@
 # specific language governing permissions and limitations
 # under the License.
 
-readonly test_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly test_grand_parent_path=$(dirname ${test_parent_path})
+readonly unsecured-go-server_dir_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+readonly grpc_unary_dir_path=$(dirname ${unsecured-go-server_dir_path})
+readonly grpc_dir_path=$(dirname ${grpc_unary_dir_path})
+readonly test_grid_scripts_dir_path=$(dirname ${grpc_dir_path})
 
-. ${test_grand_parent_path}/common/usage.sh
-. ${test_grand_parent_path}/setup/setup_test_env.sh
+. ${test_grid_scripts_dir_path}/common/usage.sh
+. ${test_grid_scripts_dir_path}/setup/setup_test_env.sh
 
 run_provided_test() {
     local test_group_to_run=${deployment_config["TestGroup"]}
 
     if [ "${test_group_to_run}" = "gRPCClientConnector" ]; then
-        . ${test_parent_path}/test-client-connector.sh
+        . ${unsecured-go-server_dir_path}/test-client-connector.sh
     fi
 }
 

@@ -15,11 +15,13 @@
 # specific language governing permissions and limitations
 # under the License.
 
-readonly deployment_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly deployment_grand_parent_path=$(dirname ${deployment_parent_path})
+readonly unsecured-go-server_dir_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+readonly grpc_unary_dir_path=$(dirname ${unsecured-go-server_dir_path})
+readonly grpc_dir_path=$(dirname ${grpc_unary_dir_path})
+readonly test_grid_scripts_dir_path=$(dirname ${grpc_dir_path})
 
-. ${deployment_grand_parent_path}/common/usage.sh
-. ${deployment_grand_parent_path}/setup/setup_deployment_env.sh
+. ${test_grid_scripts_dir_path}/common/usage.sh
+. ${test_grid_scripts_dir_path}/setup/setup_deployment_env.sh
 
 function setup_deployment() {
     clone_repo_and_set_bal_path
@@ -38,13 +40,13 @@ function setup_deployment() {
 
 function clone_repo_and_set_bal_path() {
     git clone https://github.com/ballerina-platform/ballerina-scenario-tests.git
-    product_Info_client_bal_path=grpc/src/test/resources/grpc-scenarios/src/unsecured_client/product_Info_client.bal
+    product_Info_client_bal_path=grpc/unary/src/test/resources/grpc-scenarios/src/unsecured_client/product_Info_client.bal
 }
 
 function deploy_unary_go_server() {
     docker login --username=${docker_user} --password=${docker_password}
 
-    kubectl create -f grpc/src/test/resources/grpc-scenarios/src/unsecured_client/resources/go-grpc-service.yaml
+    kubectl create -f grpc/unary/src/test/resources/grpc-scenarios/src/unsecured_client/resources/go-grpc-service.yaml
     wait_for_pod_readiness
     kubectl get svc
 }
@@ -66,9 +68,9 @@ function replace_variables_in_bal_file() {
 }
 
 function build_and_deploy_grpc_client_resources() {
-    cd grpc/src/test/resources/grpc-scenarios
-    ${ballerina_home}/bin/ballerina build unsecured_unary_client
-    kubectl apply -f ${work_dir}/grpc/src/test/resources/grpc-scenarios/target/kubernetes/unsecured_client --namespace=${cluster_namespace}
+    cd grpc/unary/src/test/resources/grpc-scenarios
+    ${ballerina_home}/bin/ballerina build unsecured_client
+    kubectl apply -f ${work_dir}/grpc/unary/src/test/resources/grpc-scenarios/target/kubernetes/unsecured_client --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
