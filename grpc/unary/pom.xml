@@ -27,7 +27,7 @@
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
-  <artifactId>ballerina-scenario-test-grpc</artifactId>
+  <artifactId>ballerina-scenario-test-grpc-unary</artifactId>
   <version>0.990.4-SNAPSHOT</version>
   <name>Ballerina - gRPC Unary Scenario Tests</name>
 
