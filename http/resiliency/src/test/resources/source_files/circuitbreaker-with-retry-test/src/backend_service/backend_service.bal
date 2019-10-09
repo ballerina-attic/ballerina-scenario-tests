@@ -29,7 +29,7 @@ import ballerina/runtime;
     targetPort: 10300
 }
 @kubernetes:Ingress {
-	hostname: "cb-with-retry.ballerina.io",
+	hostname: "http1backend.cb-with-retry.ballerina.io",
 	name: "http1-backend",
 	path: "/"
 }
@@ -82,7 +82,7 @@ service Http1Service on http1Listener {
     targetPort: 10301
 }
 @kubernetes:Ingress {
-	hostname: "cb-with-retry.ballerina.io",
+	hostname: "http2backend.cb-with-retry.ballerina.io",
 	name: "http2-backend",
 	path: "/"
 }

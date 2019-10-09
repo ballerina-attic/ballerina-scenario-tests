@@ -42,7 +42,7 @@ http:Client http1BackendClient = new ("http://http1-backend:10300", {
     targetPort: 10200
 }
 @kubernetes:Ingress {
-    hostname: "cb-with-retry.ballerina.io",
+    hostname: "http1-cb.cb-with-retry.ballerina.io",
     name: "http1-circuit-breaker",
     path: "/"
 }
@@ -108,7 +108,7 @@ http:Client http2BackendClient = new ("http://http2-backend:10301", {
     targetPort: 10201
 }
 @kubernetes:Ingress {
-    hostname: "cb-with-retry.ballerina.io",
+    hostname: "http2-cb.cb-with-retry.ballerina.io",
     name: "http2-circuit-breaker",
     path: "/"
 }
