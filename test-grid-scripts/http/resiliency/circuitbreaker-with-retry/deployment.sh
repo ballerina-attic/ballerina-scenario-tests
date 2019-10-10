@@ -27,8 +27,7 @@ function setup_deployment() {
     clone_repo_and_set_bal_path
     replace_variables_in_bal_files
     build_and_deploy_resources
-    bash ${deployment_cb_with_retry_great_great_grand_parent_path}/util/wait_for_pod_ready.sh 500 30
-    sleep 240s
+    wait_for_pod_readiness
     retrieve_and_write_properties_to_data_bucket
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
@@ -44,12 +43,12 @@ readonly DIRECTORY_NAME="http/resiliency/src/test/resources/source_files/circuit
 function clone_repo_and_set_bal_path() {
     git clone https://github.com/ballerina-platform/${REPO_NAME}.git
 
-    http1_backend_bal_path=${DIRECTORY_NAME}/src/backend_service/http1_backend_service.bal
-    http2_backend_bal_path=${DIRECTORY_NAME}/src/backend_service/http2_backend_service.bal
-    http1_cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/http1_circuit_breaker.bal
-    http2_cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/http2_circuit_breaker.bal
-    http1_retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http1_retry.bal
-    http2_retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http2_retry.bal
+    http1_backend_bal_path=${DIRECTORY_NAME}/src/http1_backend_service/http1_backend_service.bal
+    http2_backend_bal_path=${DIRECTORY_NAME}/src/http2_backend_service/http2_backend_service.bal
+    http1_cb_bal_path=${DIRECTORY_NAME}/src/http1_circuit_breaker_service/http1_circuit_breaker.bal
+    http2_cb_bal_path=${DIRECTORY_NAME}/src/http2_circuit_breaker_service/http2_circuit_breaker.bal
+    http1_retry_bal_path=${DIRECTORY_NAME}/src/http1_retry_service/http1_retry.bal
+    http2_retry_bal_path=${DIRECTORY_NAME}/src/http2_retry_service/http2_retry.bal
 }
 
 function print_kubernetes_debug_info() {
@@ -77,14 +76,12 @@ function build_and_deploy_resources() {
     cd ${DIRECTORY_NAME}
     ${ballerina_home}/bin/ballerina build --all
     cd ../../../../../../..
-    echo $PWD
-    echo ${work_dir}/${DIRECTORY_NAME}/target/kubernetes
-    set -x
-    find ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/ -type d
-    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/backend_service --namespace=${cluster_namespace}
-    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/circuit_breaker_service --namespace=${cluster_namespace}
-    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/retry_service --namespace=${cluster_namespace}
-    set +x
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http1_backend_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http2_backend_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http1_circuit_breaker_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http2_circuit_breaker_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http1_retry_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http2_retry_service --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
