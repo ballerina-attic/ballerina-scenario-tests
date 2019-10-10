@@ -44,9 +44,12 @@ readonly DIRECTORY_NAME="http/resiliency/src/test/resources/source_files/circuit
 function clone_repo_and_set_bal_path() {
     git clone https://github.com/ballerina-platform/${REPO_NAME}.git
 
-    backend_bal_path=${DIRECTORY_NAME}/src/backend_service/backend_service.bal
-    cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/circuit_breaker_service.bal
-    retry_bal_path=${DIRECTORY_NAME}/src/retry_service/retry_service.bal
+    http1_backend_bal_path=${DIRECTORY_NAME}/src/backend_service/http1_backend_service.bal
+    http2_backend_bal_path=${DIRECTORY_NAME}/src/backend_service/http2_backend_service.bal
+    http1_cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/http1_circuit_breaker.bal
+    http2_cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/http2_circuit_breaker.bal
+    http1_retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http1_retry.bal
+    http2_retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http2_retry.bal
 }
 
 function print_kubernetes_debug_info() {
@@ -55,9 +58,12 @@ function print_kubernetes_debug_info() {
 }
 
 function replace_variables_in_bal_files() {
-    replace_variables_in_bal_file ${backend_bal_path}
-    replace_variables_in_bal_file ${cb_bal_path}
-    replace_variables_in_bal_file ${retry_bal_path}
+    replace_variables_in_bal_file ${http1_backend_bal_path}
+    replace_variables_in_bal_file ${http2_backend_bal_path}
+    replace_variables_in_bal_file ${http1_cb_bal_path}
+    replace_variables_in_bal_file ${http2_cb_bal_path}
+    replace_variables_in_bal_file ${http1_retry_bal_path}
+    replace_variables_in_bal_file ${http2_retry_bal_path}
 }
 
 function replace_variables_in_bal_file() {

@@ -19,7 +19,7 @@ import ballerina/kubernetes;
 import ballerina/runtime;
 
 // ****************************************************
-//               HTTP/1 BACKEND SERVICE               *
+//                  BACKEND SERVICE                   *
 // ****************************************************
 
 @kubernetes:Service {
@@ -29,7 +29,7 @@ import ballerina/runtime;
     targetPort: 10300
 }
 @kubernetes:Ingress {
-	hostname: "http1backend.cb-with-retry.ballerina.io",
+	hostname: "cb-with-retry.ballerina.io",
 	name: "http1-backend",
 	path: "/"
 }
@@ -67,53 +67,6 @@ service Http1Service on http1Listener {
         // We need two OK responses to switch back circuit-breaker client to closed-circuit state.
         } else if (decider == 3 || decider == 0) {
             sendNormalResponse(caller, response, http1ServicePrefix, count1);
-        }
-    }
-}
-
-// ****************************************************
-//               HTTP/1 BACKEND SERVICE               *
-// ****************************************************
-
-@kubernetes:Service {
-    serviceType: "NodePort",
-    name: "http2-backend",
-    port: 10301,
-    targetPort: 10301
-}
-@kubernetes:Ingress {
-	hostname: "http2backend.cb-with-retry.ballerina.io",
-	name: "http2-backend",
-	path: "/"
-}
-listener http:Listener http2Listener= new(10301, {
-    httpVersion: "2.0"
-});
-
-string http2ServicePrefix = "[Http2Service] ";
-int count2 = 0;
-
-@http:ServiceConfig {
-    basePath: "/"
-}
-service Http2Service on http2Listener {
-    @http:ResourceConfig {
-        methods: ["GET"]
-	}
-    resource function getResponse(http:Caller caller, http:Request req) {
-        count2 += 1;
-        http:Response response = new;
-        int decider = count2 % 4;
-        if (decider == 1) {
-            // Imitate delayed response, so that the timeout occurs at the client
-            runtime:sleep(5000);
-            sendErrorResponse(caller, response, http2ServicePrefix, count2);
-        } else if (decider == 2) {
-            // Sending "501_INTERNAL_SERVER_ERROR" to imitate server failures
-            sendErrorResponse(caller, response, http2ServicePrefix, count2);
-        // We need two OK responses to switch back circuit-breaker client to closed-circuit state.
-        } else if (decider == 3 || decider == 0) {
-            sendNormalResponse(caller, response, http2ServicePrefix, count2);
         }
     }
 }
