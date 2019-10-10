@@ -64,7 +64,7 @@ int count2 = 0;
 @http:ServiceConfig {
     basePath: "/"
 }
-service CallHttp2BackendService on circuitBreakerListener {
+service CallHttp2BackendService on http2CircuitBreakerListener {
     @http:ResourceConfig {
         methods: ["GET"]
     }

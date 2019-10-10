@@ -56,7 +56,7 @@ public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
 
     @Test(description = "Circuit breaker with retry test - http1 to http1")
     public void testCircuitBreakerWithRetryHttp2() throws IOException {
-        String message = "[Http1Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
+        String message = "[Http2Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
                 "Retry request count: 1";
         String url = "http://" + host + ":" + http2Port + "/getResponse";
         HttpResponse httpResponse = HttpClientRequest.doGet(url, 60000);
