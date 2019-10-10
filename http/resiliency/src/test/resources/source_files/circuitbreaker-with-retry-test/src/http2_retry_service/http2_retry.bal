@@ -16,13 +16,12 @@
 
 import ballerina/http;
 import ballerina/kubernetes;
-import ballerina/log;
 
 // ****************************************************
 //                RETRY CLIENT SERVICE                *
 // ****************************************************
 
-http:Client backendClientEP = new ("http://http1-circuit-breaker:10101", {
+http:Client http2BackendClientEP = new ("http://http2-circuit-breaker:10201", {
     retryConfig: {
         intervalInMillis: 3000,
         count: 10,
@@ -35,23 +34,22 @@ http:Client backendClientEP = new ("http://http1-circuit-breaker:10101", {
 
 @kubernetes:Service {
     serviceType: "NodePort",
-    name: "http1-retry",
-    port: 10102,
-    targetPort: 10102
+    name: "http2-retry",
+    port: 10101,
+    targetPort: 10101
 }
 @kubernetes:Ingress {
     hostname: "cb-with-retry.ballerina.io",
-    name: "http1-retry",
+    name: "http2-retry",
     path: "/"
 }
-listener http:Listener retryListener = new (10102);
+listener http:Listener http2RetryListener = new (10101);
 
-string servicePrefix = "[RetryService] ";
-int count = 0;
+int count2 = 0;
 
 @kubernetes:Deployment {
-    image: "cb-with-retry.ballerina.io/http1-retry:v1.0",
-    name: "http1-retry",
+    image: "cb-with-retry.ballerina.io/http2-retry:v1.0",
+    name: "http2-retry",
     username: "<USERNAME>",
     password: "<PASSWORD>",
     push: true,
@@ -60,30 +58,23 @@ int count = 0;
 @http:ServiceConfig {
     basePath: "/"
 }
-service RetryService on retryListener {
+service Http2RetryService on http2RetryListener {
     @http:ResourceConfig {
         methods: ["GET"]
     }
     resource function getResponse(http:Caller caller, http:Request request) {
-        count += 1;
-        log:printInfo(servicePrefix + "Request Received. Request Count: " + count.toString());
-        var backendResponse = backendClientEP->forward("/getResponse", request);
+        count2 += 1;
+        var backendResponse = http2BackendClientEP->forward("/getResponse", request);
         http:Response response = new;
         if (backendResponse is http:ClientError) {
             response.statusCode = 501;
             response.setTextPayload(<@untainted string>backendResponse.toString() + " Retry request count: " +
-                                   count.toString());
+                                   count2.toString());
         } else {
             string backendResponsePayload = <@untainted string>backendResponse.getTextPayload();
-            response.setTextPayload(backendResponsePayload + " Retry request count: " + count.toString());
+            response.setTextPayload(backendResponsePayload + " Retry request count: " + count2.toString());
         }
         var sendResult = caller->respond(response);
-        handleResult(sendResult);
     }
 }
 
-public function handleResult(error? result) {
-    if (result is error) {
-        log:printError(servicePrefix + "Error occurred while sending the response", result);
-    }
-}

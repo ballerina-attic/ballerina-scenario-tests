@@ -16,7 +16,6 @@
 
 import ballerina/http;
 import ballerina/kubernetes;
-import ballerina/log;
 import ballerina/runtime;
 
 // ****************************************************
@@ -26,18 +25,18 @@ import ballerina/runtime;
 @kubernetes:Service {
     serviceType: "NodePort",
     name: "http1-backend",
-    port: 10100,
-    targetPort: 10100
+    port: 10300,
+    targetPort: 10300
 }
 @kubernetes:Ingress {
 	hostname: "cb-with-retry.ballerina.io",
 	name: "http1-backend",
 	path: "/"
 }
-listener http:Listener http1Listener= new(10100);
+listener http:Listener http1Listener= new(10300);
 
-int count = 0;
-string servicePrefix = "[Http1Service] ";
+int count1 = 0;
+string http1ServicePrefix = "[Http1Service] ";
 
 @kubernetes:Deployment {
     image:"cb-with-retry.ballerina.io/http1-backend:v1.0",
@@ -55,38 +54,31 @@ service Http1Service on http1Listener {
         methods: ["GET"]
 	}
     resource function getResponse(http:Caller caller, http:Request req) {
-        count += 1;
+        count1 += 1;
         http:Response response = new;
-        int decider = count % 4;
+        int decider = count1 % 4;
         if (decider == 1) {
             // Imitate delayed response, so that the timeout occurs at the client
             runtime:sleep(5000);
-            sendErrorResponse(caller, response, servicePrefix);
+            sendErrorResponse(caller, response, http1ServicePrefix, count1);
         } else if (decider == 2) {
             // Sending "501_INTERNAL_SERVER_ERROR" to imitate server failures
-            sendErrorResponse(caller, response, servicePrefix);
+            sendErrorResponse(caller, response, http1ServicePrefix, count1);
         // We need two OK responses to switch back circuit-breaker client to closed-circuit state.
         } else if (decider == 3 || decider == 0) {
-            sendNormalResponse(caller, response, servicePrefix);
+            sendNormalResponse(caller, response, http1ServicePrefix, count1);
         }
     }
 }
 
-function sendNormalResponse(http:Caller caller, http:Response response, string prefix) {
+function sendNormalResponse(http:Caller caller, http:Response response, string prefix, int count) {
     string message = prefix + "OK response. Backend request count: " + count.toString();
     response.setPayload(message);
     var result = caller->respond(response);
-    handleResult(result);
 }
 
-function sendErrorResponse(http:Caller caller, http:Response response, string prefix) {
+function sendErrorResponse(http:Caller caller, http:Response response, string prefix, int count) {
     response.statusCode = 501;
     response.setPayload(prefix + "Internal error occurred. Backend request count: " + count.toString());
     var result = caller->respond(response);
-}
-
-public function handleResult(error? result) {
-    if (result is error) {
-        log:printError(servicePrefix + "Error occurred while sending the response", result);
-    }
 }

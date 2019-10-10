@@ -43,9 +43,12 @@ readonly DIRECTORY_NAME="http/resiliency/src/test/resources/source_files/circuit
 function clone_repo_and_set_bal_path() {
     git clone https://github.com/ballerina-platform/${REPO_NAME}.git
 
-    backend_bal_path=${DIRECTORY_NAME}/src/backend_service/http1_backend_service.bal
-    cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/http1_circuit_breaker.bal
-    retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http1_retry.bal
+    http1_backend_bal_path=${DIRECTORY_NAME}/src/http1_backend_service/http1_backend_service.bal
+    http2_backend_bal_path=${DIRECTORY_NAME}/src/http2_backend_service/http2_backend_service.bal
+    http1_cb_bal_path=${DIRECTORY_NAME}/src/http1_circuit_breaker_service/http1_circuit_breaker.bal
+    http2_cb_bal_path=${DIRECTORY_NAME}/src/http2_circuit_breaker_service/http2_circuit_breaker.bal
+    http1_retry_bal_path=${DIRECTORY_NAME}/src/http1_retry_service/http1_retry.bal
+    http2_retry_bal_path=${DIRECTORY_NAME}/src/http2_retry_service/http2_retry.bal
 }
 
 function print_kubernetes_debug_info() {
@@ -54,9 +57,12 @@ function print_kubernetes_debug_info() {
 }
 
 function replace_variables_in_bal_files() {
-    replace_variables_in_bal_file ${backend_bal_path}
-    replace_variables_in_bal_file ${cb_bal_path}
-    replace_variables_in_bal_file ${retry_bal_path}
+    replace_variables_in_bal_file ${http1_backend_bal_path}
+    replace_variables_in_bal_file ${http2_backend_bal_path}
+    replace_variables_in_bal_file ${http1_cb_bal_path}
+    replace_variables_in_bal_file ${http2_cb_bal_path}
+    replace_variables_in_bal_file ${http1_retry_bal_path}
+    replace_variables_in_bal_file ${http2_retry_bal_path}
 }
 
 function replace_variables_in_bal_file() {
@@ -70,26 +76,28 @@ function build_and_deploy_resources() {
     cd ${DIRECTORY_NAME}
     ${ballerina_home}/bin/ballerina build --all
     cd ../../../../../../..
-    echo $PWD
-    echo ${work_dir}/${DIRECTORY_NAME}/target/kubernetes
-    set -x
-    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/backend_service --namespace=${cluster_namespace}
-    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/circuit_breaker_service --namespace=${cluster_namespace}
-    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/retry_service --namespace=${cluster_namespace}
-    set +x
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http1_backend_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http2_backend_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http1_circuit_breaker_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http2_circuit_breaker_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http1_retry_service --namespace=${cluster_namespace}
+    kubectl apply -f ${work_dir}/${DIRECTORY_NAME}/target/kubernetes/http2_retry_service --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
     local external_ip=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-    local node_port=$(kubectl get svc http1-retry -o=jsonpath='{.spec.ports[0].nodePort}')
+    local node_port_http1=$(kubectl get svc http1-retry -o=jsonpath='{.spec.ports[0].nodePort}')
+    local node_port_http2=$(kubectl get svc http2-retry -o=jsonpath='{.spec.ports[0].nodePort}')
     declare -A deployment_props
     deployment_props["ExternalIP"]=${external_ip}
-    deployment_props["NodePort"]=${node_port}
+    deployment_props["NodePortHttp1"]=${node_port_http1}
+    deployment_props["NodePortHttp2"]=${node_port_http2}
     write_to_properties_file ${output_dir}/deployment.properties deployment_props
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
         echo "ExternalIP: ${external_ip}"
-        echo "NodePort: ${node_port}"
+        echo "NodePort [HTTP1]: ${node_port_http1}"
+        echo "NodePort [HTTP2]: ${node_port_http2}"
     fi
 }
 

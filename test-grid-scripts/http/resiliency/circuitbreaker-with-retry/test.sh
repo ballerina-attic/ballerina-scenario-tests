@@ -15,12 +15,14 @@
 # limitations under the License.
 
 function print_debug_info() {
-    echo "Host And Port: ${external_ip}:${node_port}"
+    echo "HTTP/1 Host And Port: ${external_ip}:${node_port_http1}"
+    echo "HTTP/2 Host And Port: ${external_ip}:${node_port_http2}"
 }
 
 function run_tests() {
     local external_ip=${deployment_config["ExternalIP"]}
-    local node_port=${deployment_config["NodePort"]}
+    local node_port_http1=${deployment_config["NodePortHttp1"]}
+    local node_port_http2=${deployment_config["NodePortHttp2"]}
 
     local is_debug_enabled=${deployment_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
@@ -29,7 +31,8 @@ function run_tests() {
 
     declare -A sys_prop_array
     sys_prop_array["resiliency.service.host"]=${external_ip}
-    sys_prop_array["resiliency.service.port"]=${node_port}
+    sys_prop_array["resiliency.service.port.http1"]=${node_port_http1}
+    sys_prop_array["resiliency.service.port.http2"]=${node_port_http1}
 
     # Builds and run tests of the given connector section and copies resulting surefire reports to output directory
     run_scenario_tests http-resiliency http resiliency sys_prop_array ${input_dir} ${output_dir} "CircuitBreakerWithRetry"

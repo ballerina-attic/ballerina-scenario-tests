@@ -34,26 +34,38 @@ import static org.awaitility.Awaitility.await;
 @Test(description = "This is a scenario test including circuit breaker and the retry functionalities")
 public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
     private static final String host;
-    private static final String port;
+    private static final String http1Port;
+    private static final String http2Port;
 
     static {
         Properties deploymentProperties = getDeploymentProperties();
         host = deploymentProperties.getProperty("ExternalIP");
-        port = deploymentProperties.getProperty("NodePort");
+        http1Port = deploymentProperties.getProperty("NodePortHttp1");
+        http2Port = deploymentProperties.getProperty("NodePortHttp2");
     }
 
     @Test(description = "Circuit breaker with retry test - http1 to http1")
     public void testCircuitBreakerWithRetryHttp1() throws IOException {
         String message = "[Http1Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
                 "Retry request count: 1";
-        String url = "http://" + host + ":" + port + "/getResponse";
+        String url = "http://" + host + ":" + http1Port + "/getResponse";
         HttpResponse httpResponse = HttpClientRequest.doGet(url, 60000);
         await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
-        verifyResponse(httpResponse, message, 200);
+        verifyResponse(httpResponse, message);
     }
 
-    private void verifyResponse(HttpResponse response, String expectedMessage, int expectedResponseCode) {
-        Assert.assertEquals(response.getResponseCode(), expectedResponseCode, "Response code mismatch");
+    @Test(description = "Circuit breaker with retry test - http1 to http1")
+    public void testCircuitBreakerWithRetryHttp2() throws IOException {
+        String message = "[Http2Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
+                "Retry request count: 1";
+        String url = "http://" + host + ":" + http2Port + "/getResponse";
+        HttpResponse httpResponse = HttpClientRequest.doGet(url, 60000);
+        await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
+        verifyResponse(httpResponse, message);
+    }
+
+    private void verifyResponse(HttpResponse response, String expectedMessage) {
+        Assert.assertEquals(response.getResponseCode(), 200, "Response code mismatch");
         Assert.assertEquals(response.getData(), expectedMessage);
     }
 }
