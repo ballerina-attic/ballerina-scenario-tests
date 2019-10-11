@@ -41,7 +41,6 @@ readonly DIRECTORY_NAME="grpc/unary/src/test/resources/grpc-scenarios"
 ## Functions
 
 function clone_repo_and_set_bal_path() {
-    git clone https://github.com/ballerina-platform/ballerina-scenario-tests.git
     product_Info_client_bal_path=grpc/unary/src/test/resources/grpc-scenarios/src/unsecured_client/product_Info_client.bal
 }
 
