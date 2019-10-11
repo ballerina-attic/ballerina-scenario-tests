@@ -85,15 +85,7 @@ deploy_nats_cluster() {
     kubectl apply -f https://github.com/nats-io/nats-operator/releases/latest/download/00-prereqs.yaml --namespace=${cluster_namespace}
     kubectl apply -f https://github.com/nats-io/nats-operator/releases/latest/download/10-deployment.yaml --namespace=${cluster_namespace}
 
-    cat <<EOF | kubectl create -f -
-    apiVersion: nats.io/v1alpha2
-    kind: NatsCluster
-    metadata:
-      name: example-nats-cluster
-    spec:
-      size: 3
-      version: "1.3.0"
-    EOF
+    kubectl create -f ${root_directory_path}/messaging/nats/src/test/resources/basic/nats-cluster.yaml --namespace=${cluster_namespace}
 
     wait_for_pod_readiness
     kubectl get nats
