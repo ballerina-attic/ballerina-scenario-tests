@@ -62,8 +62,10 @@ build_and_deploy_nats_resources() {
     ${ballerina_home}/bin/ballerina build basic
     cd ../../../../../..
     kubectl apply -f ${root_directory_path}/messaging/nats/src/test/resources/basic/target/kubernetes/basic --namespace=${cluster_namespace}
-    wait_for_pod_readiness
-    kubectl get nats
+    # wait_for_pod_readiness
+    sleep 240s
+    kubectl get nats --namespace=${cluster_namespace}
+    kubectl get pods --namespace=${cluster_namespace}
 }
 
 retrieve_and_write_properties_to_data_bucket() {
