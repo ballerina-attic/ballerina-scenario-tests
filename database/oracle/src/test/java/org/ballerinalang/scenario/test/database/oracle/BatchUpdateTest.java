@@ -35,6 +35,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains `batchUpdate` remote function tests.
+ */
 public class BatchUpdateTest extends ScenarioTestBase {
     private CompileResult batchUpdateCompileResult;
     private String jdbcUrl;

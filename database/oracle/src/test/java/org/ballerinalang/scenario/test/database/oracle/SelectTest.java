@@ -44,6 +44,9 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains `select` remote function tests.
+ */
 public class SelectTest extends ScenarioTestBase {
     private CompileResult selectCompileResult;
     private String jdbcUrl;

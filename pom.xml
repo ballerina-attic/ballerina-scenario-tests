@@ -16,7 +16,8 @@
   ~ under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <groupId>org.ballerinalang</groupId>
     <version>0.990.4-SNAPSHOT</version>
@@ -340,35 +341,35 @@
                 <version>${ballerina.version}</version>
             </dependency>
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <scope>test</scope>
-                <version>${mysql.driver.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-internal</artifactId>
+                <artifactId>ballerina-stringutils</artifactId>
                 <version>${ballerina.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-internal</artifactId>
+                <artifactId>ballerina-stringutils</artifactId>
                 <type>zip</type>
                 <classifier>ballerina-binary-repo</classifier>
                 <version>${ballerina.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-internal</artifactId>
+                <artifactId>ballerina-stringutils</artifactId>
                 <classifier>bir-jar</classifier>
                 <version>${ballerina.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-internal</artifactId>
-                <classifier>bir</classifier>
+                <artifactId>ballerina-stringutils</artifactId>
                 <type>zip</type>
+                <classifier>bir</classifier>
                 <version>${ballerina.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <scope>test</scope>
+                <version>${mysql.driver.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.postgresql</groupId>
@@ -1185,6 +1186,12 @@
                 <classifier>bir-jar</classifier>
                 <version>${ballerina.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.awaitality</groupId>
+                <artifactId>awaitality</artifactId>
+                <version>${awaitality.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1231,7 +1238,7 @@
             </activation>
             <modules>
                 <module>scenarios-commons</module>
-                <module>http</module>
+                <module>http/resiliency</module>
                 <module>bbg/data</module>
                 <module>bbg/kafka</module>
                 <module>bbg/bbg-integration-patterns</module>
@@ -1241,6 +1248,8 @@
                 <module>database/postgresql</module>
                 <module>database/oracle</module>
                 <module>database/util</module>
+                <module>connectors/artemis</module>
+                <module>grpc/unary</module>
             </modules>
         </profile>
         <profile>
@@ -1265,6 +1274,13 @@
             </modules>
         </profile>
         <profile>
+            <id>messaging-artemis</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>connectors/artemis</module>
+            </modules>
+        </profile>
+        <profile>
             <id>bbg-integration-patterns</id>
             <modules>
                 <module>scenarios-commons</module>
@@ -1273,6 +1289,20 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>grpc</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>grpc/unary</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>http-resiliency</id>
+            <modules>
+                <module>scenarios-commons</module>
+                <module>http/resiliency</module>
+          </modules>
         </profile>
         <profile>
             <id>database-mysql</id>
@@ -1309,7 +1339,7 @@
     </profiles>
 
     <properties>
-        <ballerina.version>1.0.0-beta-SNAPSHOT</ballerina.version>
+        <ballerina.version>1.0.2-SNAPSHOT</ballerina.version>
         <project.version>0.990.4-SNAPSHOT</project.version>
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
         <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
@@ -1319,11 +1349,12 @@
         <os.maven.plugin.version>1.5.0.Final</os.maven.plugin.version>
         <maven.jacoco.plugin.version>0.8.3</maven.jacoco.plugin.version>
         <netty.version>4.1.19.Final</netty.version>
+        <awaitality.version>3.0.0</awaitality.version>
         <maven.dependency.plugin.version>3.1.1</maven.dependency.plugin.version>
         <maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
         <mysql.driver.version>5.1.46</mysql.driver.version>
         <postgres.driver.version>42.2.5</postgres.driver.version>
-        <oracle.driver.version>11.2.0.3</oracle.driver.version>
+        <oracle.driver.version>1.0.0</oracle.driver.version>
         <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
         <maven.checkstyle.version>8.18</maven.checkstyle.version>
         <maven.spotbugsplugin.version>3.1.1</maven.spotbugsplugin.version>

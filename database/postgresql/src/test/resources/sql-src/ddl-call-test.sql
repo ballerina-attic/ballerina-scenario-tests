@@ -99,10 +99,3 @@ BEGIN
     SELECT TEXT_VAL INTO p_doubleVal FROM SELECT_UPDATE_TEST_FLOAT_TYPES WHERE ID = p_id_out;
 END
 ' LANGUAGE plpgsql
-
-
-
-
-
-
-

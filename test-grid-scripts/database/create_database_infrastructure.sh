@@ -24,46 +24,94 @@ database_grand_parent_path=$(dirname ${database_parent_path})
 
 set -o xtrace
 
-echo "Reading database details from testplan-props.properties"
-declare -A db_details
-read_property_file ${output_dir}/testplan-props.properties db_details
+create_db_infrastructure() {
+    echo "Reading database details from testplan-props.properties"
+    declare -A db_details
+    read_property_file ${output_dir}/testplan-props.properties db_details
 
-db_engine=${db_details["DBEngine"]}
+    # Possible formats:
+    # 1. DBType-DBEdition-DBVersion eg: MySQL-5.7
+    # 2. DBType-DBVersion eg: SQLServer-SE-13.00
+    db_engine=${db_details["DBEngine"]}
 
-read database_type database_version <<<$(IFS="-"; echo ${db_engine})
+    read database_type database_version <<<$(IFS="-"; echo ${db_engine})
 
-if [ ${database_type:-""} = "" ]; then
-    echo "Database not provided!"
-    exit 1
-fi
+    read first_part second_part <<<$(IFS=" "; echo ${database_version})
 
-if [ ${database_version:-""} = "" ]; then
-    echo "Database version not provided!"
-    exit 1
-fi
+    if [ ${second_part:-""} = "" ]; then
+        database_version=${first_part}
+    else
+        database_edition=${first_part}
+        database_version=${second_part}
+        database_type="${database_type}-${database_edition}"
+    fi
 
-database_name=$(generate_random_db_name)
+    if [ ${database_type:-""} = "" ]; then
+        echo "Database not provided!"
+        exit 1
+    fi
 
-echo "Creating database..."
-echo "Database details: DB_TYPE: ${database_type} | DB_VERSION:${database_version} | DB_NAME: ${database_name}"
-create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" database_host
-echo "DB Host: ${database_host}"
+    if [ ${database_version:-""} = "" ]; then
+        echo "Database version not provided!"
+        exit 1
+    fi
 
-if [ ${database_type} = "MySQL" ]; then
-    #mysql -h "${database_host}" -P 3306 -u 'masterawsuser' -p'masteruserpassword' <${database_parent_path}/db_init.sql
-    jdbc_url="jdbc:mysql://${database_host}:3306"
-    echo "database.mysql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
-    echo "database.mysql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
-    echo "database.mysql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
-    echo "TestGroup=mysql" >> ${output_dir}/infrastructure.properties
-    echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
-elif [ ${database_type} = "Postgres" ]; then
-    #sudo apt-get install -y postgresql-client
-    #PGPASSWORD=masteruserpassword psql -h "${database_host}" -p 5432 --username 'masterawsuser' -d postgres < ${database_parent_path}/db_init.sql
-    jdbc_url="jdbc:postgresql://${database_host}:5432"
-    echo "database.postgresql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
-    echo "database.postgresql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
-    echo "database.postgresql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
-    echo "TestGroup=postgresql" >> ${output_dir}/infrastructure.properties
-    echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
+    database_name=$(generate_random_db_name)
+
+    echo "Creating database..."
+    echo "Database details: DB_TYPE: ${database_type} | DB_VERSION:${database_version} | DB_NAME: ${database_name}"
+
+    if [ ${database_type} = "MySQL" ]; then
+        create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 10 "general-public-license" database_host
+        echo "DB Host: ${database_host}"
+        #mysql -h "${database_host}" -P 3306 -u 'masterawsuser' -p'masteruserpassword' <${database_parent_path}/db_init.sql
+        jdbc_url="jdbc:mysql://${database_host}:3306"
+        echo "database.mysql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
+        echo "database.mysql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
+        echo "database.mysql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
+        echo "TestGroup=mysql" >> ${output_dir}/infrastructure.properties
+        echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
+    elif [ ${database_type} = "Postgres" ]; then
+        create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 10 "postgresql-license" database_host
+        echo "DB Host: ${database_host}"
+        #sudo apt-get install -y postgresql-client
+        #PGPASSWORD=masteruserpassword psql -h "${database_host}" -p 5432 --username 'masterawsuser' -d postgres < ${database_parent_path}/db_init.sql
+        jdbc_url="jdbc:postgresql://${database_host}:5432"
+        echo "database.postgresql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
+        echo "database.postgresql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
+        echo "database.postgresql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
+        echo "TestGroup=postgresql" >> ${output_dir}/infrastructure.properties
+        echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
+    elif [ ${database_type} = "SQLServer-SE" ]; then
+        # Temp fix until EX is added to testgrid
+        database_type="SQLServer-EX"
+        create_database ${database_type} ${database_version} ${database_name} "db.t2.micro" 20 " license-included" database_host
+        echo "DB Host: ${database_host}"
+        jdbc_url="jdbc:sqlserver://${database_host}:1433"
+        echo "database.mssql.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
+        echo "database.mssql.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
+        echo "database.mssql.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
+        echo "TestGroup=mssql" >> ${output_dir}/infrastructure.properties
+        echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
+    elif [ ${database_type} = "Oracle-SE1" ]; then
+        create_database ${database_type} ${database_version} ${database_name} "db.t3.micro" 20 "bring-your-own-license" database_host
+        echo "DB Host: ${database_host}"
+        jdbc_url="jdbc:oracle:thin:@${database_host}:1521:ORCL"
+        echo "database.oracle.test.jdbc.url=${jdbc_url}" >> ${output_dir}/infrastructure.properties
+        echo "database.oracle.test.jdbc.username=masterawsuser" >> ${output_dir}/infrastructure.properties
+        echo "database.oracle.test.jdbc.password=masteruserpassword" >> ${output_dir}/infrastructure.properties
+        echo "TestGroup=oracle" >> ${output_dir}/infrastructure.properties
+        echo "DatabaseName=${database_name}" >> ${output_dir}/infrastructure-cleanup.properties
+    else
+        echo "Unsupported database type: ${database_type}"
+        exit 1;
+    fi
+}
+
+if create_db_infrastructure; then
+  echo "Database infrastructure creation successful!" >&2
+else
+  ret=$?
+  echo "Database infrastructure creation failed with exit code $ret" >&2
+  exit $ret
 fi

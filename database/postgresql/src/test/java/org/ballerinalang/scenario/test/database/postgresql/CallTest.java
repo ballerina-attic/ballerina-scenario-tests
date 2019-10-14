@@ -42,6 +42,9 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains `call` remote function tests.
+ */
 @Test(groups = Constants.POSTGRES_TESTNG_GROUP)
 public class CallTest extends ScenarioTestBase {
     private CompileResult callCompilerResult;

@@ -22,27 +22,25 @@ jdbc:Client testDB = new({
       username: config:getAsString("database.mysql.test.jdbc.username"),
       password: config:getAsString("database.mysql.test.jdbc.password")
 });
-//
-//function testCallInParamNumericTypes() returns error? {
-//    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
-//    jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: 1 };
-//    jdbc:Parameter tinyIntVal = { sqlType: jdbc:TYPE_TINYINT, value: 126 };
-//    jdbc:Parameter smallIntVal = { sqlType: jdbc:TYPE_SMALLINT, value: 32765 };
-//    jdbc:Parameter mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32765 };
-//    jdbc:Parameter intVal = { sqlType: jdbc:TYPE_INTEGER, value: 8388603 };
-//    jdbc:Parameter bigIntVal = { sqlType: jdbc:TYPE_BIGINT, value: 2147483644 };
-//    jdbc:Parameter decimalVal = { sqlType: jdbc:TYPE_DECIMAL, value: 143.78 };
-//    jdbc:Parameter numericVal = { sqlType: jdbc:TYPE_NUMERIC, value: 1034.789 };
-//
-//    var ret = testDB->call("CALL CALL_TEST_IN_NUMERIC_TYPES(?, ?, ?, ?, ?, ?, ?, ?, ?)", (), id, bitVal, tinyIntVal, smallIntVal, mediumIntVal,
-//        intVal, bigIntVal, decimalVal, numericVal);
-//    if (ret is error?) {
-//        return ret;
-//    } else {
-//        error e = error("Unexpected return type: table");
-//        return e;
-//    }
-//}
+
+function testCallInParamNumericTypes() returns @tainted error? {
+    jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 2 };
+    jdbc:Parameter bitVal = { sqlType: jdbc:TYPE_BIT, value: 1 };
+    jdbc:Parameter tinyIntVal = { sqlType: jdbc:TYPE_TINYINT, value: 126 };
+    jdbc:Parameter smallIntVal = { sqlType: jdbc:TYPE_SMALLINT, value: 32765 };
+    jdbc:Parameter mediumIntVal = { sqlType: jdbc:TYPE_INTEGER, value: 32765 };
+    jdbc:Parameter intVal = { sqlType: jdbc:TYPE_INTEGER, value: 8388603 };
+    jdbc:Parameter bigIntVal = { sqlType: jdbc:TYPE_BIGINT, value: 2147483644 };
+
+    var ret = testDB->call("CALL CALL_TEST_IN_INTEGER_TYPES(?, ?, ?, ?, ?, ?, ?)", (), id, bitVal, tinyIntVal,
+    smallIntVal, mediumIntVal, intVal, bigIntVal);
+    if (ret is error?) {
+        return ret;
+    } else {
+        error e = error("Unexpected return type: table");
+        return e;
+    }
+}
 
 function testCallOutParamIntegerTypes() returns @tainted [table<record{}>[]|error?, any[]] {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };

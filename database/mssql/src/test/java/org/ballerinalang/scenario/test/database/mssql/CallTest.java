@@ -42,6 +42,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains `call` remote function tests.
+ */
 @Test(groups = Constants.MSSQL_TESTNG_GROUP)
 public class CallTest extends ScenarioTestBase {
     private CompileResult callCompilerResult;

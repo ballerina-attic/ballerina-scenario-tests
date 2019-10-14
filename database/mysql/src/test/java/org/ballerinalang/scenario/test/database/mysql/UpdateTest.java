@@ -44,6 +44,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * Contains `update` remote function tests.
+ */
 @Test(groups = Constants.MYSQL_TESTNG_GROUP)
 public class UpdateTest extends ScenarioTestBase {
     private CompileResult updateCompileResult;

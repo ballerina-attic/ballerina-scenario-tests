@@ -32,22 +32,26 @@ declare oracle_se2_port=1521
 # $2 - database version
 # $3 - database name
 # $4 - instance_type
-# $5 - variable to set the database host value into
+# $5 - storage size
+# $6 - variable to set the database host value into
 function create_database() {
     local db_type=$1
     local db_version=$2
     local database_name=$3
     local instance_type=$4
-    local __db_host=$5
+    local allocated_storage=$5
+    local license_model=$6
+    local __db_host=$7
 
     aws rds create-db-instance --db-instance-identifier ${database_name} \
         --db-instance-class ${instance_type} \
         --engine ${db_type} \
-        --allocated-storage 10 \
+        --allocated-storage ${allocated_storage} \
         --master-username masterawsuser \
         --master-user-password masteruserpassword \
         --backup-retention-period 0\
-        --engine-version ${db_version}
+        --engine-version ${db_version} \
+        --license-model ${license_model}
 
     aws rds wait  db-instance-available  --db-instance-identifier "$database_name"
 

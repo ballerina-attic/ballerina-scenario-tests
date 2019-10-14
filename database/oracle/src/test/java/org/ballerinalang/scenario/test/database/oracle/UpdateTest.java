@@ -43,6 +43,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * Contains `update` remote function tests.
+ */
 public class UpdateTest extends ScenarioTestBase {
     private CompileResult updateCompileResult;
     private String jdbcUrl;

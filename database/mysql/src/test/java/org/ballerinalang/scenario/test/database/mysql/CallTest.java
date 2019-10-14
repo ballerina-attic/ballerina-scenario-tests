@@ -42,6 +42,9 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains `call` remote function tests.
+ */
 @Test(groups = Constants.MYSQL_TESTNG_GROUP)
 public class CallTest extends ScenarioTestBase {
     private CompileResult callCompilerResult;
@@ -80,11 +83,11 @@ public class CallTest extends ScenarioTestBase {
         setupDateTimeData();
     }
 
-//    @Test(description = "Test numeric type In params")
-//    public void testCallInParamNumericTypes() {
-//        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamNumericTypes");
-//        AssertionUtil.assertCallQueryReturnValue(returns[0]);
-//    }
+    @Test(description = "Test numeric type In params")
+    public void testCallInParamNumericTypes() {
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamNumericTypes");
+        AssertionUtil.assertCallQueryReturnValue(returns[0]);
+    }
 
     @Test(description = "Test numeric type OUT params")
     public void testCallOutParamIntegerTypes() {

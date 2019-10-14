@@ -35,6 +35,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains database local transaction tests.
+ */
 public class LocalTransactionTest extends ScenarioTestBase {
     private CompileResult localTransactionCompileResult;
     private String jdbcUrl;

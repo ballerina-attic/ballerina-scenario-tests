@@ -35,6 +35,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * Contains Data Definition Language tests.
+ */
 public class DdlTest extends ScenarioTestBase {
     private CompileResult ddlCompileResult;
     private String jdbcUrl;

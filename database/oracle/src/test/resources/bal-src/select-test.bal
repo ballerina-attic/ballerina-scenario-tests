@@ -13,6 +13,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+
 import ballerina/config;
 import ballerina/time;
 import ballerinax/java.jdbc;
@@ -45,22 +46,16 @@ type StringType record {
 type DateTimeTypeStr record {
     string? dateStr;
     string? timestampStr;
-   // string? timestampzStr;
-   // string? timestampzLocalStr;
 };
 
 type DateTimeTypeInt record {
     int? dateInt;
     int? timestampInt;
-    //int? timestampzInt;
-    //int? timestampzLocalInt;
 };
 
 type DateTimeTypeRec record {
     time:Time? dateRec;
     time:Time? timestampRec;
-    //time:Time? timestampzRec;
-    //time:Time? timestampzLocalRec;
 };
 
 type ComplexType record {
