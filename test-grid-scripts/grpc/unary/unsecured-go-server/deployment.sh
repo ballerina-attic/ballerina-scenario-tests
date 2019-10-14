@@ -53,9 +53,9 @@ function deploy_unary_go_server() {
 }
 
 function print_kubernetes_debug_info() {
-    kubectl get pods
-    kubectl get svc ballerina-grpc-client-proxy -o=json
-    kubectl get nodes --output wide
+    kubectl get pods --namespace=${cluster_namespace}
+    kubectl get svc ballerina-grpc-client-proxy -o=json --namespace=${cluster_namespace}
+    kubectl get nodes --output wide --namespace=${cluster_namespace}
 }
 
 function replace_variables_in_bal_files() {
