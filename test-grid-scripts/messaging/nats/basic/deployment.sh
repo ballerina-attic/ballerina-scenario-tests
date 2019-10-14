@@ -82,9 +82,7 @@ retrieve_and_write_properties_to_data_bucket() {
 
 deploy_nats_cluster() {
     docker login --username=${docker_user} --password=${docker_password}
-    kubectl apply -f https://github.com/nats-io/nats-operator/releases/latest/download/00-prereqs.yaml
-    kubectl apply -f https://github.com/nats-io/nats-operator/releases/latest/download/10-deployment.yaml
-
+    # This assumes the NATS CRD is available in the cluster.
     kubectl create -f ${root_directory_path}/messaging/nats/src/test/resources/basic/nats-cluster.yaml --namespace=${cluster_namespace}
 
     wait_for_pod_readiness
