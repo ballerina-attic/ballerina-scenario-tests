@@ -1,5 +1,4 @@
 import ballerina/config;
-//import ballerina/transactions;
 import ballerina/io;
 import ballerinax/java.jdbc;
 
@@ -165,4 +164,3 @@ function testUpdateWithGeneratedKeysSelectFullIterate() returns @tainted [int, s
 function stopDatabaseClient() {
     checkpanic testDB.stop();
 }
-
