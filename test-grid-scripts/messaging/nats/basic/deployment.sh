@@ -19,7 +19,7 @@ readonly basic_request_reply_directory_path=$( cd "$(dirname "${BASH_SOURCE[0]}"
 readonly nats_directory_path=$(dirname ${basic_request_reply_directory_path})
 readonly messaging_directory_path=$(dirname ${nats_directory_path})
 readonly testgrid_scripts_directory_path=$(dirname ${messaging_directory_path})
-readonly root_directory_path=$(dirname ${messaging_directory_path})
+readonly root_directory_path=$(dirname ${testgrid_scripts_directory_path})
 
 . ${testgrid_scripts_directory_path}/common/usage.sh
 . ${testgrid_scripts_directory_path}/setup/setup_deployment_env.sh
@@ -45,8 +45,8 @@ print_kubernetes_debug_info() {
 }
 
 replace_variables_in_bal_files() {
-    replace_variables_in_bal_file ${root_directory_path}/messaging/nats/src/test/resources/basic/proxy.bal
-    replace_variables_in_bal_file ${root_directory_path}/messaging/nats/src/test/resources/basic/subscriber.bal
+    replace_variables_in_bal_file ${root_directory_path}/messaging/nats/src/test/resources/basic/src/basic/proxy.bal
+    replace_variables_in_bal_file ${root_directory_path}/messaging/nats/src/test/resources/basic/src/basic/subscriber.bal
 }
 
 replace_variables_in_bal_file() {
@@ -59,9 +59,9 @@ replace_variables_in_bal_file() {
 build_and_deploy_nats_resources() {
     docker login --username=${docker_user} --password=${docker_password}
     cd ${root_directory_path}/messaging/nats/src/test/resources/basic
-    ${ballerina_home}/bin/ballerina build
+    ${ballerina_home}/bin/ballerina build basic
     cd ../../../../../..
-    kubectl apply -f ${root_directory_path}/messaging/nats/src/test/resources/basic/kubernetes --namespace=${cluster_namespace}
+    kubectl apply -f ${root_directory_path}/messaging/nats/src/test/resources/basic/target/kubernetes/basic --namespace=${cluster_namespace}
     wait_for_pod_readiness
     kubectl get nats
 }
