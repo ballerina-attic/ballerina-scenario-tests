@@ -35,12 +35,12 @@ nats:Producer publisher = new(conn);
 }
 
 @kubernetes:Deployment {
-    image:"ballerina.nats.io/nats-sender:v1.0",
-    name:"proxy-deployment"//,
-   // username:"<USERNAME>",
-   // password:"<PASSWORD>",
-   // push:true,
-   // imagePullPolicy:"Always"
+    image:"<USERNAME>/nats-sender:v1.0",
+    name:"proxy-deployment",
+    username:"<USERNAME>",
+    password:"<PASSWORD>",
+    push:true,
+    imagePullPolicy:"Always"
 }
 
 listener http:Listener sendListener = new(8080);

@@ -7,8 +7,12 @@ nats:Connection subscriberConnection = new("nats://example-nats-cluster:4222");
 
 @kubernetes:Deployment {
     //livenessProbe: true, NPE Occurred when this was enabled..
-    image:"ballerina.guides.io/natstest:latest",
-    name: "nats-subscriber-service-deployment"
+    image:"<USERNAME>/natstest:latest",
+    name: "nats-subscriber-service-deployment",
+    username:"<USERNAME>",
+    password:"<PASSWORD>",
+    push:true,
+    imagePullPolicy:"Always"
 }
 // Initializes the NATS listener.
 listener nats:Listener subscription = new(subscriberConnection);
