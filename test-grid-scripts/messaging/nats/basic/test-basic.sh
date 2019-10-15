@@ -32,7 +32,7 @@ run_tests() {
     declare -A sys_prop_array
 
     # Builds and run tests of the given BBG section and copies resulting surefire reports to output directory
-    run_scenario_tests messaging-nats messaging nats sys_prop_array ${input_dir} ${output_dir} "NatsBasicRequestReplyTest"
+    run_scenario_tests messaging-nats messaging nats sys_prop_array ${input_dir} ${output_dir} "NatsBasicTest"
 }
 
 run_tests
