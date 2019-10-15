@@ -28,7 +28,6 @@ setup_deployment() {
     deploy_nats_cluster
     replace_variables_in_bal_files
     build_and_deploy_nats_resources
-    wait_for_pod_readiness
     retrieve_and_write_properties_to_data_bucket
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
@@ -53,7 +52,6 @@ replace_variables_in_bal_file() {
     local bal_path=$1
     sed -i "s:<USERNAME>:${docker_user}:g" ${bal_path}
     sed -i "s:<PASSWORD>:${docker_password}:g" ${bal_path}
-    sed -i "s:nats.ballerina.io:${docker_user}:g" ${bal_path}
 }
 
 build_and_deploy_nats_resources() {
@@ -62,13 +60,12 @@ build_and_deploy_nats_resources() {
     ${ballerina_home}/bin/ballerina build basic
     cd ../../../../../..
     kubectl apply -f ${root_directory_path}/messaging/nats/src/test/resources/basic/target/kubernetes/basic --namespace=${cluster_namespace}
-    # wait_for_pod_readiness
-    sleep 240s
-    kubectl get nats --namespace=${cluster_namespace}
-    kubectl get pods --namespace=${cluster_namespace}
-    print_deployment_logs nats-operator
-    print_deployment_logs nats-subscriber-service-deployment
-    print_deployment_logs proxy-deployment
+    wait_for_pod_readiness
+    if [ "${is_debug_enabled}" = "true" ]; then
+        print_deployment_logs nats-operator
+        print_deployment_logs nats-subscriber-service-deployment
+        print_deployment_logs proxy-deployment
+    fi
 }
 
 retrieve_and_write_properties_to_data_bucket() {
@@ -91,8 +88,16 @@ deploy_nats_cluster() {
     kubectl create -f ${root_directory_path}/messaging/nats/src/test/resources/basic/nats-cluster.yaml --namespace=${cluster_namespace}
 
     wait_for_pod_readiness
-    kubectl get nats -o json
-    kubectl get pods -o json
+    if [ "${is_debug_enabled}" = "true" ]; then
+        kubectl get nats -o json
+        kubectl get pods -o json
+    fi
 }
 
-setup_deployment
+if setup_deployment; then
+  echo "Deployment was successfull!" >&2
+else
+  ret=$?
+  echo "Deployment failed exit code $ret" >&2
+  exit $ret
+fi
