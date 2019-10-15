@@ -21,13 +21,23 @@ import ballerina/kubernetes;
 //                RETRY CLIENT SERVICE                *
 // ****************************************************
 
-http:Client http2BackendClientEP = new ("http://http2-circuit-breaker:10201", {
+http:Client http2BackendClientEP = new ("https://http2-circuit-breaker:10201", {
     retryConfig: {
         intervalInMillis: 3000,
         count: 10,
         backOffFactor: 2.0,
         maxWaitIntervalInMillis: 20000,
         statusCodes: [400, 401, 402, 403, 404, 500, 501, 502, 503]
+    },
+    secureSocket: {
+        keyStore: {
+            path: "./security/ballerinaKeystore.p12",
+            password: "ballerina"
+        },
+        trustStore: {
+            path: "./security/ballerinaTruststore.p12",
+            password: "ballerina"
+        }
     },
     timeoutInMillis: 2000
 });
@@ -43,7 +53,19 @@ http:Client http2BackendClientEP = new ("http://http2-circuit-breaker:10201", {
     name: "http2-retry",
     path: "/"
 }
-listener http:Listener http2RetryListener = new (10101);
+listener http:Listener http2RetryListener = new (10101, {
+    httpVersion: "2.0",
+    secureSocket: {
+        keyStore: {
+            path: "./security/ballerinaKeystore.p12",
+            password: "ballerina"
+        },
+        trustStore: {
+            path: "./security/ballerinaTruststore.p12",
+            password: "ballerina"
+        }
+    }
+});
 
 int count2 = 0;
 

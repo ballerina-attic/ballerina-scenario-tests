@@ -21,6 +21,7 @@ package org.ballerinalang.scenario.test.http.resiliency;
 import org.ballerinalang.scenario.test.common.ScenarioTestBase;
 import org.ballerinalang.scenario.test.common.http.HttpClientRequest;
 import org.ballerinalang.scenario.test.common.http.HttpResponse;
+import org.ballerinalang.scenario.test.common.http.HttpsClientRequest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -36,12 +37,16 @@ public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
     private static final String host;
     private static final String http1Port;
     private static final String http2Port;
+    private static final String keystoreTruststorePath;
+
+    private static final int CONNECTION_TIMEOUT = 60000;
 
     static {
         Properties deploymentProperties = getDeploymentProperties();
         host = deploymentProperties.getProperty("ExternalIP");
         http1Port = deploymentProperties.getProperty("NodePortHttp1");
         http2Port = deploymentProperties.getProperty("NodePortHttp2");
+        keystoreTruststorePath = deploymentProperties.getProperty("keystoreTruststorePath");
     }
 
     @Test(description = "Circuit breaker with retry test - http1 to http1")
@@ -49,7 +54,7 @@ public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
         String message = "[Http1Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
                 "Retry request count: 1";
         String url = "http://" + host + ":" + http1Port + "/getResponse";
-        HttpResponse httpResponse = HttpClientRequest.doGet(url, 60000);
+        HttpResponse httpResponse = HttpClientRequest.doGet(url, CONNECTION_TIMEOUT);
         await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
         verifyResponse(httpResponse, message);
     }
@@ -58,8 +63,8 @@ public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
     public void testCircuitBreakerWithRetryHttp2() throws IOException {
         String message = "[Http2Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
                 "Retry request count: 1";
-        String url = "http://" + host + ":" + http2Port + "/getResponse";
-        HttpResponse httpResponse = HttpClientRequest.doGet(url, 60000);
+        String url = "https://" + host + ":" + http2Port + "/getResponse";
+        HttpResponse httpResponse = HttpsClientRequest.doGet(url, keystoreTruststorePath, CONNECTION_TIMEOUT);
         await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
         verifyResponse(httpResponse, message);
     }

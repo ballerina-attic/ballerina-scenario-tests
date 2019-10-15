@@ -52,8 +52,8 @@ function clone_repo_and_set_bal_path() {
 }
 
 function print_kubernetes_debug_info() {
-    kubectl get pods
-    kubectl get nodes --output wide
+    kubectl get pods --namespace=${cluster_namespace}
+    kubectl get nodes --namespace=${cluster_namespace} --output wide
 }
 
 function replace_variables_in_bal_files() {
@@ -82,19 +82,23 @@ function build_and_deploy_resources() {
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
-    local external_ip=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-    local node_port_http1=$(kubectl get svc http1-retry -o=jsonpath='{.spec.ports[0].nodePort}')
-    local node_port_http2=$(kubectl get svc http2-retry -o=jsonpath='{.spec.ports[0].nodePort}')
+    local external_ip=$(kubectl get nodes --namespace=${cluster_namespace} -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+    local node_port_http1=$(kubectl get svc http1-retry --namespace=${cluster_namespace} -o=jsonpath='{.spec.ports[0].nodePort}')
+    local node_port_http2=$(kubectl get svc http2-retry --namespace=${cluster_namespace} -o=jsonpath='{.spec.ports[0].nodePort}')
+    local security_path=${work_dir}/${DIRECTORY_NAME}/security
     declare -A deployment_props
     deployment_props["ExternalIP"]=${external_ip}
     deployment_props["NodePortHttp1"]=${node_port_http1}
     deployment_props["NodePortHttp2"]=${node_port_http2}
+    deployment_props["SecurityPath"]=${security_path}
+    echo ${security_path}
     write_to_properties_file ${output_dir}/deployment.properties deployment_props
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
         echo "ExternalIP: ${external_ip}"
         echo "NodePort [HTTP1]: ${node_port_http1}"
         echo "NodePort [HTTP2]: ${node_port_http2}"
+        echo "Security Path: ${security_path}"
     fi
 }
 
