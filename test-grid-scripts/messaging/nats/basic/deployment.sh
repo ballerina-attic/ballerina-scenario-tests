@@ -66,6 +66,9 @@ build_and_deploy_nats_resources() {
     sleep 240s
     kubectl get nats --namespace=${cluster_namespace}
     kubectl get pods --namespace=${cluster_namespace}
+    print_deployment_logs nats-operator
+    print_deployment_logs nats-subscriber-service-deployment
+    print_deployment_logs proxy-deployment
 }
 
 retrieve_and_write_properties_to_data_bucket() {
@@ -88,7 +91,8 @@ deploy_nats_cluster() {
     kubectl create -f ${root_directory_path}/messaging/nats/src/test/resources/basic/nats-cluster.yaml --namespace=${cluster_namespace}
 
     wait_for_pod_readiness
-    kubectl get nats
+    kubectl get nats -o json
+    kubectl get pods -o json
 }
 
 setup_deployment
