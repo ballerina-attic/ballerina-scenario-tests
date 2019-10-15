@@ -35,4 +35,10 @@ run_tests() {
     run_scenario_tests messaging-nats messaging nats sys_prop_array ${input_dir} ${output_dir} "NatsBasicTest"
 }
 
-run_tests
+if run_tests; then
+  echo "Tests were run successfully!" >&2
+else
+  ret=$?
+  echo "Tests failed to run successfully with exit code: $ret" >&2
+  exit $ret
+fi

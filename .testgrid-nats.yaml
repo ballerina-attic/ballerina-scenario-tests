@@ -16,7 +16,7 @@
 
 # TestGrid Test Configuration Parameters
 version: '0.9'
-emailToList: "manurip@wso2.com"
+emailToList: "manurip@wso2.com,builder@wso2.org"
 infrastructureConfig:
   infrastructureProvider: SHELL
   containerOrchestrationEngine: K8S
@@ -25,8 +25,8 @@ infrastructureConfig:
     - OracleJDK-8
   provisioners:
     - name: ballerina-deployment
-      remoteRepository: "https://github.com/Manuri/ballerina-scenario-tests.git"
-      remoteBranch: "nats"
+      remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
+      remoteBranch: "master"
       description: creates infrastructure for ballerina scenario tests
       scripts:
         - name: ballerina-deployment
@@ -42,8 +42,8 @@ deploymentConfig:
   deploymentPatterns:
     - name: 'nats-basic-client'
       description: 'NATS Basic client deployment'
-      remoteRepository: "https://github.com/Manuri/ballerina-scenario-tests.git"
-      remoteBranch: "nats"
+      remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
+      remoteBranch: "master"
       dir: .
       scripts:
         - name: 'default'
@@ -58,8 +58,8 @@ deploymentConfig:
             TestGroup: "NatsBasicTest"
 scenarioConfigs:
   - testType: TESTNG
-    remoteRepository: "https://github.com/Manuri/ballerina-scenario-tests.git"
-    remoteBranch: "nats"
+    remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
+    remoteBranch: "master"
     name: "ballerinaScenarios"
     description: "ballerina-scenarios"
     file: test-grid-scripts/messaging/nats/test-runner.sh

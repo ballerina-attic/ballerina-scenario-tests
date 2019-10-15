@@ -69,6 +69,9 @@ service Proxy on sendListener {
                 jsonResult = {"Error" : res.reason()};
             }
             var x = caller->respond(jsonResult);
+            if (res is error) {
+                log:printError("Error while responding", res);
+            }
         }
     }
 
