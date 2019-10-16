@@ -61,6 +61,7 @@ build_and_deploy_nats_resources() {
     cd ../../../../../..
     kubectl apply -f ${root_directory_path}/messaging/nats/src/test/resources/basic/target/kubernetes/basic --namespace=${cluster_namespace}
     wait_for_pod_readiness
+    local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
         print_deployment_logs nats-operator
         print_deployment_logs nats-subscriber-service-deployment
@@ -88,6 +89,7 @@ deploy_nats_cluster() {
     kubectl create -f ${root_directory_path}/messaging/nats/src/test/resources/basic/nats-cluster.yaml --namespace=${cluster_namespace}
 
     wait_for_pod_readiness
+    local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
         kubectl get nats -o json
         kubectl get pods -o json
