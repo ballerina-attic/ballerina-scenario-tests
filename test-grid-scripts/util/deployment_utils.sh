@@ -135,3 +135,18 @@ build_docker_image() {
     local image_location=$3
     docker build -t ${docker_user}/${image}:${tag} ${image_location}
 }
+
+# Prints all logs of the pods belonging to the provided deployment.
+#
+# $1 - The name of the deployment
+print_deployment_logs() {
+    echo "Printing pod logs of the deployment: $1"
+    k8s_deployment=$1
+
+    for p in $(kubectl get pods | grep ^${k8s_deployment}- | cut -f 1 -d ' '); do
+        echo ---------------------------
+        echo $p
+        echo ---------------------------
+        kubectl logs $p
+    done
+}
