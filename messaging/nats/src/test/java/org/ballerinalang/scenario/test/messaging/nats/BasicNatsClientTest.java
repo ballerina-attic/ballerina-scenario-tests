@@ -41,7 +41,7 @@ public class BasicNatsClientTest extends ScenarioTestBase {
     }
 
     @Test(description = "Test NATS connector request-reply scenario")
-    public void testArtemisConnector() throws IOException {
+    public void testNatsRequestReply() throws IOException {
         String url = "http://" + host + ":" + port + "/proxy/send";
         HttpResponse httpResponse = HttpClientRequest.doGet(url);
         Assert.assertEquals(httpResponse.getResponseCode(), 200, "Response code mismatching");
