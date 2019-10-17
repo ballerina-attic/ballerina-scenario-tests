@@ -21,7 +21,7 @@ import ballerina/kubernetes;
 //              CIRCUIT BREAKER SERVICE               *
 // ****************************************************
 
-http:Client http2BackendClient = new ("https://http2-backend:10301", {
+http:Client http2BackendClient = new ("http://backend-server-go:10400", {
     circuitBreaker: {
         rollingWindow: {
             requestVolumeThreshold: 1,
@@ -31,16 +31,6 @@ http:Client http2BackendClient = new ("https://http2-backend:10301", {
         resetTimeInMillis: 15000,
         failureThreshold: 0.3,    // If more than 3 requests failed among 10 requests, circuit trips.
         statusCodes: [400, 401, 402, 403, 404, 500, 501, 502, 503]
-    },
-    secureSocket: {
-        keyStore: {
-            path: "./security/ballerinaKeystore.p12",
-            password: "ballerina"
-        },
-        trustStore: {
-            path: "./security/ballerinaTruststore.p12",
-            password: "ballerina"
-        }
     },
     timeoutInMillis: 2000,
     httpVersion: "2.0"
@@ -58,17 +48,7 @@ http:Client http2BackendClient = new ("https://http2-backend:10301", {
     path: "/"
 }
 listener http:Listener http2CircuitBreakerListener = new (10201, {
-    httpVersion: "2.0",
-    secureSocket: {
-        keyStore: {
-            path: "./security/ballerinaKeystore.p12",
-            password: "ballerina"
-        },
-        trustStore: {
-            path: "./security/ballerinaTruststore.p12",
-            password: "ballerina"
-        }
-    }
+    httpVersion: "2.0"
 });
 
 int count2 = 0;
@@ -98,7 +78,7 @@ service CallHttp2BackendService on http2CircuitBreakerListener {
         } else {
             response.statusCode = backendResponse.statusCode;
             string responseText = <@untainted string>backendResponse.getTextPayload() +
-            " Circuit breaker request count: " + count2.toString();
+                        " Circuit breaker request count: " + count2.toString();
             response.setTextPayload(responseText);
         }
         var result = caller->respond(response);

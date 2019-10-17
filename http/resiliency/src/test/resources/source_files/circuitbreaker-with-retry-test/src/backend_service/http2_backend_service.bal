@@ -30,17 +30,7 @@ import ballerina/runtime;
 	path: "/"
 }
 listener http:Listener http2Listener = new (10301, {
-    httpVersion: "2.0",
-    secureSocket: {
-        keyStore: {
-            path: "./security/ballerinaKeystore.p12",
-            password: "ballerina"
-        },
-        trustStore: {
-            path: "./security/ballerinaTruststore.p12",
-            password: "ballerina"
-        }
-    }
+    httpVersion: "2.0"
 });
 
 @kubernetes:Deployment {
