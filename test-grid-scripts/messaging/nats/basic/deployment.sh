@@ -38,9 +38,9 @@ setup_deployment() {
 ## Functions
 
 print_kubernetes_debug_info() {
-    kubectl get pods
-    kubectl get svc proxy-service -o=json
-    kubectl get nodes --output wide
+    kubectl get pods --namespace=${cluster_namespace}
+    kubectl get svc proxy-service -o=json --namespace=${cluster_namespace}
+    kubectl get nodes --output wide --namespace=${cluster_namespace}
 }
 
 replace_variables_in_bal_files() {
@@ -70,8 +70,8 @@ build_and_deploy_nats_resources() {
 }
 
 retrieve_and_write_properties_to_data_bucket() {
-    local external_ip=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-    local node_port=$(kubectl get svc proxy-service -o=jsonpath='{.spec.ports[0].nodePort}')
+    local external_ip=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}' --namespace=${cluster_namespace})
+    local node_port=$(kubectl get svc proxy-service -o=jsonpath='{.spec.ports[0].nodePort}' --namespace=${cluster_namespace})
     declare -A deployment_props
     deployment_props["ExternalIP"]=${external_ip}
     deployment_props["NodePort"]=${node_port}
@@ -91,8 +91,8 @@ deploy_nats_cluster() {
     wait_for_pod_readiness
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
-        kubectl get nats -o json
-        kubectl get pods -o json
+        kubectl get nats -o json --namespace=${cluster_namespace}
+        kubectl get pods -o json --namespace=${cluster_namespace}
     fi
 }
 
