@@ -17,10 +17,6 @@
 import ballerina/http;
 import ballerina/kubernetes;
 
-// ****************************************************
-//                RETRY CLIENT SERVICE                *
-// ****************************************************
-
 http:Client backendClientEP = new ("http://http1-circuit-breaker:10200", {
     retryConfig: {
         intervalInMillis: 3000,

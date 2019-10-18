@@ -17,10 +17,6 @@
 import ballerina/http;
 import ballerina/kubernetes;
 
-// ****************************************************
-//              CIRCUIT BREAKER SERVICE               *
-// ****************************************************
-
 http:Client http2BackendClient = new ("http://backend-server-go:10400", {
     circuitBreaker: {
         rollingWindow: {

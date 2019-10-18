@@ -17,10 +17,6 @@
 import ballerina/http;
 import ballerina/kubernetes;
 
-// ****************************************************
-//              CIRCUIT BREAKER SERVICE               *
-// ****************************************************
-
 http:RollingWindow rollingWindowConfig = {
     requestVolumeThreshold: 1,
     timeWindowInMillis: 20000,
