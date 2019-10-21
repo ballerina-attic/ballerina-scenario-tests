@@ -16,10 +16,7 @@
 
 import ballerina/http;
 import ballerina/kubernetes;
-
-// ****************************************************
-//                RETRY CLIENT SERVICE                *
-// ****************************************************
+import commons;
 
 http:Client backendClientEP = new ("http://http1-circuit-breaker:10200", {
     retryConfig: {
@@ -29,8 +26,7 @@ http:Client backendClientEP = new ("http://http1-circuit-breaker:10200", {
         maxWaitIntervalInMillis: 20000,
         statusCodes: [400, 401, 402, 403, 404, 500, 501, 502, 503]
     },
-    timeoutInMillis: 2000,
-    httpVersion: "2.0"
+    timeoutInMillis: 2000
 });
 
 @kubernetes:Service {
@@ -76,5 +72,6 @@ service RetryService on retryListener {
             response.setTextPayload(backendResponsePayload + " Retry request count: " + count1.toString());
         }
         var sendResult = caller->respond(response);
+        commons:handleResult(sendResult, "[HTTP/1 Retry]");
     }
 }

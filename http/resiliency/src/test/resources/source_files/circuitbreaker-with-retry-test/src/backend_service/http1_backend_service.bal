@@ -18,10 +18,6 @@ import ballerina/http;
 import ballerina/kubernetes;
 import ballerina/runtime;
 
-// ****************************************************
-//                  BACKEND SERVICE                   *
-// ****************************************************
-
 @kubernetes:Service {
     serviceType: "NodePort",
     name: "http1-backend",
@@ -34,9 +30,6 @@ import ballerina/runtime;
 	path: "/"
 }
 listener http:Listener http1Listener= new(10300);
-
-int count1 = 0;
-string http1ServicePrefix = "[Http1Service] ";
 
 @kubernetes:Deployment {
     image:"cb-with-retry.ballerina.io/http1-backend:v1.0",
@@ -69,16 +62,4 @@ service Http1Service on http1Listener {
             sendNormalResponse(caller, response, http1ServicePrefix, count1);
         }
     }
-}
-
-function sendNormalResponse(http:Caller caller, http:Response response, string prefix, int count) {
-    string message = prefix + "OK response. Backend request count: " + count.toString();
-    response.setPayload(message);
-    var result = caller->respond(response);
-}
-
-function sendErrorResponse(http:Caller caller, http:Response response, string prefix, int count) {
-    response.statusCode = 501;
-    response.setPayload(prefix + "Internal error occurred. Backend request count: " + count.toString());
-    var result = caller->respond(response);
 }

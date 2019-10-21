@@ -37,6 +37,8 @@ public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
     private static final String http1Port;
     private static final String http2Port;
 
+    private static final int CONNECTION_TIMEOUT = 60000;
+
     static {
         Properties deploymentProperties = getDeploymentProperties();
         host = deploymentProperties.getProperty("ExternalIP");
@@ -49,7 +51,7 @@ public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
         String message = "[Http1Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
                 "Retry request count: 1";
         String url = "http://" + host + ":" + http1Port + "/getResponse";
-        HttpResponse httpResponse = HttpClientRequest.doGet(url, 60000);
+        HttpResponse httpResponse = HttpClientRequest.doGet(url, CONNECTION_TIMEOUT);
         await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
         verifyResponse(httpResponse, message);
     }
@@ -59,7 +61,7 @@ public class CircuitBreakerWithRetryTest extends ScenarioTestBase {
         String message = "[Http2Service] OK response. Backend request count: 3 Circuit breaker request count: 5 " +
                 "Retry request count: 1";
         String url = "http://" + host + ":" + http2Port + "/getResponse";
-        HttpResponse httpResponse = HttpClientRequest.doGet(url, 60000);
+        HttpResponse httpResponse = HttpClientRequest.doGet(url, CONNECTION_TIMEOUT);
         await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
         verifyResponse(httpResponse, message);
     }

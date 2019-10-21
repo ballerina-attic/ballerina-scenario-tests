@@ -18,10 +18,6 @@ import ballerina/http;
 import ballerina/kubernetes;
 import ballerina/runtime;
 
-// ****************************************************
-//                  BACKEND SERVICE                   *
-// ****************************************************
-
 @kubernetes:Service {
     serviceType: "NodePort",
     name: "http2-backend",
@@ -33,20 +29,17 @@ import ballerina/runtime;
 	name: "http2-backend",
 	path: "/"
 }
-listener http:Listener http2Listener= new(10301, {
+listener http:Listener http2Listener = new (10301, {
     httpVersion: "2.0"
 });
 
-int count2 = 0;
-string http2ServicePrefix = "[Http2Service] ";
-
 @kubernetes:Deployment {
-    image:"cb-with-retry.ballerina.io/http2-backend:v1.0",
-    name:"http2-backend",
-    username:"<USERNAME>",
-    password:"<PASSWORD>",
-    push:true,
-    imagePullPolicy:"Always"
+    image: "cb-with-retry.ballerina.io/http2-backend:v1.0",
+    name: "http2-backend",
+    username: "<USERNAME>",
+    password: "<PASSWORD>",
+    push: true,
+    imagePullPolicy: "Always"
 }
 @http:ServiceConfig {
     basePath: "/"
@@ -54,7 +47,7 @@ string http2ServicePrefix = "[Http2Service] ";
 service Http2Service on http2Listener {
     @http:ResourceConfig {
         methods: ["GET"]
-	}
+    }
     resource function getResponse(http:Caller caller, http:Request req) {
         count2 += 1;
         http:Response response = new;

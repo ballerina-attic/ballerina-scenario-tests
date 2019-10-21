@@ -23,6 +23,7 @@ function run_tests() {
     local external_ip=${deployment_config["ExternalIP"]}
     local node_port_http1=${deployment_config["NodePortHttp1"]}
     local node_port_http2=${deployment_config["NodePortHttp2"]}
+    local security_path=${deployment_config["SecurityPath"]}
 
     local is_debug_enabled=${deployment_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
@@ -33,6 +34,7 @@ function run_tests() {
     sys_prop_array["resiliency.service.host"]=${external_ip}
     sys_prop_array["resiliency.service.port.http1"]=${node_port_http1}
     sys_prop_array["resiliency.service.port.http2"]=${node_port_http1}
+    sys_prop_array["resiliency.service.security.path"]=${security_path}
 
     # Builds and run tests of the given connector section and copies resulting surefire reports to output directory
     run_scenario_tests http-resiliency http resiliency sys_prop_array ${input_dir} ${output_dir} "CircuitBreakerWithRetry"

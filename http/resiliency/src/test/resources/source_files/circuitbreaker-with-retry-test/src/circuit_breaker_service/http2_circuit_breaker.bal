@@ -16,12 +16,9 @@
 
 import ballerina/http;
 import ballerina/kubernetes;
+import commons;
 
-// ****************************************************
-//              CIRCUIT BREAKER SERVICE               *
-// ****************************************************
-
-http:Client http2BackendClient = new ("http://http2-backend:10301", {
+http:Client http2BackendClient = new ("http://backend-server-go:10400", {
     circuitBreaker: {
         rollingWindow: {
             requestVolumeThreshold: 1,
@@ -78,10 +75,11 @@ service CallHttp2BackendService on http2CircuitBreakerListener {
         } else {
             response.statusCode = backendResponse.statusCode;
             string responseText = <@untainted string>backendResponse.getTextPayload() +
-            " Circuit breaker request count: " + count2.toString();
+                        " Circuit breaker request count: " + count2.toString();
             response.setTextPayload(responseText);
         }
         var result = caller->respond(response);
+        commons:handleResult(result, "[HTTP/2 Circuit Breaker]");
     }
 }
 

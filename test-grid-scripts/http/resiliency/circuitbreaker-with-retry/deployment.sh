@@ -25,8 +25,10 @@ readonly deployment_cb_with_retry_great_great_grand_parent_path=$(dirname ${depl
 
 function setup_deployment() {
     clone_repo_and_set_bal_path
-    replace_variables_in_bal_files
+    replace_variables_in_files
+    build_and_deploy_go_backend
     build_and_deploy_resources
+    print_kubernetes_debug_info
     wait_for_pod_readiness
     retrieve_and_write_properties_to_data_bucket
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
@@ -49,27 +51,39 @@ function clone_repo_and_set_bal_path() {
     http2_cb_bal_path=${DIRECTORY_NAME}/src/circuit_breaker_service/http2_circuit_breaker.bal
     http1_retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http1_retry.bal
     http2_retry_bal_path=${DIRECTORY_NAME}/src/retry_service/http2_retry.bal
+    go_yaml_path=${DIRECTORY_NAME}/backend_service_go/backend-service-go.yaml
 }
 
 function print_kubernetes_debug_info() {
-    kubectl get pods
-    kubectl get nodes --output wide
+    kubectl get pods --namespace=${cluster_namespace}
+    kubectl get nodes --namespace=${cluster_namespace} --output wide
 }
 
-function replace_variables_in_bal_files() {
-    replace_variables_in_bal_file ${http1_backend_bal_path}
-    replace_variables_in_bal_file ${http2_backend_bal_path}
-    replace_variables_in_bal_file ${http1_cb_bal_path}
-    replace_variables_in_bal_file ${http2_cb_bal_path}
-    replace_variables_in_bal_file ${http1_retry_bal_path}
-    replace_variables_in_bal_file ${http2_retry_bal_path}
+function replace_variables_in_files() {
+    replace_variables_in_file ${http1_backend_bal_path}
+    replace_variables_in_file ${http2_backend_bal_path}
+    replace_variables_in_file ${http1_cb_bal_path}
+    replace_variables_in_file ${http2_cb_bal_path}
+    replace_variables_in_file ${http1_retry_bal_path}
+    replace_variables_in_file ${http2_retry_bal_path}
+    replace_variables_in_file ${go_yaml_path}
 }
 
-function replace_variables_in_bal_file() {
+function replace_variables_in_file() {
     local bal_path=$1
     sed -i "s:<USERNAME>:${docker_user}:g" ${bal_path}
     sed -i "s:<PASSWORD>:${docker_password}:g" ${bal_path}
     sed -i "s:cb-with-retry.ballerina.io:${docker_user}:g" ${bal_path}
+}
+
+function build_and_deploy_go_backend() {
+  cd ${DIRECTORY_NAME}
+  cd backend_service_go
+  docker login --username=${docker_user} --password=${docker_password}
+  docker build -t ${docker_user}/resiliency_backend_service:v1 .
+  docker push ${docker_user}/resiliency_backend_service:v1
+  kubectl create -f backend-service-go.yaml
+  cd ${deployment_cb_with_retry_great_great_grand_parent_path}/..
 }
 
 function build_and_deploy_resources() {
@@ -82,19 +96,23 @@ function build_and_deploy_resources() {
 }
 
 function retrieve_and_write_properties_to_data_bucket() {
-    local external_ip=$(kubectl get nodes -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-    local node_port_http1=$(kubectl get svc http1-retry -o=jsonpath='{.spec.ports[0].nodePort}')
-    local node_port_http2=$(kubectl get svc http2-retry -o=jsonpath='{.spec.ports[0].nodePort}')
+    local external_ip=$(kubectl get nodes --namespace=${cluster_namespace} -o=jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+    local node_port_http1=$(kubectl get svc http1-retry --namespace=${cluster_namespace} -o=jsonpath='{.spec.ports[0].nodePort}')
+    local node_port_http2=$(kubectl get svc http2-retry --namespace=${cluster_namespace} -o=jsonpath='{.spec.ports[0].nodePort}')
+    local security_path=${work_dir}/${DIRECTORY_NAME}/security
     declare -A deployment_props
     deployment_props["ExternalIP"]=${external_ip}
     deployment_props["NodePortHttp1"]=${node_port_http1}
     deployment_props["NodePortHttp2"]=${node_port_http2}
+    deployment_props["SecurityPath"]=${security_path}
+    echo ${security_path}
     write_to_properties_file ${output_dir}/deployment.properties deployment_props
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
         echo "ExternalIP: ${external_ip}"
         echo "NodePort [HTTP1]: ${node_port_http1}"
         echo "NodePort [HTTP2]: ${node_port_http2}"
+        echo "Security Path: ${security_path}"
     fi
 }
 
