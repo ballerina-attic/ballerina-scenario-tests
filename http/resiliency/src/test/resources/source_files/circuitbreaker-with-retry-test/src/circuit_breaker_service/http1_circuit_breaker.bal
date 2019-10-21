@@ -16,6 +16,7 @@
 
 import ballerina/http;
 import ballerina/kubernetes;
+import commons;
 
 http:RollingWindow rollingWindowConfig = {
     requestVolumeThreshold: 1,
@@ -81,5 +82,6 @@ service CallBackendService on circuitBreakerListener {
             response.setTextPayload(responseText);
         }
         var result = caller->respond(response);
+        commons:handleResult(result, "[HTTP/1 Circuit Breaker]");
     }
 }

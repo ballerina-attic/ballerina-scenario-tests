@@ -16,6 +16,7 @@
 
 import ballerina/http;
 import ballerina/kubernetes;
+import commons;
 
 http:Client http2BackendClientEP = new ("http://http2-circuit-breaker:10201", {
     retryConfig: {
@@ -74,6 +75,7 @@ service Http2RetryService on http2RetryListener {
             response.setTextPayload(backendResponsePayload + " Retry request count: " + count2.toString());
         }
         var sendResult = caller->respond(response);
+        commons:handleResult(sendResult, "[HTTP/1 Retry]");
     }
 }
 

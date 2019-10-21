@@ -16,6 +16,7 @@
 
 import ballerina/http;
 import ballerina/kubernetes;
+import commons;
 
 http:Client http2BackendClient = new ("http://backend-server-go:10400", {
     circuitBreaker: {
@@ -78,6 +79,7 @@ service CallHttp2BackendService on http2CircuitBreakerListener {
             response.setTextPayload(responseText);
         }
         var result = caller->respond(response);
+        commons:handleResult(result, "[HTTP/2 Circuit Breaker]");
     }
 }
 
