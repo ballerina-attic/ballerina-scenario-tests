@@ -50,7 +50,13 @@ public class SelectTest extends ScenarioTestBase {
     private String userName;
     private String password;
     private Path resourcePath;
-    private static final String DISABLED = "disabled";
+    private static long date;
+    private static long time;
+    private static long datetime;
+    private static long datetime2;
+    private static long smallDatetime;
+    private static long dateTimeOffset;
+    private BValue[] args = new BValue[6];
 
     @BeforeSuite
     public void createDatabase() throws Exception {
@@ -84,6 +90,7 @@ public class SelectTest extends ScenarioTestBase {
                 Paths.get(resourcePath.toString(), "sql-src", "dml-select-test.sql"));
         selectCompileResult = BCompileUtil
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "select-test.bal").toString());
+        setupDateTimeData();
     }
 
     @Test(description = "Test integer type selection query.")
@@ -203,23 +210,36 @@ public class SelectTest extends ScenarioTestBase {
         AssertionUtil.assertNullValues((BMap) returns[0], 4, "id");
     }
 
-    @Test(description = "Test date time type selection query", groups = { DISABLED })
+    @Test(description = "Test date time type selection query")
     public void testDateTimeTypes() {
         BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypes");
         Assert.assertTrue(returns[0] instanceof BMap);
         BMap dateTimeTypeRecord = (BMap) returns[0];
-        String[] fieldValues = {
-                "2007-05-08", "2007-05-08 12:35:29.1234567 +12:15", "2007-05-08 12:35:29.123",
-                "2007-05-08 12:35:29.1234567", "2007-05-08 12:35:00", "12:35:29.1234567"
-        };
-        AssertionUtil.assertNonNullStringValues(dateTimeTypeRecord, 7, fieldValues, "id");
+        MssqlUtils.assertDateValues(dateTimeTypeRecord, date, time, datetime, datetime2, smallDatetime, dateTimeOffset);
     }
 
-    @Test(description = "Test nil date time type selection query", groups = { DISABLED })
+    @Test(description = "Test nil date time type selection query")
     public void testDateTimeTypesNil() {
         BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesNil");
         Assert.assertTrue(returns[0] instanceof BMap);
         AssertionUtil.assertNullValues((BMap) returns[0], 7, "id");
+    }
+
+    private void setupDateTimeData() {
+        date = MssqlUtils.getDateValue();
+        time = MssqlUtils.getTimeValue();
+        datetime = MssqlUtils.getDateTimeValue();
+        datetime2 = MssqlUtils.getDateTime2Value();
+        smallDatetime = MssqlUtils.getSmallDateTimeValue();
+        dateTimeOffset = MssqlUtils.getDateTimeOffsetValue();
+        args[0] = new BInteger(date);
+        args[1] = new BInteger(time);
+        args[2] = new BInteger(datetime);
+        args[3] = new BInteger(datetime2);
+        args[4] = new BInteger(smallDatetime);
+        args[5] = new BInteger(dateTimeOffset);
+
+        BRunUtil.invoke(selectCompileResult, "setUpDatetimeData", args);
     }
 
     private long getIntValFromBMap(BMap bMap, String key) {

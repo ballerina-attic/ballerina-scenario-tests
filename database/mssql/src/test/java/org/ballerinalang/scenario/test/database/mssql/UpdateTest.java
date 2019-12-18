@@ -51,7 +51,7 @@ public class UpdateTest extends ScenarioTestBase {
     private String userName;
     private String password;
     private Path resourcePath;
-    private static final String DISABLED = "disabled";
+    private BValue[] args = new BValue[6];
 
     @BeforeClass
     public void setup() throws Exception {
@@ -214,17 +214,27 @@ public class UpdateTest extends ScenarioTestBase {
         }
     }
 
-    @Test(description = "Test update datetime types with params", groups = { DISABLED })
+    @Test(description = "Test update datetime types with params")
     public void testUpdateDateTimeWithValuesParam() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateDateTimeWithValuesParam");
+        long date = MssqlUtils.getDateValue();
+        long time = MssqlUtils.getTimeValue();
+        long datetime = MssqlUtils.getDateTimeValue();
+        long datetime2 = MssqlUtils.getDateTime2Value();
+        long smallDatetime = MssqlUtils.getSmallDateTimeValue();
+        long dateTimeOffset = MssqlUtils.getDateTimeOffsetValue();
+
+        args[0] = new BInteger(date);
+        args[1] = new BInteger(time);
+        args[2] = new BInteger(datetime);
+        args[3] = new BInteger(datetime2);
+        args[4] = new BInteger(smallDatetime);
+        args[5] = new BInteger(dateTimeOffset);
+
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateDateTimeWithValuesParam", args);
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
         Assert.assertTrue(returns[1] instanceof BMap);
         BMap dateTimeTypeRecord = (BMap) returns[1];
-        String[] fieldValues = {
-                "2007-05-08", "2007-05-08 12:35:29.1234567 +12:15", "2007-05-08 12:35:29.123",
-                "2007-05-08 12:35:29.1234567", "2007-05-08 12:35:00", "12:35:29.1234567"
-        };
-        AssertionUtil.assertNonNullStringValues(dateTimeTypeRecord, 7, fieldValues, "id");
+        MssqlUtils.assertDateValues(dateTimeTypeRecord, date, time, datetime, datetime2, smallDatetime, dateTimeOffset);
     }
 
     @Test(description = "Test Update with generated keys")
