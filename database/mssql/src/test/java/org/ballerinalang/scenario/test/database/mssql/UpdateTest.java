@@ -51,6 +51,7 @@ public class UpdateTest extends ScenarioTestBase {
     private String userName;
     private String password;
     private Path resourcePath;
+    private BValue[] args = new BValue[6];
 
     @BeforeClass
     public void setup() throws Exception {
@@ -215,21 +216,25 @@ public class UpdateTest extends ScenarioTestBase {
 
     @Test(description = "Test update datetime types with params")
     public void testUpdateDateTimeWithValuesParam() {
-        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateDateTimeWithValuesParam");
+        long date = MssqlUtils.getDateValue();
+        long time = MssqlUtils.getTimeValue();
+        long datetime = MssqlUtils.getDateTimeValue();
+        long datetime2 = MssqlUtils.getDateTime2Value();
+        long smallDatetime = MssqlUtils.getSmallDateTimeValue();
+        long dateTimeOffset = MssqlUtils.getDateTimeOffsetValue();
+
+        args[0] = new BInteger(date);
+        args[1] = new BInteger(time);
+        args[2] = new BInteger(datetime);
+        args[3] = new BInteger(datetime2);
+        args[4] = new BInteger(smallDatetime);
+        args[5] = new BInteger(dateTimeOffset);
+
+        BValue[] returns = BRunUtil.invoke(updateCompileResult, "testUpdateDateTimeWithValuesParam", args);
         AssertionUtil.assertUpdateQueryReturnValue(returns[0], 1);
         Assert.assertTrue(returns[1] instanceof BMap);
         BMap dateTimeTypeRecord = (BMap) returns[1];
-        String[] fieldValues = {
-                "2007-05-08", "2007-05-08T12:35:29.123+05:30", "2007-05-08T12:35:29.450",
-                "2007-05-08T12:35:29.123", "2007-05-08T12:35:00", "12:35:29.123"
-        };
-        MssqlUtils.assertDateTimeValues(
-                dateTimeTypeRecord.get("dateVal").stringValue(),
-                dateTimeTypeRecord.get("dateTimeOffsetVal").stringValue(),
-                dateTimeTypeRecord.get("dateTimeVal").stringValue(),
-                dateTimeTypeRecord.get("dateTime2Val").stringValue(),
-                dateTimeTypeRecord.get("smallDateTimeVal").stringValue(),
-                dateTimeTypeRecord.get("timeVal").stringValue(), fieldValues);
+        MssqlUtils.assertDateValues(dateTimeTypeRecord, date, time, datetime, datetime2, smallDatetime, dateTimeOffset);
     }
 
     @Test(description = "Test Update with generated keys")

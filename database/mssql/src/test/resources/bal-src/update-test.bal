@@ -166,14 +166,15 @@ function testUpdateComplexTypesWithParams() returns @tainted [jdbc:UpdateResult|
     return [updateRet, selectRet];
 }
 
-function testUpdateDateTimeWithValuesParam() returns @tainted [jdbc:UpdateResult|error, record{}|error] {
+function testUpdateDateTimeWithValuesParam(int date, int time, int datetime, int datetime2, int smallDatetime,
+                                        int dateTimeOffset) returns @tainted [jdbc:UpdateResult|error, record{}|error] {
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 1 };
-    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: "2007-05-08" };
-    jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "2007-05-08T12:35:29.123+05:30" };
-    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.45+05:30" };
-    jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30" };
-    jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30" };
-    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: "12:35:29.123+05:30" };
+    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: date };
+    jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: dateTimeOffset };
+    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: datetime };
+    jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, value: datetime2 };
+    jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: smallDatetime };
+    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: time };
 
     var updateRet = runInsertQueryWithParams("SELECT_UPDATE_TEST_DATETIME_TYPES", id, dateVal, dateTimeOffsetVal,
                                               dateTimeVal, dateTime2Val, smallDateTimeVal, timeVal);

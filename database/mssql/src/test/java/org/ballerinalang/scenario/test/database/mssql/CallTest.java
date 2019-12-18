@@ -49,6 +49,13 @@ public class CallTest extends ScenarioTestBase {
     private String userName;
     private String password;
     private Path resourcePath;
+    private static long date;
+    private static long time;
+    private static long datetime;
+    private static long datetime2;
+    private static long smallDatetime;
+    private static long dateTimeOffset;
+    private BValue[] args = new BValue[6];
 
     @BeforeClass
     public void setup() throws Exception {
@@ -73,6 +80,7 @@ public class CallTest extends ScenarioTestBase {
                 Paths.get(resourcePath.toString(), "sql-src", "dml-call-test.sql"));
         callCompilerResult = BCompileUtil
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "call-test.bal").toString());
+        setupDateTimeData();
     }
 
     @Test(description = "Test Integer type IN params")
@@ -208,27 +216,32 @@ public class CallTest extends ScenarioTestBase {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamDateTimeValues");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray valueArray = (BValueArray) returns[1];
-        String[] fieldValues = {
-                "2007-05-08", "2007-05-08T12:35:29.123+05:30", "2007-05-08T12:35:29.450",
-                "2007-05-08T12:35:29.123", "2007-05-08T12:35:00", "12:35:29.123"
-        };
-        MssqlUtils.assertDateTimeValues(valueArray.getBValue(0).stringValue(), valueArray.getBValue(1).stringValue(),
-                valueArray.getBValue(2).stringValue(), valueArray.getBValue(3).stringValue(),
-                valueArray.getBValue(4).stringValue(), valueArray.getBValue(5).stringValue(), fieldValues);
+        MssqlUtils.assertDateValues(valueArray, date, time, datetime, datetime2, smallDatetime, dateTimeOffset);
     }
 
     @Test(description = "Test datetime type INOUT params")
     public void testCallInOutParamDateTimeValues() {
-        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamDateTimeValues");
+        BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamDateTimeValues", args);
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
         BValueArray valueArray = (BValueArray) returns[1];
-        String[] fieldValues = {
-                "2007-05-08", "2007-05-08T12:35:29.123+05:30", "2007-05-08T12:35:29.450",
-                "2007-05-08T12:35:29.123", "2007-05-08T12:35:00", "12:35:29.123"
-        };
-        MssqlUtils.assertDateTimeValues(valueArray.getBValue(0).stringValue(), valueArray.getBValue(1).stringValue(),
-                valueArray.getBValue(2).stringValue(), valueArray.getBValue(3).stringValue(),
-                valueArray.getBValue(4).stringValue(), valueArray.getBValue(5).stringValue(), fieldValues);
+        MssqlUtils.assertDateValues(valueArray, date, time, datetime, datetime2, smallDatetime, dateTimeOffset);
+    }
+
+    private void setupDateTimeData() {
+        date = MssqlUtils.getDateValue();
+        time = MssqlUtils.getTimeValue();
+        datetime = MssqlUtils.getDateTimeValue();
+        datetime2 = MssqlUtils.getDateTime2Value();
+        smallDatetime = MssqlUtils.getSmallDateTimeValue();
+        dateTimeOffset = MssqlUtils.getDateTimeOffsetValue();
+        args[0] = new BInteger(date);
+        args[1] = new BInteger(time);
+        args[2] = new BInteger(datetime);
+        args[3] = new BInteger(datetime2);
+        args[4] = new BInteger(smallDatetime);
+        args[5] = new BInteger(dateTimeOffset);
+
+        BRunUtil.invoke(callCompilerResult, "setUpDatetimeData", args);
     }
 
     @Test(description = "Test complex type IN params")

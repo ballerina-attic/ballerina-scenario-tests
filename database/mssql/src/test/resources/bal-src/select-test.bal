@@ -144,16 +144,16 @@ function runSelectSetQuery(string tableName, string id, typedesc<record{}> recor
     return returnedRecord;
 }
 
-function setUpDatetimeData() {
+function setUpDatetimeData(int date, int time, int datetime, int datetime2, int smallDatetime, int dateTimeOffset) {
     string stmt = "INSERT INTO SELECT_UPDATE_TEST_DATETIME_TYPES values (?,?,?,?,?,?,?)";
 
     jdbc:Parameter id = { sqlType: jdbc:TYPE_INTEGER, value: 3 };
-    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: "2007-05-08" };
-    jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: "2007-05-08T12:35:29.123+05:30" };
-    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.45+05:30" };
-    jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30" };
-    jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: "2007-05-08T12:35:29.123+05:30" };
-    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: "12:35:29.123+05:30" };
+    jdbc:Parameter dateVal = { sqlType: jdbc:TYPE_DATE, value: date };
+    jdbc:Parameter dateTimeOffsetVal = { sqlType: jdbc:TYPE_TIMESTAMP, value: dateTimeOffset };
+    jdbc:Parameter dateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: datetime };
+    jdbc:Parameter dateTime2Val = { sqlType: jdbc:TYPE_DATETIME, value: datetime2 };
+    jdbc:Parameter smallDateTimeVal = { sqlType: jdbc:TYPE_DATETIME, value: smallDatetime };
+    jdbc:Parameter timeVal = { sqlType: jdbc:TYPE_TIME, value: time };
 
     var insertRet = testDB->update(stmt, id, dateVal, dateTimeOffsetVal, dateTimeVal, dateTime2Val, smallDateTimeVal,
                                     timeVal);
