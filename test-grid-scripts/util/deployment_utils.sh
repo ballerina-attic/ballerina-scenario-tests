@@ -62,17 +62,21 @@ install_ballerina_nightly() {
 # $1 - link to download Ballerina
 install_ballerina_from_link() {
     mkdir ${utils_parent_path}/temp_ballerina_download
-    echo "Downloading Ballerina pack from: $1"
-    wget $1 -P ${utils_parent_path}/temp_ballerina_download
+    local pack_location="https://ballerina-test-pack.s3.amazonaws.com/ballerina-pack.zip"
+    echo "Downloading Ballerina pack from: ${pack_location}"
+    wget ${pack_location} -P ${utils_parent_path}/temp_ballerina_download --quiet
     local wget_output=$?
     if [ ${wget_output} -ne 0 ]; then
         echo "Ballerina download failed!"
         exit 2;
     fi
-    local ballerina_dist=$(ls ${utils_parent_path}/temp_ballerina_download | head -1)
-    unzip -q ${utils_parent_path}/temp_ballerina_download/${ballerina_dist} -d ${utils_parent_path}
-    local ballerina_home_dir_name=$(sed "s:.zip::g" <<< ${ballerina_dist})
+    local ballerina_dist="ballerina-pack.zip"
+    local ballerina_home_dir_name="ballerina_home"
+    unzip -q ${utils_parent_path}/temp_ballerina_download/${ballerina_dist} -d ${utils_parent_path}/temp_ballerina_download
+    rm ${utils_parent_path}/temp_ballerina_download/${ballerina_dist}
+    mv ${utils_parent_path}/temp_ballerina_download/ballerina* ${utils_parent_path}/${ballerina_home_dir_name}
     readonly ballerina_home=${utils_parent_path}/${ballerina_home_dir_name}
+    ${ballerina_home}/bin/ballerina -v
 }
 # Downloads and extracts the MySQL connector
 #
