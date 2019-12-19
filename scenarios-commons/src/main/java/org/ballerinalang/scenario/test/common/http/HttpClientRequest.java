@@ -126,6 +126,20 @@ public class HttpClientRequest {
     }
 
     /**
+     * Send an HTTP POST request to a service.
+     *
+     * @param endpoint - service endpoint
+     * @param postBody - message payload
+     * @param headers  http request headers map
+     * @return - HttpResponse from end point
+     * @throws IOException If an error occurs while sending the POST request
+     */
+    public static HttpResponse doPost(String endpoint, String postBody, Map<String, String> headers, int timeout)
+            throws IOException {
+        return executeRequestWithRequestBody(endpoint, postBody, headers, TestConstant.HTTP_METHOD_POST);
+    }
+
+    /**
      * Send an HTTP PUT request to a service.
      *
      * @param endpoint - service endpoint
@@ -171,6 +185,29 @@ public class HttpClientRequest {
         HttpURLConnection urlConnection = null;
         try {
             urlConnection = getURLConnection(endpoint);
+            setHeadersAndMethod(urlConnection, headers, httpMethod);
+            OutputStream out = urlConnection.getOutputStream();
+            try {
+                Writer writer = new OutputStreamWriter(out, TestConstant.CHARSET_NAME);
+                writer.write(postBody);
+                writer.close();
+            } finally {
+                out.close();
+            }
+            return buildResponse(urlConnection);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+    }
+
+    private static HttpResponse executeRequestWithRequestBody(String endpoint, String postBody,
+                                                              Map<String, String> headers, String httpMethod,
+                                                              int timeout) throws IOException {
+        HttpURLConnection urlConnection = null;
+        try {
+            urlConnection = getURLConnection(endpoint, timeout);
             setHeadersAndMethod(urlConnection, headers, httpMethod);
             OutputStream out = urlConnection.getOutputStream();
             try {
