@@ -1,8 +1,7 @@
 import ballerina/http;
 import ballerina/kafka;
-import ballerina/lang.'string
-
-import ballerinax/kubernetes;
+import ballerina/kubernetes;
+import ballerina/lang.'string;
 
 string resultString = "";
 
@@ -12,7 +11,7 @@ kafka:ConsumerConfig consumerConfig = {
     clientId: "simple-consumer",
     offsetReset: "earliest",
     topics: ["kafka-test-topic"]
-}
+};
 
 listener kafka:Consumer kafkaConsumer = new(consumerConfig);
 
@@ -20,7 +19,13 @@ service KafkaService on kafkaConsumer {
     resource function onMessage(kafka:Consumer consumer, kafka:ConsumerRecord[] records) {
         foreach var kafkaRecord in records {
             byte[] serializedMessage = kafkaRecord.value;
-            resultString = 'string:fromBytes(serializedMsg);
+            var result = 'string:fromBytes(serializedMessage);
+
+            if (result is string) {
+                resultString = <@untainted string>result;
+            } else {
+                resultString = "Error converting from bytes";
+            }
         }
     }
 }

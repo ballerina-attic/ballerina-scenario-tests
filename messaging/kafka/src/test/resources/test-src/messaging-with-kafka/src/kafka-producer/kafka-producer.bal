@@ -1,20 +1,18 @@
 import ballerina/http;
 import ballerina/kafka;
-import ballerina/lang.'string
-
-import ballerinax/kubernetes;
+import ballerina/kubernetes;
 
 string kafkaTopic = "kafka-test-topic";
 string resultString = "";
 
 kafka:ProducerConfig producerConfig = {
     bootstrapServers: "kafka-service:9092",
-    clientID: "kafka-producer",
+    clientId: "kafka-producer",
     acks: "all",
-    noRetries: 3
-}
+    retryCount: 3
+};
 
-listener kafka:Producer kafkaProducer = new(producerConfig);
+kafka:Producer kafkaProducer = new(producerConfig);
 
 @kubernetes:Service {
     serviceType: "NodePort",
@@ -46,7 +44,8 @@ service HttpService on producerHttpListener {
         var requestPayload = request.getTextPayload();
 
         if (requestPayload is error) {
-            response.setPayload("Retrieving the payload from the HTTP request failed" + requestPayload.toString());
+            response.setPayload("Retrieving the payload from the HTTP request failed"
+                            + <@untainted string>requestPayload.toString());
             response.statusCode = 400;
         } else {
             byte[] serializedMessage = requestPayload.toBytes();

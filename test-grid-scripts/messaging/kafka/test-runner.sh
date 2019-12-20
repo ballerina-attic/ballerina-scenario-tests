@@ -22,9 +22,10 @@ readonly dir_test_grid_scripts=$(dirname ${dir_messaging})
 . ${dir_test_grid_scripts}/common/usage.sh
 . ${dir_test_grid_scripts}/setup/setup_test_env.sh
 
+echo ${dir_test_grid_scripts}
+
 run_provided_test() {
     local test_group_to_run=${deployment_config["TestGroup"]}
-
     if [ "${test_group_to_run}" = "KafkaMessagingTest" ]; then
         . ${dir_kafka}/test.sh
     fi

@@ -21,8 +21,13 @@ function print_debug_info() {
 
 function run_tests() {
     local external_ip=${deployment_config["ExternalIP"]}
-    local node_port_http1=${deployment_config["NodePortConsumer"]}
-    local node_port_http2=${deployment_config["NodePortProducer"]}
+    local node_port_consumer=${deployment_config["NodePortConsumer"]}
+    local node_port_producer=${deployment_config["NodePortProducer"]}
+
+    echo "############################"
+    echo ${node_port_consumer}
+    echo ${node_port_producer}
+    echo "############################"
 
     local is_debug_enabled=${deployment_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
@@ -31,8 +36,8 @@ function run_tests() {
 
     declare -A sys_prop_array
     sys_prop_array["kafka.service.host"]=${external_ip}
-    sys_prop_array["kafka.consumer.service.port"]=${node_port_http1}
-    sys_prop_array["kafka.producer.service.port"]=${node_port_http1}
+    sys_prop_array["kafka.consumer.service.port"]=${node_port_consumer}
+    sys_prop_array["kafka.producer.service.port"]=${node_port_producer}
 
     # Builds and run tests of the given connector section and copies resulting surefire reports to output directory
     run_scenario_tests messaging-kafka messaging kafka sys_prop_array ${input_dir} ${output_dir} "KafkaMessagingTest"

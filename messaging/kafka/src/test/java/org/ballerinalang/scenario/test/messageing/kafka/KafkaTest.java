@@ -49,14 +49,17 @@ public class KafkaTest extends ScenarioTestBase {
     static {
         Properties deploymentProperties = getDeploymentProperties();
         host = deploymentProperties.getProperty("ExternalIP");
-        producerPort = deploymentProperties.getProperty("ProducerNodePort");
-        consumerPort = deploymentProperties.getProperty("ConsumerNodePort");
+        producerPort = deploymentProperties.getProperty("NodePortProducer");
+        consumerPort = deploymentProperties.getProperty("NodePortConsumer");
     }
 
     @Test
     public void testSendingData() throws IOException {
         String producerHttpServiceUrl = "http://" + host + ":" + producerPort + "/sendMessage";
         String consumerHttpServiceUrl = "http://" + host + ":" + consumerPort + "/sendMessage";
+
+        System.out.println("Producer" + producerHttpServiceUrl);
+        System.out.println("Consumer" + consumerHttpServiceUrl);
 
         // Send message to producer HTTP service
         Map<String, String> headers = new HashMap<>();

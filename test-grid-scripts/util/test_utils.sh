@@ -40,8 +40,7 @@ run_scenario_tests() {
     bash --version
     for x in "${!properties_array[@]}"; do sys_prop_str+="-D$x=${properties_array[$x]} " ; done
 
-    echo "******************************"
-    mvn clean install -f ${root_dir}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
+    mvn clean install -f ${root_dir}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile} -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
     mkdir -p ${__output_dir}/scenarios/${test_name}
     cp -r ${root_dir}/${section}/${test_name}/target ${__output_dir}/scenarios/${test_name}/
