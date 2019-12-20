@@ -73,7 +73,10 @@ install_ballerina_from_link() {
     local ballerina_dist="ballerina-pack.zip"
     local ballerina_home_dir_name="ballerina_home"
     unzip -q ${utils_parent_path}/temp_ballerina_download/${ballerina_dist} -d ${utils_parent_path}/temp_ballerina_download
+    ls -al ${utils_parent_path}/temp_ballerina_download/
+    echo "*********************************"
     rm ${utils_parent_path}/temp_ballerina_download/${ballerina_dist}
+    echo "*********************************"
     mv ${utils_parent_path}/temp_ballerina_download/ballerina* ${utils_parent_path}/${ballerina_home_dir_name}
     readonly ballerina_home=${utils_parent_path}/${ballerina_home_dir_name}
     ${ballerina_home}/bin/ballerina -v

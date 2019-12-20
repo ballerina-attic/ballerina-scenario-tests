@@ -15,9 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-readonly test_utils_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly test_utils_grand_parent_path=$(dirname ${test_utils_parent_path})
-readonly test_utils_great_grand_parent_path=$(dirname ${test_utils_grand_parent_path})
+readonly test_utils_dir=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+readonly test_grid_scripts_dir=$(dirname ${test_utils_dir})
+readonly root_dir=$(dirname ${test_grid_scripts_dir})
 
 # Builds run tests of the provided BBG section profile and copies the surefire reports to teh output directory
 #
@@ -40,10 +40,11 @@ run_scenario_tests() {
     bash --version
     for x in "${!properties_array[@]}"; do sys_prop_str+="-D$x=${properties_array[$x]} " ; done
 
-    mvn clean install -f ${test_utils_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
+    echo "******************************"
+    mvn clean install -f ${root_dir}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
 
     mkdir -p ${__output_dir}/scenarios/${test_name}
-    cp -r ${test_utils_great_grand_parent_path}/${section}/${test_name}/target ${__output_dir}/scenarios/${test_name}/
+    cp -r ${root_dir}/${section}/${test_name}/target ${__output_dir}/scenarios/${test_name}/
 }
 
 # Builds run tests of the provided BBG section profile and copies the surefire reports to teh output directory
@@ -64,11 +65,11 @@ run_bbg_section_tests() {
     bash --version
     for x in "${!properties_array[@]}"; do sys_prop_str+="-D$x=${properties_array[$x]} " ; done
 
-    mvn clean install -f ${test_utils_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
+    mvn clean install -f ${root_dir}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
 
     mkdir -p ${__output_dir}/scenarios
 
-    cp -r ${test_utils_great_grand_parent_path}/bbg/${bbg_section}/target ${__output_dir}/scenarios/${bbg_section}/
+    cp -r ${root_dir}/bbg/${bbg_section}/target ${__output_dir}/scenarios/${bbg_section}/
 }
 
 run_connector_section_tests() {
@@ -82,9 +83,9 @@ run_connector_section_tests() {
     bash --version
     for x in "${!properties_array[@]}"; do sys_prop_str+="-D$x=${properties_array[$x]} " ; done
 
-    mvn clean install -f ${test_utils_great_grand_parent_path}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
+    mvn clean install -f ${root_dir}/pom.xml -fae -Ddata.bucket.location=${__input_dir} ${sys_prop_str} -Dtestng.groups=${test_group} -P ${maven_profile}
 
     mkdir -p ${__output_dir}/scenarios
 
-    cp -r ${test_utils_great_grand_parent_path}/connectors/${connector_section}/target ${__output_dir}/scenarios/${connector_section}/
+    cp -r ${root_dir}/connectors/${connector_section}/target ${__output_dir}/scenarios/${connector_section}/
 }
