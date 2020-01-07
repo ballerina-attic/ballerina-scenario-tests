@@ -39,7 +39,7 @@ setup_deployment() {
 clone_bbg_and_set_bal_path() {
     local bbg_repo_name="data-backed-service"
     clone_bbg ${bbg_repo_name}
-    bal_path=${bbg_repo_name}/guide/data_backed_service/employee_db_service.bal
+    bal_path=${bbg_repo_name}/guide/src/data_backed_service/employee_db_service.bal
 }
 
 print_kubernetes_debug_info() {
@@ -73,7 +73,7 @@ build_and_deploy_guide() {
        # Set the environmental variable so that ballerina k8s artifact creation can be debugged
        export BAL_DOCKER_DEBUG=true
     fi
-    ${ballerina_home}/bin/ballerina build data_backed_service --skiptests
+    ${ballerina_home}/bin/ballerina build --skip-tests data_backed_service
     cd ../..
     kubectl apply -f ${work_dir}/data-backed-service/guide/target/kubernetes/data_backed_service --namespace=${cluster_namespace}
 }

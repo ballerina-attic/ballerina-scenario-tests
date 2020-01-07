@@ -16,7 +16,7 @@
 
 # TestGrid Test Configuration Parameters
 version: '0.9'
-emailToList: "manurip@wso2.com,ballerina-builder@wso2.com"
+emailToList: "bhashinee@wso2.com,ballerina-builder@wso2.com"
 infrastructureConfig:
   infrastructureProvider: SHELL
   containerOrchestrationEngine: K8S
@@ -50,7 +50,7 @@ deploymentConfig:
           type: SHELL
           file: test-grid-scripts/bbg/data/deployment-data-backed-service.sh
           inputParameters:
-            BallerinaVersionType: "LatestSnapshot" #LatestSnapshot/RC
+            #BallerinaVersionType: "LatestSnapshot" #LatestSnapshot/RC
             #BallerinaVersionType: "RC"
             #BallerinaVersion: "0.991.0"
             #RCLocation: "https://product-dist.ballerina.io/nightly/0.992.0-m2-SNAPSHOT/ballerina-0.992.0-m2-SNAPSHOT.zip"
