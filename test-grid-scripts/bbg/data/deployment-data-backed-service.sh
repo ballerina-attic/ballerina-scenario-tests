@@ -63,6 +63,7 @@ replace_variables_in_bal_file() {
     sed -i "s:<USERNAME>:${docker_user}:g" ${bal_path}
     sed -i "s:<PASSWORD>:${docker_password}:g" ${bal_path}
     sed -i "s:ballerina.guides.io:${docker_user}:g" ${bal_path}
+    sed -i "s:<BALLERINA_HOME>:${ballerina_home}:g" ${bal_path}
 }
 
 build_and_deploy_guide() {
