@@ -40,6 +40,7 @@ clone_bbg_and_set_bal_path() {
     local bbg_repo_name="data-backed-service"
     clone_bbg ${bbg_repo_name}
     bal_path=${bbg_repo_name}/guide/src/data_backed_service/employee_db_service.bal
+    toml_path=${bbg_repo_name}/guide/Ballerina.toml
 }
 
 print_kubernetes_debug_info() {
@@ -59,7 +60,7 @@ deploy_mysql_resources() {
 replace_variables_in_bal_file() {
     sed -i "s/defaultValue = \"localhost\"/defaultValue = \"mysql-service\"/" ${bal_path}
     sed -i "s/<BALLERINA_VERSION>/${ballerina_version}/" ${bal_path}
-    sed -i "s:<path_to_JDBC_jar>:"${work_dir}/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47.jar":g" ${bal_path}
+    sed -i "s:<path_to_JDBC_jar>:"${work_dir}/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47.jar":g" ${toml_path}
     sed -i "s:<USERNAME>:${docker_user}:g" ${bal_path}
     sed -i "s:<PASSWORD>:${docker_password}:g" ${bal_path}
     sed -i "s:ballerina.guides.io:${docker_user}:g" ${bal_path}
