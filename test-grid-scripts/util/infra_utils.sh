@@ -26,7 +26,7 @@ function cleanup_k8s_resources() {
     local -n __infra_cleanup_config=$1
     local namespace=${__infra_cleanup_config[NamespacesToCleanup]}
     if [ "${namespace}" != "" ]; then
-        kubectl -n ${namespace} delete deployment,po,svc --all
+        kubectl delete all --all --namespace=${namespace}
         kubectl delete namespaces ${namespace}
     else
         echo "Namespace string is empty"
