@@ -24,11 +24,6 @@ function run_tests() {
     local node_port_consumer=${deployment_config["NodePortConsumer"]}
     local node_port_producer=${deployment_config["NodePortProducer"]}
 
-    echo "############################"
-    echo ${node_port_consumer}
-    echo ${node_port_producer}
-    echo "############################"
-
     local is_debug_enabled=${deployment_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
         print_debug_info

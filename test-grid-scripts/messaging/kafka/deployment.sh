@@ -75,7 +75,6 @@ function deploy_kafka_cluster() {
 function build_and_deploy_resources() {
   # shellcheck disable=SC2164
   cd ${test_dir}
-  ls -la
   ${ballerina_home}/bin/ballerina -v
   ${ballerina_home}/bin/ballerina build --all
   cd ${dir_root}
