@@ -51,6 +51,7 @@ print_kubernetes_debug_info() {
 }
 
 deploy_mysql_resources() {
+    download_and_extract_mysql_connector ${work_dir}
     build_docker_image mysql-ballerina 1.0 data-backed-service/resources/
     push_image_to_docker_registry mysql-ballerina 1.0
     sed -i "s/mysql-ballerina/${docker_user}\/mysql-ballerina/" data-backed-service/resources/kubernetes/mysql-deployment.yaml
@@ -68,7 +69,6 @@ replace_variables_in_bal_file() {
 }
 
 build_and_deploy_guide() {
-    download_and_extract_mysql_connector ${work_dir}
     cd data-backed-service/guide
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
