@@ -94,11 +94,6 @@ function retrieve_and_write_properties_to_data_bucket() {
     deployment_props["NodePortConsumer"]=${node_port_consumer}
     deployment_props["NodePortProducer"]=${node_port_producer}
 
-    echo "****************************"
-    echo ${node_port_consumer}
-    echo ${node_port_producer}
-    echo "****************************"
-
     write_to_properties_file ${output_dir}/deployment.properties deployment_props
     local is_debug_enabled=${infra_config["isDebugEnabled"]}
     if [ "${is_debug_enabled}" = "true" ]; then
