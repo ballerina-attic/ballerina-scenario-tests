@@ -41,8 +41,6 @@ clone_bbg_and_set_bal_path() {
     clone_bbg ${bbg_repo_name}
     bal_path=${bbg_repo_name}/guide/src/data_backed_service/employee_db_service.bal
     toml_path=${bbg_repo_name}/guide/Ballerina.toml
-    echo $toml_path
-    ls ${bbg_repo_name}/guide
 }
 
 print_kubernetes_debug_info() {
