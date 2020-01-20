@@ -58,8 +58,8 @@ public class KafkaTest extends ScenarioTestBase {
         String producerHttpServiceUrl = "http://" + host + ":" + producerPort + "/sendMessage";
         String consumerHttpServiceUrl = "http://" + host + ":" + consumerPort + "/sendMessage";
 
-        System.out.println("Producer" + producerHttpServiceUrl);
-        System.out.println("Consumer" + consumerHttpServiceUrl);
+        System.out.println("Producer: " + producerHttpServiceUrl);
+        System.out.println("Consumer: " + consumerHttpServiceUrl);
 
         // Send message to producer HTTP service
         Map<String, String> headers = new HashMap<>();
