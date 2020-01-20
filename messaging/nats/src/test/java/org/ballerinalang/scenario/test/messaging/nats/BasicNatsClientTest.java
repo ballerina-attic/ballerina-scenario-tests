@@ -24,7 +24,11 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import static org.awaitility.Awaitility.await;
 
 /**
  * Tests basic NATS client.
@@ -45,6 +49,7 @@ public class BasicNatsClientTest extends ScenarioTestBase {
         String url = "http://" + host + ":" + port + "/proxy/send";
         HttpResponse httpResponse = HttpClientRequest.doGet(url);
         Assert.assertEquals(httpResponse.getResponseCode(), 200, "Response code mismatching");
+        await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
         Assert.assertEquals(httpResponse.getData(), "{\"Response\":\"Pong!\"}");
     }
 }
