@@ -60,6 +60,7 @@ wait_until_pods_ready() {
 
   echo "Waited for $period seconds, but all pods are not ready yet."
   kubectl get pods --namespace=${cluster_namespace}
+  kubectl delete all --all --namespace=${cluster_namespace}
   return 1
 }
 

@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 # Copyright (c) 2019, WSO2 Inc. (http://wso2.org) All Rights Reserved.
 #
 # WSO2 Inc. licenses this file to you under the Apache License,
