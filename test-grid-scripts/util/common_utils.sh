@@ -44,7 +44,7 @@ write_to_properties_file() {
     local -n properties_array=$2
 
     # Keys are accessed through exclamation point
-    for i in ${!properties_array[@]}
+    for i in "${!properties_array[@]}"
     do
       echo ${i}=${properties_array[$i]} >> ${properties_file_path}
     done
