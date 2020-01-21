@@ -48,8 +48,7 @@ public class BasicNatsClientTest extends ScenarioTestBase {
     public void testNatsRequestReply() throws IOException {
         String url = "http://" + host + ":" + port + "/proxy/send";
         HttpResponse httpResponse = HttpClientRequest.doGet(url);
-        Assert.assertEquals(httpResponse.getResponseCode(), 200, "Response code mismatching");
-        await().atMost(60, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
+        await().atMost(120, TimeUnit.SECONDS).until(() -> Objects.nonNull(httpResponse));
         Assert.assertEquals(httpResponse.getData(), "{\"Response\":\"Pong!\"}");
     }
 }
