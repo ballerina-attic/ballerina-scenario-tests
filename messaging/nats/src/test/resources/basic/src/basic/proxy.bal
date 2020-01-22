@@ -43,7 +43,7 @@ nats:Producer publisher = new(conn);
     imagePullPolicy:"Always"
 }
 
-listener http:Listener sendListener = new(8080);
+listener http:Listener sendListener = new(9090);
 
 @http:ServiceConfig {
     basePath: "/proxy"

@@ -41,25 +41,23 @@ infrastructureConfig:
 deploymentConfig:
   deploymentPatterns:
     - name: 'messaging-with-kafka'
-      description: 'messaging-with-kafka BBG tests'
+      description: 'messaging-with-kafka tests'
       remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
       remoteBranch: "master"
       dir: .
       scripts:
         - name: 'default'
           type: SHELL
-          file: test-grid-scripts/bbg/kafka/deployment-kafka-service.sh
+          file: test-grid-scripts/messaging/kafka/deployment.sh
           inputParameters:
-            BallerinaVersion: "0.990.3"
-            KafkaConnectorVersion: "0.980.2"
-            isDebugEnabled: "false"
-            TestGroup: "KafkaService"
+            isDebugEnabled: "true"
+            TestGroup: "KafkaMessagingTest"
 scenarioConfigs:
   - testType: TESTNG
     remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
     remoteBranch: "master"
     name: "ballerinaScenarios"
     description: "ballerina-scenarios"
-    file: test-grid-scripts/bbg/kafka/test-runner.sh
+    file: test-grid-scripts/messaging/kafka/test-runner.sh
     inputParameters:
-      isDebugEnabled: "false"
+      isDebugEnabled: "true"

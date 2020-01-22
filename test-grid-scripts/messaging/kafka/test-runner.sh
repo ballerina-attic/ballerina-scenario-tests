@@ -15,4 +15,20 @@
 # specific language governing permissions and limitations
 # under the License.
 
-echo "Executing infrastructure phase"
+readonly dir_kafka=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+readonly dir_messaging=$(dirname ${dir_kafka})
+readonly dir_test_grid_scripts=$(dirname ${dir_messaging})
+
+. ${dir_test_grid_scripts}/common/usage.sh
+. ${dir_test_grid_scripts}/setup/setup_test_env.sh
+
+echo ${dir_test_grid_scripts}
+
+run_provided_test() {
+    local test_group_to_run=${deployment_config["TestGroup"]}
+    if [ "${test_group_to_run}" = "KafkaMessagingTest" ]; then
+        . ${dir_kafka}/test.sh
+    fi
+}
+
+run_provided_test
