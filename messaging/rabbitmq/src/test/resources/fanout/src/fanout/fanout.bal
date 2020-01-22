@@ -87,7 +87,7 @@ service rabbitmqSubscriber1 on channelListener {
         if (messageContent is string) {
             messages = messages + <@untainted>data;
         } else {
-            io:println("Error occurred while retrieving the message content in rabbitmqCompetingConsumer3.");
+            io:println("Error occurred while retrieving the message content in rabbitmqSubscriber1.");
         }
     }
 
@@ -108,7 +108,7 @@ service rabbitmqSubscriber2 on channelListener {
         if (messageContent is string) {
             messages = messages + <@untainted>data;
         } else {
-            io:println("Error occurred while retrieving the message content in rabbitmqCompetingConsumer3.");
+            io:println("Error occurred while retrieving the message content in rabbitmqSubscriber2.");
         }
     }
 
@@ -129,7 +129,7 @@ service rabbitmqSubscriber3 on channelListener {
         if (messageContent is string) {
             messages = messages + <@untainted>data;
         } else {
-            io:println("Error occurred while retrieving the message content in rabbitmqCompetingConsumer3.");
+            io:println("Error occurred while retrieving the message content in rabbitmqSubscriber3.");
         }
     }
 

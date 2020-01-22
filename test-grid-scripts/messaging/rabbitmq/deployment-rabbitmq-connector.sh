@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2019, WSO2 Inc. (http://wso2.org) All Rights Reserved.
+# Copyright (c) 2020, WSO2 Inc. (http://wso2.org) All Rights Reserved.
 #
 # WSO2 Inc. licenses this file to you under the Apache License,
 # Version 2.0 (the "License"); you may not use this file except
@@ -15,16 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-echo "*********************************************"
-readonly deployment_rabbitmq_parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-readonly deployment_rabbitmq_grand_parent_path=$(dirname ${deployment_rabbitmq_parent_path})
-readonly deployment_rabbitmq_great_grand_parent_path=$(dirname ${deployment_rabbitmq_grand_parent_path})
+readonly rabbitmq_directory_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+readonly messaging_directory_path=$(dirname ${rabbitmq_directory_path})
+readonly testgrid_scripts_directory_path=$(dirname ${messaging_directory_path})
+readonly root_directory_path=$(dirname ${testgrid_scripts_directory_path})
 
-. ${deployment_rabbitmq_great_grand_parent_path}/common/usage.sh
-. ${deployment_rabbitmq_great_grand_parent_path}/setup/setup_deployment_env.sh
+. ${testgrid_scripts_directory_path}/common/usage.sh
+. ${testgrid_scripts_directory_path}/setup/setup_deployment_env.sh
 
 function setup_deployment() {
-    echo "*****************SETUP****************************"
     clone_repo_and_set_bal_path
     deploy_rabbitmq_broker
     replace_variables_in_bal_files
@@ -40,18 +39,17 @@ function setup_deployment() {
 ## Functions
 
 function clone_repo_and_set_bal_path() {
-    git clone --branch rabbit-test https://github.com/aashikam/ballerina-scenario-tests.git
-    publisher_bal_path=connectors/rabbitmq/src/test/resources/publisher-subscriber/src/publisher-subscriber/publisher.bal
-    cc_publisher_bal_path=connectors/rabbitmq/src/test/resources/competing-consumer/src/competing-consumer/producer.bal
-    dc_publisher_bal_path=connectors/rabbitmq/src/test/resources/dual-channel/src/dual-channel/dual-channel.bal
-    fanout_bal_path=connectors/rabbitmq/src/test/resources/fanout/src/fanout/fanout.bal
+    publisher_bal_path=${root_directory_path}/messaging/rabbitmq/src/test/resources/publisher-subscriber/src/publisher-subscriber/publisher.bal
+    cc_publisher_bal_path=${root_directory_path}/messaging/rabbitmq/src/test/resources/competing-consumer/src/competing-consumer/producer.bal
+    dc_publisher_bal_path=${root_directory_path}/messaging/rabbitmq/src/test/resources/dual-channel/src/dual-channel/dual-channel.bal
+    fanout_bal_path=${root_directory_path}/messaging/rabbitmq/src/test/resources/fanout/src/fanout/fanout.bal
 }
 
 function deploy_rabbitmq_broker() {
     docker login --username=${docker_user} --password=${docker_password}
 
-    kubectl create -f connectors/rabbitmq/src/test/resources/rabbitmq-deployment.yaml --namespace=${cluster_namespace}
-    kubectl create -f connectors/rabbitmq/src/test/resources/rabbitmq-service.yaml --namespace=${cluster_namespace}
+    kubectl create -f ${root_directory_path}/messaging/rabbitmq/src/test/resources/rabbitmq-deployment.yaml --namespace=${cluster_namespace}
+    kubectl create -f ${root_directory_path}/messaging/rabbitmq/src/test/resources/rabbitmq-service.yaml --namespace=${cluster_namespace}
     wait_for_pod_readiness
     kubectl get svc --namespace=${cluster_namespace}
 }
@@ -78,22 +76,22 @@ function replace_variables_in_bal_file() {
 }
 
 function build_and_deploy_rabbitmq_resources() {
-    cd connectors/rabbitmq/src/test/resources/fanout
+    cd ${root_directory_path}/messaging/rabbitmq/src/test/resources/fanout
     ${ballerina_home}/bin/ballerina build fanout
     cd ../../../../../..
-    kubectl apply -f ${work_dir}/connectors/rabbitmq/src/test/resources/fanout/target/kubernetes/fanout --namespace=${cluster_namespace}
-    cd connectors/rabbitmq/src/test/resources/publisher-subscriber
+    kubectl apply -f ${root_directory_path}/messaging/rabbitmq/src/test/resources/fanout/target/kubernetes/fanout --namespace=${cluster_namespace}
+    cd ${root_directory_path}/messaging/rabbitmq/src/test/resources/publisher-subscriber
     ${ballerina_home}/bin/ballerina build publisher-subscriber
     cd ../../../../../..
-    kubectl apply -f ${work_dir}/connectors/rabbitmq/src/test/resources/publisher-subscriber/target/kubernetes/publisher-subscriber --namespace=${cluster_namespace}
-    cd connectors/rabbitmq/src/test/resources/competing-consumer
+    kubectl apply -f ${root_directory_path}/messaging/rabbitmq/src/test/resources/publisher-subscriber/target/kubernetes/publisher-subscriber --namespace=${cluster_namespace}
+    cd ${root_directory_path}/messaging/rabbitmq/src/test/resources/competing-consumer
     ${ballerina_home}/bin/ballerina build competing-consumer
     cd ../../../../../..
-    kubectl apply -f ${work_dir}/connectors/rabbitmq/src/test/resources/competing-consumer/target/kubernetes/competing-consumer --namespace=${cluster_namespace}
-    cd connectors/rabbitmq/src/test/resources/dual-channel
+    kubectl apply -f ${root_directory_path}/messaging/rabbitmq/src/test/resources/competing-consumer/target/kubernetes/competing-consumer --namespace=${cluster_namespace}
+    cd ${root_directory_path}/messaging/rabbitmq/src/test/resources/dual-channel
     ${ballerina_home}/bin/ballerina build dual-channel
     cd ../../../../../..
-    kubectl apply -f ${work_dir}/connectors/rabbitmq/src/test/resources/dual-channel/target/kubernetes/dual-channel --namespace=${cluster_namespace}
+    kubectl apply -f ${root_directory_path}/messaging/rabbitmq/src/test/resources/dual-channel/target/kubernetes/dual-channel --namespace=${cluster_namespace}
 }
 
 function retrieve_and_write_properties_to_data_bucket() {

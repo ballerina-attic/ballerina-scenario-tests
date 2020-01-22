@@ -68,13 +68,13 @@ service rabbitSend on sendListener {
         rabbitmq:BasicProperties props = {replyTo: "replyQueue"};
         var sendResult = newChannel->basicPublish(messageVal, "MyQueue", properties = props);
         if (sendResult is error) {
-            io:println("An error occurred while sending the message to MyQueue1 using newChannel1.");
+            io:println("An error occurred while sending the message to MyQueue using newChannel.");
             check caller->respond("Message sending failed");
         }
         runtime:sleep(5000);
         var basicGetResult = newChannel->basicGet("replyQueue", rabbitmq:AUTO_ACK);
         if (basicGetResult is rabbitmq:Message) {
-            check caller->respond("Dual channel successful. Message received: Testing dual channel");
+            check caller->respond("Dual channel successful.");
         }
         checkpanic connection.close();
     }
@@ -92,9 +92,9 @@ service consumer on Listener {
         rabbitmq:Channel newChannel1 = new(connection);
     	rabbitmq:BasicProperties | rabbitmq:Error result = message.getProperties();
     	if (result is rabbitmq:BasicProperties) {
-    	    string? resplyto = result.replyTo;
-    	    if (resplyto is string) {
-    	        var resultt = newChannel1->basicPublish("Received", resplyto);
+    	    string? replyto = result.replyTo;
+    	    if (replyto is string) {
+    	        var resultt = newChannel1->basicPublish("Message Received", replyto);
     	    }
     	}
     }

@@ -77,9 +77,10 @@ public class RabbitMQConnectorTest extends ScenarioTestBase {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
         HttpResponse httpResponse = HttpClientRequest.doGet(url, headers);
-        Assert.assertEquals(httpResponse.getData(), "Dual channel successful. Message received: Testing dual channel");
+        Assert.assertEquals(httpResponse.getData(), "Dual channel successful.");
     }
 
+    // Fanout exchanges are used in this scenario
     @Test(description = "Test Pub/Sub pattern with RabbitMQ connector")
     public void testPubSub() throws IOException {
         String url = "http://" + host + ":" + pubSubPort + "/rabbitmq/fanout";
