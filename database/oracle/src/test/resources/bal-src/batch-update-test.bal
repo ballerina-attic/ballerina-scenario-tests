@@ -22,7 +22,7 @@ jdbc:Client testDB =  new jdbc:Client({
     username: config:getAsString("database.oracle.test.jdbc.username"),
     password: config:getAsString("database.oracle.test.jdbc.password"),
     poolOptions: {
-        maximumPoolSize: 100
+        maximumPoolSize: 200
     }
 });
 
