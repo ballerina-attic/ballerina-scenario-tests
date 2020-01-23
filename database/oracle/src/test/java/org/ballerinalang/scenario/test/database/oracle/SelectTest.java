@@ -152,7 +152,7 @@ public class SelectTest extends ScenarioTestBase {
         AssertionUtil.assertNullValues(stringTypeRecord, 5, "id");
     }
 
-    @Test(description = "Test date time type selection query")
+    @Test(description = "Test date time type selection query", enabled = false)
     public void testDateTimeTypesString() {
         BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesString");
         Assert.assertTrue(returns[0] instanceof BMap);
@@ -160,7 +160,7 @@ public class SelectTest extends ScenarioTestBase {
         assertDateStringValues(dateTimeTypeRecord, date, timestamp);
     }
 
-    @Test(description = "Test date time type selection query")
+    @Test(description = "Test date time type selection query", enabled = false)
     public void testDateTimeTypesInt() {
         BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesInt");
         Assert.assertTrue(returns[0] instanceof BMap);
@@ -189,7 +189,7 @@ public class SelectTest extends ScenarioTestBase {
         AssertionUtil.assertNullValues((BMap) returns[0], 2);
     }
 
-    @Test(description = "Test date time type selection query")
+    @Test(description = "Test date time type selection query", enabled = false)
     public void testDateTimeTypesRecord() {
         BValue[] returns = BRunUtil.invoke(selectCompileResult, "testDateTimeTypesRecord");
         Assert.assertTrue(returns[0] instanceof BMap);
