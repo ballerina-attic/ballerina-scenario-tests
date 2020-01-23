@@ -20,7 +20,6 @@ package org.ballerinalang.scenario.test.database.mysql;
 
 import org.ballerinalang.config.ConfigRegistry;
 import org.ballerinalang.model.values.BBoolean;
-import org.ballerinalang.model.values.BByte;
 import org.ballerinalang.model.values.BDecimal;
 import org.ballerinalang.model.values.BInteger;
 import org.ballerinalang.model.values.BValue;
@@ -96,7 +95,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray integerValues = (BValueArray) returns[1];
         Assert.assertTrue(((BBoolean) integerValues.getRefValue(0)).booleanValue());
-        Assert.assertEquals(((BByte) integerValues.getRefValue(1)).intValue(), 126);
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(1)).intValue(), 126);
         Assert.assertEquals(((BInteger) integerValues.getRefValue(2)).intValue(), 32765);
         Assert.assertEquals(((BInteger) integerValues.getRefValue(3)).intValue(), 8388603);
         Assert.assertEquals(((BInteger) integerValues.getRefValue(4)).intValue(), 2147483644);
@@ -110,7 +109,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
         BValueArray numericValues = (BValueArray) returns[1];
         Assert.assertTrue(((BBoolean) numericValues.getRefValue(0)).booleanValue());
-        Assert.assertEquals(((BByte) numericValues.getRefValue(1)).intValue(), 126);
+        Assert.assertEquals(((BInteger) numericValues.getRefValue(1)).intValue(), 126);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(2)).intValue(), 32765);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(3)).intValue(), 8388603);
         Assert.assertEquals(((BInteger) numericValues.getRefValue(4)).intValue(), 2147483644);

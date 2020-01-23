@@ -20,7 +20,6 @@ package org.ballerinalang.scenario.test.database.mssql;
 
 import org.ballerinalang.config.ConfigRegistry;
 import org.ballerinalang.model.values.BBoolean;
-import org.ballerinalang.model.values.BByte;
 import org.ballerinalang.model.values.BDecimal;
 import org.ballerinalang.model.values.BFloat;
 import org.ballerinalang.model.values.BInteger;
@@ -92,7 +91,7 @@ public class CallTest extends ScenarioTestBase {
         BValueArray integerValues = (BValueArray) returns[1];
         Assert.assertEquals(((BInteger) integerValues.getRefValue(0)).intValue(), 32767);
         Assert.assertEquals(((BInteger) integerValues.getRefValue(1)).intValue(), 9223372036854775807L);
-        Assert.assertEquals(((BByte) integerValues.getRefValue(2)).intValue(), 126);
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(2)).intValue(), 126);
         Assert.assertTrue(((BBoolean) integerValues.getRefValue(3)).booleanValue());
         Assert.assertEquals(((BInteger) integerValues.getRefValue(4)).intValue(), 2147483647);
     }
@@ -105,7 +104,7 @@ public class CallTest extends ScenarioTestBase {
         BValueArray integerValues = (BValueArray) returns[1];
         Assert.assertEquals(((BInteger) integerValues.getRefValue(0)).intValue(), 32767);
         Assert.assertEquals(((BInteger) integerValues.getRefValue(1)).intValue(), 9223372036854775807L);
-        Assert.assertEquals(((BByte) integerValues.getRefValue(2)).intValue(), 126);
+        Assert.assertEquals(((BInteger) integerValues.getRefValue(2)).intValue(), 126);
         Assert.assertTrue(((BBoolean) integerValues.getRefValue(3)).booleanValue());
         Assert.assertEquals(((BInteger) integerValues.getRefValue(4)).intValue(), 2147483647);
     }
