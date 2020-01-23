@@ -36,8 +36,7 @@ function testDropTable() returns jdbc:UpdateResult | error {
 }
 
 function testCreateProcedure() returns jdbc:UpdateResult | error {
-    return testDB->update("CREATE PROCEDURE DDL_TEST_CREATE_PROC(IN X INT, OUT Y VARCHAR(50), INOUT Z BOOLEAN)
-      BEGIN SELECT \"DDL_TEST_CREATE_PROC called\" END");
+    return testDB->update("CREATE PROCEDURE DDL_TEST_CREATE_PROC(IN X INT, OUT Y VARCHAR(50), INOUT Z BOOLEAN) BEGIN SELECT \"DDL_TEST_CREATE_PROC called\" END");
 }
 
 function testDropProcedure() returns jdbc:UpdateResult | error {

@@ -16,6 +16,7 @@
 
 import ballerina/config;
 import ballerinax/java.jdbc;
+import ballerina/io;
 
 jdbc:Client testDB = new({
         url: config:getAsString("database.oracle.test.jdbc.url"),

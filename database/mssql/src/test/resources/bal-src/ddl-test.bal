@@ -36,19 +36,13 @@ function testDropTable() returns jdbc:UpdateResult|error {
 }
 
 function testCreateProcedure() returns jdbc:UpdateResult|error {
-    var retCall = testDB->update("CREATE PROCEDURE DDL_TEST_CREATE_PROC AS
-                                BEGIN
-                                INSERT INTO DDL_TEST_PROC_TABLE VALUES(1, 'Text');
-                                END;");
+    var retCall = testDB->update("CREATE PROCEDURE DDL_TEST_CREATE_PROC AS BEGIN INSERT INTO DDL_TEST_PROC_TABLE VALUES(1, 'Text'); END;");
     retCall = testDB->update("EXECUTE DDL_TEST_CREATE_PROC;");
     return retCall;
 }
 
 function testAlterProcedure() returns jdbc:UpdateResult|error {
-    var retCall = testDB->update("ALTER PROCEDURE DDL_TEST_ALTER_PROC AS
-                                    BEGIN
-                                    INSERT INTO DDL_TEST_PROC_TABLE VALUES(2, 'Sample');
-                                    END;");
+    var retCall = testDB->update("ALTER PROCEDURE DDL_TEST_ALTER_PROC AS BEGIN INSERT INTO DDL_TEST_PROC_TABLE VALUES(2, 'Sample'); END;");
     retCall = testDB->update("EXECUTE DDL_TEST_ALTER_PROC;");
     return retCall;
 }
