@@ -45,7 +45,7 @@ public class BatchUpdateTest extends ScenarioTestBase {
     private String password;
     private Path resourcePath;
 
-    @BeforeClass
+    @BeforeClass(enabled = false)
     public void setUp() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
         jdbcUrl = deploymentProperties.getProperty(Constants.ORACLE_JDBC_URL_KEY);
@@ -66,49 +66,49 @@ public class BatchUpdateTest extends ScenarioTestBase {
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "batch-update-test.bal").toString());
     }
 
-    @Test(description = "Test update integer types with params")
+    @Test(description = "Test update integer types with params", enabled = false)
     public void testBatchUpdateIntegerTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateIntegerTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update integer types with params")
+    @Test(description = "Test update integer types with params", enabled = false)
     public void testBatchUpdateFixedPointTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update integer types with params")
+    @Test(description = "Test update integer types with params", enabled = false)
     public void testUpdateFloatingPointTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateFixedPointTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update string types with params")
+    @Test(description = "Test update string types with params", enabled = false)
     public void testBatchUpdateStringTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateStringTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update complex types with params")
+    @Test(description = "Test update complex types with params", enabled = false)
     public void testBatchUpdateComplexTypesWithParams() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateComplexTypesWithParams");
         int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @Test(description = "Test update datetime types with params")
+    @Test(description = "Test update datetime types with params", enabled = false)
     public void testBatchUpdateDateTimeWithValuesParam() {
         BValue[] returns = BRunUtil.invoke(batchUpdateCompileResult, "testBatchUpdateDateTimeWithValuesParam");
         int[] expectedArrayOfUpdatedRowCount = { -2, -2 };
         AssertionUtil.assertBatchUpdateQueryReturnValue(returns[0], expectedArrayOfUpdatedRowCount);
     }
 
-    @AfterClass(alwaysRun = true)
+    @AfterClass(alwaysRun = true, enabled = false)
     public void cleanup() throws Exception {
         BRunUtil.invoke(batchUpdateCompileResult, "stopDatabaseClient");
         DatabaseUtil.executeSqlFile(jdbcUrl, userName, password,

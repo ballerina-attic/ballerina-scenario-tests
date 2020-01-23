@@ -20,10 +20,7 @@ import ballerinax/java.jdbc;
 jdbc:Client testDB =  new jdbc:Client({
     url: config:getAsString("database.oracle.test.jdbc.url"),
     username: config:getAsString("database.oracle.test.jdbc.username"),
-    password: config:getAsString("database.oracle.test.jdbc.password"),
-    poolOptions: {
-        maximumPoolSize: 200
-    }
+    password: config:getAsString("database.oracle.test.jdbc.password")
 });
 
 function testBatchUpdateIntegerTypesWithParams() returns int[] | error {
