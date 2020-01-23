@@ -227,33 +227,33 @@
                 <classifier>bir</classifier>
                 <version>${ballerina.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-utils</artifactId>
-                <scope>test</scope>
-                <version>${ballerina.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-utils</artifactId>
-                <type>zip</type>
-                <classifier>ballerina-binary-repo</classifier>
-                <scope>test</scope>
-                <version>${ballerina.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-utils</artifactId>
-                <classifier>bir-jar</classifier>
-                <version>${ballerina.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-utils</artifactId>
-                <classifier>bir</classifier>
-                <version>${ballerina.version}</version>
-                <type>zip</type>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.ballerinalang</groupId>-->
+<!--                <artifactId>ballerina-utils</artifactId>-->
+<!--                <scope>test</scope>-->
+<!--                <version>${ballerina.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.ballerinalang</groupId>-->
+<!--                <artifactId>ballerina-utils</artifactId>-->
+<!--                <type>zip</type>-->
+<!--                <classifier>ballerina-binary-repo</classifier>-->
+<!--                <scope>test</scope>-->
+<!--                <version>${ballerina.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.ballerinalang</groupId>-->
+<!--                <artifactId>ballerina-utils</artifactId>-->
+<!--                <classifier>bir-jar</classifier>-->
+<!--                <version>${ballerina.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.ballerinalang</groupId>-->
+<!--                <artifactId>ballerina-utils</artifactId>-->
+<!--                <classifier>bir</classifier>-->
+<!--                <version>${ballerina.version}</version>-->
+<!--                <type>zip</type>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.ballerinalang</groupId>
                 <artifactId>ballerina-builtin</artifactId>
