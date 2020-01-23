@@ -104,29 +104,29 @@
             <type>zip</type>
             <classifier>bir</classifier>
         </dependency>
-        <dependency>
-            <groupId>org.ballerinalang</groupId>
-            <artifactId>ballerina-utils</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ballerinalang</groupId>
-            <artifactId>ballerina-utils</artifactId>
-            <type>zip</type>
-            <classifier>ballerina-binary-repo</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ballerinalang</groupId>
-            <artifactId>ballerina-utils</artifactId>
-            <classifier>bir-jar</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.ballerinalang</groupId>
-            <artifactId>ballerina-utils</artifactId>
-            <classifier>bir</classifier>
-            <type>zip</type>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.ballerinalang</groupId>-->
+<!--            <artifactId>ballerina-utils</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.ballerinalang</groupId>-->
+<!--            <artifactId>ballerina-utils</artifactId>-->
+<!--            <type>zip</type>-->
+<!--            <classifier>ballerina-binary-repo</classifier>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.ballerinalang</groupId>-->
+<!--            <artifactId>ballerina-utils</artifactId>-->
+<!--            <classifier>bir-jar</classifier>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.ballerinalang</groupId>-->
+<!--            <artifactId>ballerina-utils</artifactId>-->
+<!--            <classifier>bir</classifier>-->
+<!--            <type>zip</type>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.ballerinalang</groupId>
             <artifactId>ballerina-system</artifactId>
