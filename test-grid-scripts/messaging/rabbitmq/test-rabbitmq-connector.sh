@@ -37,7 +37,7 @@ function run_tests() {
     sys_prop_array["rabbitmq.service.port.fanout"]=${fanout_node_port}
 
     # Builds and run tests of the given connector section and copies resulting surefire reports to output directory
-    run_connector_section_tests rabbitmq rabbitmq sys_prop_array ${input_dir} ${output_dir} "RabbitmqConnector"
+    run_scenario_tests rabbitmq messaging rabbitmq sys_prop_array ${input_dir} ${output_dir} "RabbitMQConnector"
 }
 
 run_tests
