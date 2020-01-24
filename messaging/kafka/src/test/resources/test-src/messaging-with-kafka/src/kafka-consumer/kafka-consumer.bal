@@ -18,11 +18,10 @@ listener kafka:Consumer kafkaConsumer = new(consumerConfig);
 service KafkaService on kafkaConsumer {
     resource function onMessage(kafka:Consumer consumer, kafka:ConsumerRecord[] records) {
         foreach var kafkaRecord in records {
-            byte[] serializedMessage = kafkaRecord.value;
-            var result = 'string:fromBytes(serializedMessage);
+            var message = kafkaRecord.value;
 
-            if (result is string) {
-                resultString = <@untainted string>result;
+            if (message is string) {
+                resultString = <@untainted string> message;
             } else {
                 resultString = "Error converting from bytes";
             }
