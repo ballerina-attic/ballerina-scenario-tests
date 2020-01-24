@@ -25,9 +25,9 @@ readonly root_dir=$(dirname ${test_grid_scripts_dir})
 # $2 - Test section (Eg.: "bbg" or "connectors" or "http")
 # $3 - Test name (Eg.: "kafka" or, "artemis" or "resiliency")
 # $4 - Associative array of system property-value pairs
-# $5 - System properties associative array
-# $6 - Input directory
-# $7 - Output directory
+# $5 - Input directory
+# $6 - Output directory
+# $7 - Test group name
 run_scenario_tests() {
     local maven_profile=$1
     local section=$2
