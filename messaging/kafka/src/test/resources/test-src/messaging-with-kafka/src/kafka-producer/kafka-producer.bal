@@ -9,7 +9,8 @@ kafka:ProducerConfig producerConfig = {
     bootstrapServers: "kafka-service:9092",
     clientId: "kafka-producer",
     acks: "all",
-    retryCount: 3
+    retryCount: 3,
+    valueSerializer: kafka:SER_STRING
 };
 
 kafka:Producer kafkaProducer = new(producerConfig);
