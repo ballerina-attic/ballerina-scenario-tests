@@ -1,7 +1,6 @@
 import ballerina/http;
 import ballerina/kafka;
 import ballerina/kubernetes;
-import ballerina/lang.'string;
 
 string resultString = "";
 
@@ -10,7 +9,8 @@ kafka:ConsumerConfig consumerConfig = {
     groupId: "kafka-consumer-group",
     clientId: "simple-consumer",
     offsetReset: "earliest",
-    topics: ["kafka-test-topic"]
+    topics: ["kafka-test-topic"],
+    valueDeserializer: kafka:SER_STRING
 };
 
 listener kafka:Consumer kafkaConsumer = new(consumerConfig);
