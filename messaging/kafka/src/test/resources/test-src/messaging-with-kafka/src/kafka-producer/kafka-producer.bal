@@ -49,8 +49,7 @@ service HttpService on producerHttpListener {
                             + <@untainted string>requestPayload.toString());
             response.statusCode = 400;
         } else {
-            byte[] serializedMessage = requestPayload.toBytes();
-            var result = kafkaProducer->send(serializedMessage, kafkaTopic);
+            var result = kafkaProducer->send(<@untainted string> requestPayload, kafkaTopic);
             if (result is error) {
                 response.setPayload("Error sending message to the Kafka service: " + result.toString());
                 response.statusCode = 500;
