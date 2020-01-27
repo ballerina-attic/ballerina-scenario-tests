@@ -25,6 +25,11 @@ under the License.
     </listeners>
     <test name="ballerina-database-oracle-test" preserve-order="true" parallel="false">
         <parameter name="enableJBallerinaTests" value="true"/>
+        <groups>
+            <run>
+                <exclude name="disabled"/>
+            </run>
+        </groups>
         <packages>
             <package name="org.ballerinalang.scenario.test.database.oracle.*"/>
         </packages>

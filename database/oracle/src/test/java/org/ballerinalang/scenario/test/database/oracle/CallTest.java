@@ -42,6 +42,7 @@ import java.util.Properties;
 /**
  * Contains `call` remote function tests.
  */
+@Test(groups = { "disabled" })
 public class CallTest extends ScenarioTestBase {
     private CompileResult callCompilerResult;
     private String jdbcUrl;
@@ -49,7 +50,7 @@ public class CallTest extends ScenarioTestBase {
     private String password;
     private Path resourcePath;
 
-    @BeforeClass(enabled = false)
+    @BeforeClass
     public void setup() throws Exception {
         Properties deploymentProperties = getDeploymentProperties();
         jdbcUrl = deploymentProperties.getProperty(Constants.ORACLE_JDBC_URL_KEY);
@@ -72,13 +73,13 @@ public class CallTest extends ScenarioTestBase {
                 .compile(Paths.get(resourcePath.toString(), "bal-src", "call-test.bal").toString());
     }
 
-    @Test(description = "Test Integer type IN params", enabled = false)
+    @Test(description = "Test Integer type IN params")
     public void testCallInParamIntegerTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
     }
 
-    @Test(description = "Test Integer type OUT params", enabled = false)
+    @Test(description = "Test Integer type OUT params")
     public void testCallOutParamIntegerTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -87,7 +88,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertEquals(((BInteger) integerValues.getRefValue(0)).intValue(), 922337203);
     }
 
-    @Test(description = "Test Integer type INOUT params", enabled = false)
+    @Test(description = "Test Integer type INOUT params")
     public void testCallInOutParamIntegerTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -96,13 +97,13 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertEquals(((BInteger) integerValues.getRefValue(0)).intValue(), 922337203);
     }
 
-    @Test(description = "Test fixed point type IN params", enabled = false)
+    @Test(description = "Test fixed point type IN params")
     public void testCallInParamFixedPointTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamFixedPointTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
     }
 
-    @Test(description = "Test fixed point type OUT params", enabled = false)
+    @Test(description = "Test fixed point type OUT params")
     public void testCallOutParamFixedPointTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamFixedPointTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -112,7 +113,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(1)).floatValue(), 10912.3412378);
     }
 
-    @Test(description = "Test fixed point type INOUT params", enabled = false)
+    @Test(description = "Test fixed point type INOUT params")
     public void testCallInOutParamFixedPointTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamFixedPointTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -122,13 +123,13 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertEquals(((BDecimal) fixedPointValues.getRefValue(1)).floatValue(), 10912.3412378);
     }
 
-    @Test(description = "Test Float type IN params", enabled = false)
+    @Test(description = "Test Float type IN params")
     public void testCallInParamFloatTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamFloatTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
     }
 
-    @Test(description = "Test Float type OUT params", enabled = false)
+    @Test(description = "Test Float type OUT params")
     public void testCallOutParamFloatTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamFloatTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -138,7 +139,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertEquals(((BFloat) floatValues.getRefValue(1)).floatValue(), 109999.123412378914545);
     }
 
-    @Test(description = "Test Float type INOUT params", enabled = false)
+    @Test(description = "Test Float type INOUT params")
     public void testCallInOutParamFloatTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamFloatTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -148,13 +149,13 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertEquals(((BFloat) floatValues.getRefValue(1)).floatValue(), 109999.123412378914545);
     }
 
-    @Test(description = "Test string type IN params", enabled = false)
+    @Test(description = "Test string type IN params")
     public void testCallInParamStringTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamStringTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
     }
 
-    @Test(description = "Test string type OUT params", enabled = false)
+    @Test(description = "Test string type OUT params")
     public void testCallOutParamStringTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamStringTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -172,7 +173,7 @@ public class CallTest extends ScenarioTestBase {
         }
     }
 
-    @Test(description = "Test string type INOUT params", enabled = false)
+    @Test(description = "Test string type INOUT params")
     public void testCallInOutParamStringTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamStringTypes");
         Assert.assertTrue(returns[1] instanceof BValueArray, "Invalid type");
@@ -185,13 +186,13 @@ public class CallTest extends ScenarioTestBase {
         }
     }
 
-    @Test(description = "Test complex type IN params", enabled = false)
+    @Test(description = "Test complex type IN params")
     public void testCallInParamComplexTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInParamComplexTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
     }
 
-    @Test(description = "Test complex type OUT params", enabled = false)
+    @Test(description = "Test complex type OUT params")
     public void testCallOutParamComplexTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamComplexTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -204,7 +205,7 @@ public class CallTest extends ScenarioTestBase {
         }
     }
 
-    @Test(description = "Test complex type INOUT params", enabled = false)
+    @Test(description = "Test complex type INOUT params")
     public void testCallInOutParamComplexTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamComplexTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -217,7 +218,7 @@ public class CallTest extends ScenarioTestBase {
         }
     }
 
-    @AfterClass(alwaysRun = true, enabled = false)
+    @AfterClass(alwaysRun = true)
     public void cleanup() throws Exception {
         if (callCompilerResult != null) {
             BRunUtil.invoke(callCompilerResult, "stopDatabaseClient");
