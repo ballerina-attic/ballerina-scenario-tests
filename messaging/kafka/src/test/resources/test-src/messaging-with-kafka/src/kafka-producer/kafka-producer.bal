@@ -60,7 +60,8 @@ function sendData(string payload) returns http:Response {
     http:Response response = new;
     var message = 'int:fromString(payload);
     if (message is int) {
-        var result = kafkaProducer->send(message, kafkaTopic);
+        // This should not panic ideally. This is a bug in jBallerina.
+        var result = trap kafkaProducer->send(message, kafkaTopic);
         if (result is error) {
             response.setPayload("Message successfully sent to the Kafka service");
             // Due to an error in jBallerina, ignore this for now. Otherwise the response code should be 500.
