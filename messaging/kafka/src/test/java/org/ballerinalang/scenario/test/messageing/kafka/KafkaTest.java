@@ -40,7 +40,7 @@ public class KafkaTest extends ScenarioTestBase {
     private static final String producerPort;
     private static final String consumerPort;
 
-    private static final String MESSAGE = "Hello from test class";
+    private static final String MESSAGE = "1135";
     private static final String KAFKA_PRODUCER_SUCCESS_MESSAGE = "Message successfully sent to the Kafka service";
     private static final int CONNECTION_TIMEOUT = 10;
     private static final int AWAIT_TIMEOUT = 10;
