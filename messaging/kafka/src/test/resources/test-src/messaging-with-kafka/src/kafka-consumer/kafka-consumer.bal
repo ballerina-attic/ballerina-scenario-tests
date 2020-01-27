@@ -10,7 +10,7 @@ kafka:ConsumerConfig consumerConfig = {
     clientId: "simple-consumer",
     offsetReset: "earliest",
     topics: ["kafka-test-topic"],
-    valueDeserializer: kafka:SER_STRING
+    valueDeserializer: kafka:SER_INT
 };
 
 listener kafka:Consumer kafkaConsumer = new(consumerConfig);
@@ -19,9 +19,8 @@ service KafkaService on kafkaConsumer {
     resource function onMessage(kafka:Consumer consumer, kafka:ConsumerRecord[] records) {
         foreach var kafkaRecord in records {
             var message = kafkaRecord.value;
-
-            if (message is string) {
-                resultString = <@untainted string> message;
+            if (message is int) {
+                resultString = <@untainted string> message.toString();
             } else {
                 resultString = "Error converting from bytes";
             }
