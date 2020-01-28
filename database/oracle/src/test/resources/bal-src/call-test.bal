@@ -20,7 +20,10 @@ import ballerinax/java.jdbc;
 jdbc:Client testDB = new({
     url: config:getAsString("database.oracle.test.jdbc.url"),
     username: config:getAsString("database.oracle.test.jdbc.username"),
-    password: config:getAsString("database.oracle.test.jdbc.password")
+    password: config:getAsString("database.oracle.test.jdbc.password"),
+    poolOptions: {
+        maximumPoolSize: 100
+    }
 });
 
 function testCallInParamIntegerTypes() returns @tainted error? {

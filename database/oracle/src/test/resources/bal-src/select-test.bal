@@ -148,8 +148,7 @@ function setupDatetimeData() returns [int, int] {
     // then its up to him to drop any timezone info when obtaining that int value.
     jdbc:Parameter para2 = { sqlType: jdbc:TYPE_TIMESTAMP, value: timestampInserted };
 
-    _ = checkpanic testDB->update("Insert into SELECT_UPDATE_DATETIME_TYPES (ID, DATE_VAL, TIMESTAMP_VAL)
-    values (?,?,?)", para0, para1, para2);
+    _ = checkpanic testDB->update("Insert into SELECT_UPDATE_DATETIME_TYPES (ID, DATE_VAL, TIMESTAMP_VAL) values (?,?,?)", para0, para1, para2);
     return [dateInserted, timestampInserted];
 }
 

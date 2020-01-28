@@ -229,33 +229,6 @@
             </dependency>
             <dependency>
                 <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-utils</artifactId>
-                <scope>test</scope>
-                <version>${ballerina.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-utils</artifactId>
-                <type>zip</type>
-                <classifier>ballerina-binary-repo</classifier>
-                <scope>test</scope>
-                <version>${ballerina.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-utils</artifactId>
-                <classifier>bir-jar</classifier>
-                <version>${ballerina.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.ballerinalang</groupId>
-                <artifactId>ballerina-utils</artifactId>
-                <classifier>bir</classifier>
-                <version>${ballerina.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.ballerinalang</groupId>
                 <artifactId>ballerina-builtin</artifactId>
                 <version>${ballerina.version}</version>
                 <scope>test</scope>
@@ -1357,7 +1330,7 @@
     </profiles>
 
     <properties>
-        <ballerina.version>1.0.2-SNAPSHOT</ballerina.version>
+        <ballerina.version>1.2.0-SNAPSHOT</ballerina.version>
         <project.version>0.990.4-SNAPSHOT</project.version>
         <maven.surefire.plugin.version>2.22.1</maven.surefire.plugin.version>
         <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>

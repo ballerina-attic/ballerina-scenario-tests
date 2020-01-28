@@ -42,6 +42,7 @@ import java.util.Properties;
 /**
  * Contains `call` remote function tests.
  */
+@Test(groups = { "disabled" })
 public class CallTest extends ScenarioTestBase {
     private CompileResult callCompilerResult;
     private String jdbcUrl;

@@ -4,7 +4,10 @@ import ballerinax/java.jdbc;
 jdbc:Client testDB =  new jdbc:Client({
         url: config:getAsString("database.mysql.test.jdbc.url"),
         username: config:getAsString("database.mysql.test.jdbc.username"),
-        password: config:getAsString("database.mysql.test.jdbc.password")
+        password: config:getAsString("database.mysql.test.jdbc.password"),
+        poolOptions: {
+            maximumPoolSize: 100
+        }
     });
 
 function testBatchUpdateIntgerTypesWithParams() returns int[] | error {

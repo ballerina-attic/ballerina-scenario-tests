@@ -16,8 +16,9 @@
 
 # TestGrid Test Configuration Parameters
 version: '0.9'
-emailToList: "manurip@wso2.com,ballerina-builder@wso2.com"
+emailToList: "bhashinee@wso2.com,ballerina-builder@wso2.com"
 infrastructureConfig:
+  iacProvider: None
   infrastructureProvider: SHELL
   containerOrchestrationEngine: K8S
   includes:

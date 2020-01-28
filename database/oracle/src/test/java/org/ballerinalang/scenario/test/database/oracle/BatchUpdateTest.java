@@ -38,6 +38,7 @@ import java.util.Properties;
 /**
  * Contains `batchUpdate` remote function tests.
  */
+@Test(groups = { "disabled" })
 public class BatchUpdateTest extends ScenarioTestBase {
     private CompileResult batchUpdateCompileResult;
     private String jdbcUrl;
