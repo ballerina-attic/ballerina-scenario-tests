@@ -28,8 +28,8 @@ infrastructureConfig:
     - Oracle-SE1-11.2
   provisioners:
     - name: ballerina-deployment
-      remoteRepository: "https://github.com/Bhashinee/ballerina-scenario-tests.git"
-      remoteBranch: "dataoriginal"
+      remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
+      remoteBranch: "master"
       description: creates infrastructure for ballerina scenario tests
       scripts:
         - name: ballerina-deployment
@@ -43,8 +43,8 @@ infrastructureConfig:
           phase: DESTROY
 scenarioConfigs:
   - testType: TESTNG
-    remoteRepository: "https://github.com/Bhashinee/ballerina-scenario-tests.git"
-    remoteBranch: "dataoriginal"
+    remoteRepository: "https://github.com/ballerina-platform/ballerina-scenario-tests.git"
+    remoteBranch: "master"
     name: "ballerinaScenarios"
     description: "ballerina-scenarios"
     file: test-grid-scripts/database/test-runner.sh
