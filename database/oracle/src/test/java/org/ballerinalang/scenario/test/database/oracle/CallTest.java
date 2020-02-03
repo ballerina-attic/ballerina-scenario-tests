@@ -42,7 +42,6 @@ import java.util.Properties;
 /**
  * Contains `call` remote function tests.
  */
-@Test(groups = { "disabled" })
 public class CallTest extends ScenarioTestBase {
     private CompileResult callCompilerResult;
     private String jdbcUrl;
@@ -79,7 +78,7 @@ public class CallTest extends ScenarioTestBase {
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
     }
 
-    @Test(description = "Test Integer type OUT params")
+    @Test(description = "Test Integer type OUT params", enabled = false)
     public void testCallOutParamIntegerTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallOutParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
@@ -88,7 +87,7 @@ public class CallTest extends ScenarioTestBase {
         Assert.assertEquals(((BInteger) integerValues.getRefValue(0)).intValue(), 922337203);
     }
 
-    @Test(description = "Test Integer type INOUT params")
+    @Test(description = "Test Integer type INOUT params", enabled = false)
     public void testCallInOutParamIntegerTypes() {
         BValue[] returns = BRunUtil.invoke(callCompilerResult, "testCallInOutParamIntegerTypes");
         AssertionUtil.assertCallQueryReturnValue(returns[0]);
