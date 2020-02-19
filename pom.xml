@@ -1347,7 +1347,7 @@
         <postgres.driver.version>42.2.5</postgres.driver.version>
         <oracle.driver.version>1.0.0</oracle.driver.version>
         <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
-        <maven.checkstyle.version>8.18</maven.checkstyle.version>
+        <maven.checkstyle.version>8.29</maven.checkstyle.version>
         <maven.spotbugsplugin.version>3.1.1</maven.spotbugsplugin.version>
         <maven.spotbugsplugin.exclude.file>spotbugs-exclude.xml</maven.spotbugsplugin.exclude.file>
         <mssql.driver.version>7.0.0.jre8</mssql.driver.version>
